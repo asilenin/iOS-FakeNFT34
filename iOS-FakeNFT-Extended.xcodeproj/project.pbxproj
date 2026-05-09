@@ -14,6 +14,8 @@
 		4747AA0D2FAF69D300B07D13 /* LoadingSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA0C2FAF69D300B07D13 /* LoadingSpinner.swift */; };
 		4747AA0F2FAF6AB700B07D13 /* SkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA0E2FAF6AB600B07D13 /* SkeletonView.swift */; };
 		4747AA112FAF6E8A00B07D13 /* MenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA102FAF6E8900B07D13 /* MenuButton.swift */; };
+		4747AA182FAF6FE300B07D13 /* FavoritesServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA172FAF6FE300B07D13 /* FavoritesServiceProtocol.swift */; };
+		4747AA1A2FAF700100B07D13 /* CartServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA192FAF700000B07D13 /* CartServiceProtocol.swift */; };
 		ABC5E16C2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC5E16B2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift */; };
 		ABC5E1702C31F5AF002B4068 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABC5E16F2C31F5AF002B4068 /* Assets.xcassets */; };
 		ABC5E1732C31F5AF002B4068 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABC5E1722C31F5AF002B4068 /* Preview Assets.xcassets */; };
@@ -56,6 +58,8 @@
 		4747AA0C2FAF69D300B07D13 /* LoadingSpinner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingSpinner.swift; sourceTree = "<group>"; };
 		4747AA0E2FAF6AB600B07D13 /* SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonView.swift; sourceTree = "<group>"; };
 		4747AA102FAF6E8900B07D13 /* MenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuButton.swift; sourceTree = "<group>"; };
+		4747AA172FAF6FE300B07D13 /* FavoritesServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesServiceProtocol.swift; sourceTree = "<group>"; };
+		4747AA192FAF700000B07D13 /* CartServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartServiceProtocol.swift; sourceTree = "<group>"; };
 		ABC5E1682C31F5AF002B4068 /* iOS-FakeNFT-Extended.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS-FakeNFT-Extended.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABC5E16B2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS_FakeNFT_ExtendedApp.swift; sourceTree = "<group>"; };
 		ABC5E16F2C31F5AF002B4068 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -127,6 +131,43 @@
 				4747AA042FAF622900B07D13 /* WebViewRepresentable.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		4747AA122FAF6FB800B07D13 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				4747AA192FAF700000B07D13 /* CartServiceProtocol.swift */,
+				4747AA172FAF6FE300B07D13 /* FavoritesServiceProtocol.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		4747AA132FAF6FBC00B07D13 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		4747AA142FAF6FC700B07D13 /* Statistics */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Statistics;
+			sourceTree = "<group>";
+		};
+		4747AA152FAF6FCE00B07D13 /* Cart */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Cart;
+			sourceTree = "<group>";
+		};
+		4747AA162FAF6FD200B07D13 /* Catalog */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Catalog;
 			sourceTree = "<group>";
 		};
 		ABC5E15F2C31F5AF002B4068 = {
@@ -244,6 +285,11 @@
 		ABC5E1A92C31FABA002B4068 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				4747AA162FAF6FD200B07D13 /* Catalog */,
+				4747AA152FAF6FCE00B07D13 /* Cart */,
+				4747AA142FAF6FC700B07D13 /* Statistics */,
+				4747AA132FAF6FBC00B07D13 /* Profile */,
+				4747AA122FAF6FB800B07D13 /* Shared */,
 				ABC5E1AC2C31FB6C002B4068 /* Requests */,
 				ABC5E1B62C31FC70002B4068 /* ServicesAssembly.swift */,
 			);
@@ -421,8 +467,10 @@
 				4747AA0F2FAF6AB700B07D13 /* SkeletonView.swift in Sources */,
 				ABC5E1B72C31FC70002B4068 /* ServicesAssembly.swift in Sources */,
 				4747AA072FAF622F00B07D13 /* WebViewScreen.swift in Sources */,
+				4747AA1A2FAF700100B07D13 /* CartServiceProtocol.swift in Sources */,
 				4747AA0D2FAF69D300B07D13 /* LoadingSpinner.swift in Sources */,
 				ABC5E1B52C31FC57002B4068 /* TabBarView.swift in Sources */,
+				4747AA182FAF6FE300B07D13 /* FavoritesServiceProtocol.swift in Sources */,
 				4747AA0B2FAF679F00B07D13 /* ErrorAlert.swift in Sources */,
 				ABC5E1A62C31F815002B4068 /* NetworkRequest.swift in Sources */,
 				ABC5E1A42C31F800002B4068 /* NetworkClient.swift in Sources */,
