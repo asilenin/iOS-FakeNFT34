@@ -8,7 +8,7 @@ struct TabBarView: View {
         @Bindable var router = router
 
         VStack(spacing: 0) {
-            content
+            content(router: router)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
             CustomTabBar(selection: $router.selectedTab)
@@ -17,29 +17,46 @@ struct TabBarView: View {
     }
 
     @ViewBuilder
-    private var content: some View {
-        // TODO: each tab will be replaced with a real entry-point view
-        // (CatalogView, CartView, ProfileView, StatisticsView) in the
-        // next commit, wrapped in a NavigationStack bound to its
-        // corresponding router path.
+    private func content(router: Router) -> some View {
+        @Bindable var router = router
+
         switch router.selectedTab {
-        case .profile:    PlaceholderTabView(tab: .profile)
-        case .catalog:    PlaceholderTabView(tab: .catalog)
-        case .cart:       PlaceholderTabView(tab: .cart)
-        case .statistics: PlaceholderTabView(tab: .statistics)
-        }
-    }
-}
-
-private struct PlaceholderTabView: View {
-    let tab: AppTab
-
-    var body: some View {
-        ZStack {
-            Color.ypWhite.ignoresSafeArea()
-            Text("\(String(describing: tab).capitalized) – coming soon")
-                .font(.bold22)
-                .foregroundStyle(Color.ypBlack)
+        case .profile:
+            NavigationStack(path: $router.profilePath) {
+                ProfileView()
+                    .navigationDestination(for: ProfileRoute.self) { _ in
+                        // TODO(profile epic): map ProfileRoute cases
+                        // to their destination views.
+                        EmptyView()
+                    }
+            }
+        case .catalog:
+            NavigationStack(path: $router.catalogPath) {
+                CatalogView()
+                    .navigationDestination(for: CatalogRoute.self) { _ in
+                        // TODO(catalog epic): map CatalogRoute cases
+                        // to their destination views.
+                        EmptyView()
+                    }
+            }
+        case .cart:
+            NavigationStack(path: $router.cartPath) {
+                CartView()
+                    .navigationDestination(for: CartRoute.self) { _ in
+                        // TODO(cart epic): map CartRoute cases
+                        // to their destination views.
+                        EmptyView()
+                    }
+            }
+        case .statistics:
+            NavigationStack(path: $router.statisticsPath) {
+                StatisticsView()
+                    .navigationDestination(for: StatisticsRoute.self) { _ in
+                        // TODO(statistics epic): map StatisticsRoute
+                        // cases to their destination views.
+                        EmptyView()
+                    }
+            }
         }
     }
 }

@@ -61,6 +61,10 @@
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		479FAEC42FAF4361009D7D33 /* App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = App; sourceTree = "<group>"; };
+		479FAED52FAF4AF8009D7D33 /* Catalog */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Catalog; sourceTree = "<group>"; };
+		479FAED62FAF4B01009D7D33 /* Cart */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Cart; sourceTree = "<group>"; };
+		479FAED72FAF4B08009D7D33 /* Profile */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Profile; sourceTree = "<group>"; };
+		479FAED82FAF4B0F009D7D33 /* Statistics */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Statistics; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +223,10 @@
 		ABC5E1B32C31FC03002B4068 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				479FAED82FAF4B0F009D7D33 /* Statistics */,
+				479FAED72FAF4B08009D7D33 /* Profile */,
+				479FAED62FAF4B01009D7D33 /* Cart */,
+				479FAED52FAF4AF8009D7D33 /* Catalog */,
 				ABC5E1B42C31FC57002B4068 /* TabBarView.swift */,
 			);
 			path = UI;
@@ -241,6 +249,10 @@
 			);
 			fileSystemSynchronizedGroups = (
 				479FAEC42FAF4361009D7D33 /* App */,
+				479FAED52FAF4AF8009D7D33 /* Catalog */,
+				479FAED62FAF4B01009D7D33 /* Cart */,
+				479FAED72FAF4B08009D7D33 /* Profile */,
+				479FAED82FAF4B0F009D7D33 /* Statistics */,
 			);
 			name = "iOS-FakeNFT-Extended";
 			packageProductDependencies = (

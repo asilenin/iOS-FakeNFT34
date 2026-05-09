@@ -1,19 +1,19 @@
 import Foundation
 
 enum CatalogRoute: Hashable {
-    // TODO(catalog epic): add cases here
+    case _placeholder
     // case collection(NftCollection)
     // case authorWeb(URL)
 }
 
 enum CartRoute: Hashable {
-    // TODO(cart epic): add cases here
+    case _placeholder
     // case currencySelection
     // case userAgreement(URL)
 }
 
 enum ProfileRoute: Hashable {
-    // TODO(profile epic): add cases here
+    case _placeholder
     // case myNfts
     // case favorites
     // case edit
@@ -21,7 +21,7 @@ enum ProfileRoute: Hashable {
 }
 
 enum StatisticsRoute: Hashable {
-    // TODO(statistics epic): add cases here
+    case _placeholder
     // case user(User)
     // case userCollection(User)
     // case userWeb(URL)
