@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4747AA052FAF622A00B07D13 /* WebViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA042FAF622900B07D13 /* WebViewRepresentable.swift */; };
+		4747AA072FAF622F00B07D13 /* WebViewScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA062FAF622F00B07D13 /* WebViewScreen.swift */; };
 		ABC5E16C2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC5E16B2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift */; };
 		ABC5E1702C31F5AF002B4068 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABC5E16F2C31F5AF002B4068 /* Assets.xcassets */; };
 		ABC5E1732C31F5AF002B4068 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABC5E1722C31F5AF002B4068 /* Preview Assets.xcassets */; };
@@ -42,6 +44,8 @@
 
 /* Begin PBXFileReference section */
 		47470DE62FAF5EF4005D4D4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4747AA042FAF622900B07D13 /* WebViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewRepresentable.swift; sourceTree = "<group>"; };
+		4747AA062FAF622F00B07D13 /* WebViewScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewScreen.swift; sourceTree = "<group>"; };
 		ABC5E1682C31F5AF002B4068 /* iOS-FakeNFT-Extended.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS-FakeNFT-Extended.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABC5E16B2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS_FakeNFT_ExtendedApp.swift; sourceTree = "<group>"; };
 		ABC5E16F2C31F5AF002B4068 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -94,6 +98,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4747AA022FAF621C00B07D13 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				4747AA032FAF622400B07D13 /* Components */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		4747AA032FAF622400B07D13 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				4747AA062FAF622F00B07D13 /* WebViewScreen.swift */,
+				4747AA042FAF622900B07D13 /* WebViewRepresentable.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		ABC5E15F2C31F5AF002B4068 = {
 			isa = PBXGroup;
 			children = (
@@ -225,6 +246,7 @@
 		ABC5E1B32C31FC03002B4068 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				4747AA022FAF621C00B07D13 /* Common */,
 				479FAED82FAF4B0F009D7D33 /* Statistics */,
 				479FAED72FAF4B08009D7D33 /* Profile */,
 				479FAED62FAF4B01009D7D33 /* Cart */,
@@ -378,8 +400,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4747AA052FAF622A00B07D13 /* WebViewRepresentable.swift in Sources */,
 				ABC5E1992C31F666002B4068 /* Fonts.swift in Sources */,
 				ABC5E1B72C31FC70002B4068 /* ServicesAssembly.swift in Sources */,
+				4747AA072FAF622F00B07D13 /* WebViewScreen.swift in Sources */,
 				ABC5E1B52C31FC57002B4068 /* TabBarView.swift in Sources */,
 				ABC5E1A62C31F815002B4068 /* NetworkRequest.swift in Sources */,
 				ABC5E1A42C31F800002B4068 /* NetworkClient.swift in Sources */,

@@ -1,8 +1,6 @@
 import SwiftUI
 
 struct CatalogView: View {
-    @Environment(Router.self) private var router
-    
     var body: some View {
         ZStack {
             Color.ypWhite.ignoresSafeArea()
@@ -11,7 +9,7 @@ struct CatalogView: View {
             // collections list bound to CatalogViewModel.
             Text("Catalog – coming soon")
                 .font(.bold22)
-                .foregroundStyle(.ypBlack)
+                .foregroundStyle(Color.ypBlack)
         }
         .navigationTitle(Text("Tab.catalog"))
         .navigationBarTitleDisplayMode(.inline)

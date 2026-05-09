@@ -27,8 +27,7 @@ final class Router {
 
     // MARK: - Tab switching
 
-    /// Programmatically switch to a tab. Useful for cross-tab actions
-    /// (e.g. "go to Catalog after successful payment").
+    /// Programmatically switch to a tab. Useful for cross-tab actions  (e.g. "go to Catalog after successful payment").
     func switchTo(_ tab: AppTab) {
         selectedTab = tab
     }

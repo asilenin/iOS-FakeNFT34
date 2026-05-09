@@ -11,9 +11,13 @@ struct TabBarView: View {
             content(router: router)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-            CustomTabBar(selection: $router.selectedTab)
+            if !isCurrentTabPushed(router) {
+                CustomTabBar(selection: $router.selectedTab)
+                    .transition(.move(edge: .bottom))
+            }
         }
         .ignoresSafeArea(.keyboard)
+        .animation(.easeInOut(duration: 0.2), value: isCurrentTabPushed(router))
     }
 
     @ViewBuilder
@@ -25,8 +29,7 @@ struct TabBarView: View {
             NavigationStack(path: $router.profilePath) {
                 ProfileView()
                     .navigationDestination(for: ProfileRoute.self) { _ in
-                        // TODO(profile epic): map ProfileRoute cases
-                        // to their destination views.
+                        // TODO(profile epic): map ProfileRoute cases to their destination views.
                         EmptyView()
                     }
             }
@@ -34,8 +37,7 @@ struct TabBarView: View {
             NavigationStack(path: $router.catalogPath) {
                 CatalogView()
                     .navigationDestination(for: CatalogRoute.self) { _ in
-                        // TODO(catalog epic): map CatalogRoute cases
-                        // to their destination views.
+                        // TODO(catalog epic): map CatalogRoute cases to their destination views.
                         EmptyView()
                     }
             }
@@ -43,8 +45,7 @@ struct TabBarView: View {
             NavigationStack(path: $router.cartPath) {
                 CartView()
                     .navigationDestination(for: CartRoute.self) { _ in
-                        // TODO(cart epic): map CartRoute cases
-                        // to their destination views.
+                        // TODO(cart epic): map CartRoute cases to their destination views.
                         EmptyView()
                     }
             }
@@ -52,11 +53,20 @@ struct TabBarView: View {
             NavigationStack(path: $router.statisticsPath) {
                 StatisticsView()
                     .navigationDestination(for: StatisticsRoute.self) { _ in
-                        // TODO(statistics epic): map StatisticsRoute
-                        // cases to their destination views.
+                        // TODO(statistics epic): map StatisticsRoute cases to their destination views.
                         EmptyView()
                     }
             }
+        }
+    }
+
+    /// True when the currently selected tab has any pushed screens.
+    private func isCurrentTabPushed(_ router: Router) -> Bool {
+        switch router.selectedTab {
+        case .profile:    !router.profilePath.isEmpty
+        case .catalog:    !router.catalogPath.isEmpty
+        case .cart:       !router.cartPath.isEmpty
+        case .statistics: !router.statisticsPath.isEmpty
         }
     }
 }
