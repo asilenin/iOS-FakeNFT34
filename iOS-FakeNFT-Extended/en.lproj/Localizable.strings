@@ -2,3 +2,10 @@
 "Tab.profile" = "Профиль";
 "Tab.cart" = "Корзина";
 "Tab.statistics" = "Статистика";
+
+"Error.title" = "Не удалось получить данные";
+"Error.network" = "Произошла ошибка сети";
+"Error.parsing" = "Не удалось обработать данные";
+"Error.purhase" = "Не удалось произвести оплату";
+"Error.cancel" = "Отмена";
+"Error.retry" = "Повторить";
