@@ -9,3 +9,5 @@
 "Error.purhase" = "Не удалось произвести оплату";
 "Error.cancel" = "Отмена";
 "Error.retry" = "Повторить";
+
+"Common.sort" = "Сортировка";
