@@ -16,6 +16,7 @@
 		4747AA112FAF6E8A00B07D13 /* MenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA102FAF6E8900B07D13 /* MenuButton.swift */; };
 		4747AA182FAF6FE300B07D13 /* FavoritesServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA172FAF6FE300B07D13 /* FavoritesServiceProtocol.swift */; };
 		4747AA1A2FAF700100B07D13 /* CartServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA192FAF700000B07D13 /* CartServiceProtocol.swift */; };
+		479BD4C72FB0FE8F009F014D /* NftCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479BD4C62FB0FE8E009F014D /* NftCollection.swift */; };
 		ABC5E16C2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC5E16B2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift */; };
 		ABC5E1702C31F5AF002B4068 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABC5E16F2C31F5AF002B4068 /* Assets.xcassets */; };
 		ABC5E1732C31F5AF002B4068 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABC5E1722C31F5AF002B4068 /* Preview Assets.xcassets */; };
@@ -60,6 +61,7 @@
 		4747AA102FAF6E8900B07D13 /* MenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuButton.swift; sourceTree = "<group>"; };
 		4747AA172FAF6FE300B07D13 /* FavoritesServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesServiceProtocol.swift; sourceTree = "<group>"; };
 		4747AA192FAF700000B07D13 /* CartServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartServiceProtocol.swift; sourceTree = "<group>"; };
+		479BD4C62FB0FE8E009F014D /* NftCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftCollection.swift; sourceTree = "<group>"; };
 		ABC5E1682C31F5AF002B4068 /* iOS-FakeNFT-Extended.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS-FakeNFT-Extended.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABC5E16B2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS_FakeNFT_ExtendedApp.swift; sourceTree = "<group>"; };
 		ABC5E16F2C31F5AF002B4068 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -170,6 +172,14 @@
 			path = Catalog;
 			sourceTree = "<group>";
 		};
+		479BD4C52FB0FE83009F014D /* Catalog */ = {
+			isa = PBXGroup;
+			children = (
+				479BD4C62FB0FE8E009F014D /* NftCollection.swift */,
+			);
+			path = Catalog;
+			sourceTree = "<group>";
+		};
 		ABC5E15F2C31F5AF002B4068 = {
 			isa = PBXGroup;
 			children = (
@@ -243,33 +253,18 @@
 		ABC5E19A2C31F687002B4068 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
-				ABC5E19B2C31F69C002B4068 /* MemoryStorage */,
 				ABC5E1A22C31F7E8002B4068 /* NetworkClient */,
 				ABC5E1A72C31FA90002B4068 /* DateFormatters+Presets.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
 		};
-		ABC5E19B2C31F69C002B4068 /* MemoryStorage */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = MemoryStorage;
-			sourceTree = "<group>";
-		};
 		ABC5E19E2C31F6C1002B4068 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				ABC5E19F2C31F6CB002B4068 /* Network */,
+				479BD4C52FB0FE83009F014D /* Catalog */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		ABC5E19F2C31F6CB002B4068 /* Network */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Network;
 			sourceTree = "<group>";
 		};
 		ABC5E1A22C31F7E8002B4068 /* NetworkClient */ = {
@@ -465,6 +460,7 @@
 				4747AA092FAF678300B07D13 /* NetworkClientError+LocalizedError.swift in Sources */,
 				ABC5E1992C31F666002B4068 /* Fonts.swift in Sources */,
 				4747AA0F2FAF6AB700B07D13 /* SkeletonView.swift in Sources */,
+				479BD4C72FB0FE8F009F014D /* NftCollection.swift in Sources */,
 				ABC5E1B72C31FC70002B4068 /* ServicesAssembly.swift in Sources */,
 				4747AA072FAF622F00B07D13 /* WebViewScreen.swift in Sources */,
 				4747AA1A2FAF700100B07D13 /* CartServiceProtocol.swift in Sources */,
