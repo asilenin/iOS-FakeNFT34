@@ -4,21 +4,48 @@ struct CatalogView: View {
 
     @Environment(ServicesAssembly.self) private var services
     @State private var viewModel: CatalogViewModel?
+    @State private var isShowingSortDialog = false
+
+    @AppStorage("catalogSortOption") private var storedSortOption: CatalogSortOption = .nftCount
 
     var body: some View {
         ZStack {
             Color.ypWhite.ignoresSafeArea()
-
             content
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                MenuButton {
+                    isShowingSortDialog = true
+                }
+            }
+        }
+        .confirmationDialog(
+            Text("Catalog.sort.title"),
+            isPresented: $isShowingSortDialog,
+            titleVisibility: .visible
+        ) {
+            Button("Catalog.sort.byName") {
+                storedSortOption = .name
+            }
+            Button("Catalog.sort.byNftCount") {
+                storedSortOption = .nftCount
+            }
+            Button("Common.close", role: .cancel) {}
         }
         .errorAlert(error: errorBinding) {
             Task { await viewModel?.load() }
         }
         .task {
             if viewModel == nil {
-                viewModel = CatalogViewModel(service: services.catalogService)
+                let vm = CatalogViewModel(service: services.catalogService)
+                vm.sortOption = storedSortOption
+                viewModel = vm
             }
             await viewModel?.load()
+        }
+        .onChange(of: storedSortOption) { _, newValue in
+            viewModel?.sortOption = newValue
         }
     }
 

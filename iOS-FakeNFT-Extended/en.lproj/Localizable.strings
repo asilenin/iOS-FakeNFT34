@@ -11,3 +11,8 @@
 "Error.retry" = "Повторить";
 
 "Common.sort" = "Сортировка";
+"Common.close" = "Закрыть";
+
+"Catalog.sort.title" = "Сортировка";
+"Catalog.sort.byName" = "По названию";
+"Catalog.sort.byNftCount" = "По количеству NFT";
