@@ -28,7 +28,7 @@ struct CatalogRow: View {
     private var title: some View {
         Text("\(collection.name) (\(collection.nfts.count))")
             .font(.bold17)
-            .foregroundStyle(Color.ypBlack)
+            .foregroundStyle(.ypBlack)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
