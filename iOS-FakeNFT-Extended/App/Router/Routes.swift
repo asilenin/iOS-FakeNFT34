@@ -1,8 +1,7 @@
 import Foundation
 
 enum CatalogRoute: Hashable {
-    case _placeholder
-    // case collection(NftCollection)
+    case collection(NftCollection)
     // case authorWeb(URL)
 }
 

@@ -1,16 +1,16 @@
 import SwiftUI
 
 struct TabBarView: View {
-
+    
     @Environment(Router.self) private var router
-
+    
     var body: some View {
         @Bindable var router = router
-
+        
         VStack(spacing: 0) {
             content(router: router)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-
+            
             if !isCurrentTabPushed(router) {
                 CustomTabBar(selection: $router.selectedTab)
                     .transition(.move(edge: .bottom))
@@ -19,11 +19,11 @@ struct TabBarView: View {
         .ignoresSafeArea(.keyboard)
         .animation(.easeInOut(duration: 0.2), value: isCurrentTabPushed(router))
     }
-
+    
     @ViewBuilder
     private func content(router: Router) -> some View {
         @Bindable var router = router
-
+        
         switch router.selectedTab {
         case .profile:
             NavigationStack(path: $router.profilePath) {
@@ -36,9 +36,11 @@ struct TabBarView: View {
         case .catalog:
             NavigationStack(path: $router.catalogPath) {
                 CatalogView()
-                    .navigationDestination(for: CatalogRoute.self) { _ in
-                        // TODO(catalog epic): map CatalogRoute cases to their destination views.
-                        EmptyView()
+                    .navigationDestination(for: CatalogRoute.self) { route in
+                        switch route {
+                        case .collection(let collection):
+                            CollectionDetailView(collection: collection)
+                        }
                     }
             }
         case .cart:
@@ -59,7 +61,7 @@ struct TabBarView: View {
             }
         }
     }
-
+    
     /// True when the currently selected tab has any pushed screens.
     private func isCurrentTabPushed(_ router: Router) -> Bool {
         switch router.selectedTab {

@@ -16,3 +16,5 @@
 "Catalog.sort.title" = "Сортировка";
 "Catalog.sort.byName" = "По названию";
 "Catalog.sort.byNftCount" = "По количеству NFT";
+
+"CollectionDetail.placeholder" = "Заглушка экрана коллекции";

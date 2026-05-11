@@ -1,13 +1,13 @@
 import SwiftUI
 
 struct CatalogView: View {
-
+    
     @Environment(ServicesAssembly.self) private var services
     @State private var viewModel: CatalogViewModel?
     @State private var isShowingSortDialog = false
-
+    
     @AppStorage("catalogSortOption") private var storedSortOption: CatalogSortOption = .nftCount
-
+    
     var body: some View {
         ZStack {
             Color.ypWhite.ignoresSafeArea()
@@ -48,9 +48,9 @@ struct CatalogView: View {
             viewModel?.sortOption = newValue
         }
     }
-
+    
     // MARK: - Content
-
+    
     @ViewBuilder
     private var content: some View {
         if let viewModel {
@@ -70,10 +70,13 @@ struct CatalogView: View {
     private func list(_ collections: [NftCollection]) -> some View {
         List {
             ForEach(collections) { collection in
-                CatalogRow(collection: collection)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 8, trailing: 16))
-                    .listRowBackground(Color.ypWhite)
+                NavigationLink(value: CatalogRoute.collection(collection)) {
+                    CatalogRow(collection: collection)
+                }
+                .buttonStyle(.plain)
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 8, trailing: 16))
+                .listRowBackground(Color.ypWhite)
             }
         }
         .listStyle(.plain)
@@ -99,5 +102,6 @@ struct CatalogView: View {
     NavigationStack {
         CatalogView()
             .environment(ServicesAssembly(networkClient: DefaultNetworkClient()))
+            .environment(Router())
     }
 }
