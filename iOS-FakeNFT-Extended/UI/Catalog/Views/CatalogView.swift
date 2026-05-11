@@ -1,13 +1,13 @@
 import SwiftUI
 
 struct CatalogView: View {
-    
+
     @Environment(ServicesAssembly.self) private var services
     @State private var viewModel: CatalogViewModel?
     @State private var isShowingSortDialog = false
-    
+
     @AppStorage("catalogSortOption") private var storedSortOption: CatalogSortOption = .nftCount
-    
+
     var body: some View {
         ZStack {
             Color.ypWhite.ignoresSafeArea()
@@ -48,15 +48,15 @@ struct CatalogView: View {
             viewModel?.sortOption = newValue
         }
     }
-    
+
     // MARK: - Content
-    
+
     @ViewBuilder
     private var content: some View {
         if let viewModel {
             switch viewModel.state {
             case .idle, .loading:
-                LoadingSpinner(size: .large)
+                LoadingSpinner(size: .medium)
             case .loaded(let collections):
                 list(collections)
             case .error:
