@@ -33,11 +33,11 @@ final class MockCatalogServiceTests: XCTestCase {
         let collections = try await service.loadCollections()
 
         for collection in collections {
-            XCTAssertFalse(collection.id.isEmpty,          "id is empty for \(collection.name)")
-            XCTAssertFalse(collection.name.isEmpty,        "name is empty for \(collection.id)")
+            XCTAssertFalse(collection.id.isEmpty, "id is empty for \(collection.name)")
+            XCTAssertFalse(collection.name.isEmpty, "name is empty for \(collection.id)")
             XCTAssertFalse(collection.description.isEmpty, "description is empty for \(collection.name)")
-            XCTAssertFalse(collection.author.isEmpty,      "author is empty for \(collection.name)")
-            XCTAssertFalse(collection.nfts.isEmpty,        "nfts is empty for \(collection.name)")
+            XCTAssertFalse(collection.author.isEmpty, "author is empty for \(collection.name)")
+            XCTAssertFalse(collection.nfts.isEmpty, "nfts is empty for \(collection.name)")
         }
     }
 }

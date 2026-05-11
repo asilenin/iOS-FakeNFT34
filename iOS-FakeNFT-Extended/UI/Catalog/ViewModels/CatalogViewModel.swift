@@ -30,7 +30,7 @@ final class CatalogViewModel {
         currentTask = task
         await task.value
     }
-    
+
     private func performLoad(using service: CatalogServiceProtocol) async {
         state = .loading
 
