@@ -15,9 +15,8 @@ struct MenuButton: View {
                 .renderingMode(.template)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 24, height: 24)
+                .frame(width: 42, height: 42)
                 .foregroundStyle(Color.ypBlack)
-                .frame(width: 44, height: 44) // tap target per HIG
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
