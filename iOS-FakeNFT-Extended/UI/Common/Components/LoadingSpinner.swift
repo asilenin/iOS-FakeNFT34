@@ -19,7 +19,6 @@ import SwiftUI
 ///       LoadingSpinner(size: .large, tint: .ypWhiteUniversal)
 ///   }
 
-
 struct LoadingSpinner: View {
 
     enum Size {
