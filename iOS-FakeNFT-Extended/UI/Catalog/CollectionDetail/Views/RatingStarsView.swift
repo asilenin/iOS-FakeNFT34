@@ -11,7 +11,7 @@ struct RatingStarsView: View {
     let rating: Int
 
     var body: some View {
-        HStack(spacing: 0) {
+        HStack(spacing: 2) {
             ForEach(0..<5, id: \.self) { index in
                 if index < rating {
                     Image(.starActive)
@@ -32,7 +32,9 @@ struct RatingStarsView: View {
     VStack(alignment: .leading, spacing: 12) {
         RatingStarsView(rating: 0)
         RatingStarsView(rating: 1)
+        RatingStarsView(rating: 2)
         RatingStarsView(rating: 3)
+        RatingStarsView(rating: 4)
         RatingStarsView(rating: 5)
     }
     .padding()
