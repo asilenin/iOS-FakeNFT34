@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4723FFAD2FB47BC200CB43CB /* Author.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4723FFAC2FB47BC100CB43CB /* Author.swift */; };
 		4747AA052FAF622A00B07D13 /* WebViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA042FAF622900B07D13 /* WebViewRepresentable.swift */; };
 		4747AA072FAF622F00B07D13 /* WebViewScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA062FAF622F00B07D13 /* WebViewScreen.swift */; };
 		4747AA092FAF678300B07D13 /* NetworkClientError+LocalizedError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA082FAF678100B07D13 /* NetworkClientError+LocalizedError.swift */; };
@@ -54,6 +55,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4723FFAC2FB47BC100CB43CB /* Author.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Author.swift; sourceTree = "<group>"; };
 		47470DE62FAF5EF4005D4D4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4747AA042FAF622900B07D13 /* WebViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewRepresentable.swift; sourceTree = "<group>"; };
 		4747AA062FAF622F00B07D13 /* WebViewScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewScreen.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		4723FFA92FB47B8F00CB43CB /* Network */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Network; sourceTree = "<group>"; };
 		479FAEC42FAF4361009D7D33 /* App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = App; sourceTree = "<group>"; };
 		479FAED52FAF4AF8009D7D33 /* Catalog */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Catalog; sourceTree = "<group>"; };
 		479FAED62FAF4B01009D7D33 /* Cart */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Cart; sourceTree = "<group>"; };
@@ -183,6 +186,7 @@
 		479BD4C52FB0FE83009F014D /* Catalog */ = {
 			isa = PBXGroup;
 			children = (
+				4723FFAC2FB47BC100CB43CB /* Author.swift */,
 				479BD4C62FB0FE8E009F014D /* NftCollection.swift */,
 			);
 			path = Catalog;
@@ -279,6 +283,7 @@
 		ABC5E19E2C31F6C1002B4068 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				4723FFA92FB47B8F00CB43CB /* Network */,
 				479BD4C52FB0FE83009F014D /* Catalog */,
 			);
 			path = Models;
@@ -346,6 +351,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				4723FFA92FB47B8F00CB43CB /* Network */,
 				479FAEC42FAF4361009D7D33 /* App */,
 				479FAED52FAF4AF8009D7D33 /* Catalog */,
 				479FAED62FAF4B01009D7D33 /* Cart */,
@@ -516,6 +522,7 @@
 				ABC5E1A82C31FA90002B4068 /* DateFormatters+Presets.swift in Sources */,
 				4747AA112FAF6E8A00B07D13 /* MenuButton.swift in Sources */,
 				ABC5E1B02C31FB90002B4068 /* RequestConstants.swift in Sources */,
+				4723FFAD2FB47BC200CB43CB /* Author.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
