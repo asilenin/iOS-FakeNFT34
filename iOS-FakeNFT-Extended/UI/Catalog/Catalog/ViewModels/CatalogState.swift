@@ -7,10 +7,10 @@ import Foundation
 enum CatalogState {
     /// Идёт загрузка коллекций с сервера.
     case loading
-    
+
     /// Коллекции успешно загружены.
     case success
-    
+
     /// Произошла ошибка при загрузке; детали доступны в `CatalogViewModel.error`.
     case error
 }
