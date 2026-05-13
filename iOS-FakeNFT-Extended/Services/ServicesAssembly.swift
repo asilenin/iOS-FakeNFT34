@@ -28,5 +28,9 @@ final class ServicesAssembly {
         // TODO: swap for CatalogService(networkClient: networkClient).
         MockCatalogService()
     }
+    var collectionDetailService: CollectionDetailServiceProtocol {
+        // TODO: swap for CollectionDetailService(networkClient: networkClient) in P3.
+        MockCollectionDetailService()
+    }
 
 }
