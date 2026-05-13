@@ -3,27 +3,28 @@ import Foundation
 @Observable
 @MainActor
 final class CatalogViewModel {
-    
+
     /// Состояние загрузки и данные каталога.
     ///
     /// `.idle` — начальное состояние перед первой загрузкой.
     /// `.loading` — идёт загрузка коллекций с сервера.
     /// `.loaded([collections])` — коллекции успешно загружены и отсортированы.
     /// `.error` — произошла ошибка при загрузке; детали в `error`.
-    enum LoadState {
-        case idle
+    enum CatalogState {
         case loading
-        case loaded([NftCollection])
+        case success
         case error
     }
 
     /// Текущее состояние загрузки.
-    private(set) var state: LoadState = .idle
-    
+    private(set) var state: CatalogState = .loading
+
+    private(set) var collections: [NftCollection] = []
+
     /// Ошибка последней попытки загрузки, если она была.
     /// Используется для отображения алерта через `ErrorAlert` компонент.
     var error: Error?
-    
+
     /// Опция сортировки, выбранная пользователем.
     /// При изменении список коллекций автоматически пересортируется.
     var sortOption: CatalogSortOption = .nftCount {
@@ -39,7 +40,7 @@ final class CatalogViewModel {
     init(service: CatalogServiceProtocol) {
         self.service = service
     }
-    
+
     /// Загрузить коллекции с сервера и отсортировать по текущей опции.
     /// Отменяет предыдущую загрузку, если она была в процессе.
     func load() async {
@@ -54,11 +55,11 @@ final class CatalogViewModel {
 
     private func performLoad(using service: CatalogServiceProtocol) async {
         state = .loading
-
         do {
-            let collections = try await service.loadCollections()
+            let loaded = try await service.loadCollections()
             try Task.checkCancellation()
-            state = .loaded(collections.sorted(by: sortOption.comparator))
+            collections = loaded.sorted(by: sortOption.comparator)
+            state = .success
         } catch is CancellationError {
             return
         } catch {
@@ -66,10 +67,9 @@ final class CatalogViewModel {
             self.error = error
         }
     }
-    
+
     /// Пересортировать текущий набор коллекций (вызывается при смене `sortOption`).
     private func applySortToState() {
-        guard case .loaded(let collections) = state else { return }
-        state = .loaded(collections.sorted(by: sortOption.comparator))
+        collections = collections.sorted(by: sortOption.comparator)
     }
 }

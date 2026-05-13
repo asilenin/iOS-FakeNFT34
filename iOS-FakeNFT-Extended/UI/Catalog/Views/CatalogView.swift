@@ -55,15 +55,15 @@ struct CatalogView: View {
     private var content: some View {
         if let viewModel {
             switch viewModel.state {
-            case .idle, .loading:
+            case .loading:
                 LoadingSpinner(size: .medium)
-            case .loaded(let collections):
-                list(collections)
+            case .success:
+                list(viewModel.collections)  // ← передаём collections явно
             case .error:
-                Color.clear // toast is shown via errorAlert
+                Color.clear
             }
         } else {
-            LoadingSpinner(size: .large)
+            LoadingSpinner(size: .medium)
         }
     }
 
