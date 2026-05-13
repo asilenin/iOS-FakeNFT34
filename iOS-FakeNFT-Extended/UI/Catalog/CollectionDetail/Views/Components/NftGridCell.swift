@@ -14,6 +14,7 @@ struct NftGridCell: View {
     let isInCart: Bool
     let onFavoriteTap: () -> Void
     let onCartTap: () -> Void
+    let onCellTap: () -> Void
 
     var body: some View {
         VStack(spacing: 8) {
@@ -33,6 +34,8 @@ struct NftGridCell: View {
                 .frame(width: 108, height: 108)
                 .clipped()
                 .cornerRadius(12)
+                .contentShape(Rectangle())
+                .onTapGesture(perform: onCellTap)
 
             Button(action: onFavoriteTap) {
                 Image(systemName: isFavorite ? "heart.fill" : "heart")
@@ -101,7 +104,8 @@ struct NftGridCell: View {
             isFavorite: false,
             isInCart: false,
             onFavoriteTap: {},
-            onCartTap: {}
+            onCartTap: {},
+            onCellTap: {}
         )
 
         NftGridCell(
@@ -109,7 +113,8 @@ struct NftGridCell: View {
             isFavorite: true,
             isInCart: true,
             onFavoriteTap: {},
-            onCartTap: {}
+            onCartTap: {},
+            onCellTap: {}
         )
     }
     .padding()

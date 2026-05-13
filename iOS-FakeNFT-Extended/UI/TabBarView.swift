@@ -42,6 +42,8 @@ struct TabBarView: View {
                             CollectionDetailView(collection: collection)
                         case .authorWeb(let url):
                             WebViewScreen(url: url)
+                        case .nftDetail(let id):
+                            NftDetailView(nftId: id)
                         }
                     }
             }

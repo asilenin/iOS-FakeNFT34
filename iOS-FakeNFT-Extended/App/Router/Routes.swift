@@ -6,10 +6,14 @@ import Foundation
 enum CatalogRoute: Hashable {
     /// Переход на экран деталей конкретной коллекции.
     case collection(NftCollection)
- 
+
     /// Переход на экран WebView с сайтом автора коллекции.
     case authorWeb(URL)
+
+    /// Переход на экран деталей NFT по идентификатору.
+    case nftDetail(String)
 }
+
 enum CartRoute: Hashable {
     case _placeholder
     // case currencySelection
