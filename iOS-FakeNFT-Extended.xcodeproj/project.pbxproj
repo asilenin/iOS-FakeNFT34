@@ -16,6 +16,10 @@
 		4747AA112FAF6E8A00B07D13 /* MenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA102FAF6E8900B07D13 /* MenuButton.swift */; };
 		4747AA182FAF6FE300B07D13 /* FavoritesServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA172FAF6FE300B07D13 /* FavoritesServiceProtocol.swift */; };
 		4747AA1A2FAF700100B07D13 /* CartServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA192FAF700000B07D13 /* CartServiceProtocol.swift */; };
+		479BD4C72FB0FE8F009F014D /* NftCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479BD4C62FB0FE8E009F014D /* NftCollection.swift */; };
+		479BD4C92FB1017A009F014D /* CatalogServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479BD4C82FB10179009F014D /* CatalogServiceProtocol.swift */; };
+		479BD4CC2FB10893009F014D /* MockCatalogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479BD4CB2FB10892009F014D /* MockCatalogService.swift */; };
+		479BD4CE2FB108C3009F014D /* CatalogServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479BD4CD2FB108C2009F014D /* CatalogServiceTests.swift */; };
 		ABC5E16C2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC5E16B2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift */; };
 		ABC5E1702C31F5AF002B4068 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABC5E16F2C31F5AF002B4068 /* Assets.xcassets */; };
 		ABC5E1732C31F5AF002B4068 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABC5E1722C31F5AF002B4068 /* Preview Assets.xcassets */; };
@@ -60,6 +64,10 @@
 		4747AA102FAF6E8900B07D13 /* MenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuButton.swift; sourceTree = "<group>"; };
 		4747AA172FAF6FE300B07D13 /* FavoritesServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesServiceProtocol.swift; sourceTree = "<group>"; };
 		4747AA192FAF700000B07D13 /* CartServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartServiceProtocol.swift; sourceTree = "<group>"; };
+		479BD4C62FB0FE8E009F014D /* NftCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftCollection.swift; sourceTree = "<group>"; };
+		479BD4C82FB10179009F014D /* CatalogServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogServiceProtocol.swift; sourceTree = "<group>"; };
+		479BD4CB2FB10892009F014D /* MockCatalogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCatalogService.swift; sourceTree = "<group>"; };
+		479BD4CD2FB108C2009F014D /* CatalogServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogServiceTests.swift; sourceTree = "<group>"; };
 		ABC5E1682C31F5AF002B4068 /* iOS-FakeNFT-Extended.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS-FakeNFT-Extended.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABC5E16B2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS_FakeNFT_ExtendedApp.swift; sourceTree = "<group>"; };
 		ABC5E16F2C31F5AF002B4068 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -166,8 +174,26 @@
 		4747AA162FAF6FD200B07D13 /* Catalog */ = {
 			isa = PBXGroup;
 			children = (
+				479BD4CA2FB1088B009F014D /* Mocks */,
+				479BD4C82FB10179009F014D /* CatalogServiceProtocol.swift */,
 			);
 			path = Catalog;
+			sourceTree = "<group>";
+		};
+		479BD4C52FB0FE83009F014D /* Catalog */ = {
+			isa = PBXGroup;
+			children = (
+				479BD4C62FB0FE8E009F014D /* NftCollection.swift */,
+			);
+			path = Catalog;
+			sourceTree = "<group>";
+		};
+		479BD4CA2FB1088B009F014D /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				479BD4CB2FB10892009F014D /* MockCatalogService.swift */,
+			);
+			path = Mocks;
 			sourceTree = "<group>";
 		};
 		ABC5E15F2C31F5AF002B4068 = {
@@ -219,6 +245,7 @@
 		ABC5E17B2C31F5B0002B4068 /* iOS-FakeNFT-ExtendedTests */ = {
 			isa = PBXGroup;
 			children = (
+				479BD4CD2FB108C2009F014D /* CatalogServiceTests.swift */,
 				ABC5E17C2C31F5B0002B4068 /* RouterTests.swift */,
 			);
 			path = "iOS-FakeNFT-ExtendedTests";
@@ -243,33 +270,18 @@
 		ABC5E19A2C31F687002B4068 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
-				ABC5E19B2C31F69C002B4068 /* MemoryStorage */,
 				ABC5E1A22C31F7E8002B4068 /* NetworkClient */,
 				ABC5E1A72C31FA90002B4068 /* DateFormatters+Presets.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
 		};
-		ABC5E19B2C31F69C002B4068 /* MemoryStorage */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = MemoryStorage;
-			sourceTree = "<group>";
-		};
 		ABC5E19E2C31F6C1002B4068 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				ABC5E19F2C31F6CB002B4068 /* Network */,
+				479BD4C52FB0FE83009F014D /* Catalog */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		ABC5E19F2C31F6CB002B4068 /* Network */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Network;
 			sourceTree = "<group>";
 		};
 		ABC5E1A22C31F7E8002B4068 /* NetworkClient */ = {
@@ -327,6 +339,7 @@
 				ABC5E1642C31F5AF002B4068 /* Sources */,
 				ABC5E1652C31F5AF002B4068 /* Frameworks */,
 				ABC5E1662C31F5AF002B4068 /* Resources */,
+				479BD5632FB234E6009F014D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -456,15 +469,40 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		479BD5632FB234E6009F014D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [[ -z \"$CI\" ]]; then\n    if [[ \"$(uname -m)\" == arm64 ]]; then\n        export PATH=\"/opt/homebrew/bin:$PATH\"\n    fi\n\n    # Check if running in a SwiftUI preview\n    if [ \"$XCODE_RUNNING_FOR_PREVIEWS\" != \"1\" ]; then\n        if which swiftlint > /dev/null; then\n            swiftlint # Uncomment if you want to auto-fix: swiftlint --fix &&\n        else\n            echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n        fi\n    fi\nelse \n    # Running Xcode Cloud\n    echo \"Running in Xcode Cloud. Skipping SwiftLint.\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		ABC5E1642C31F5AF002B4068 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				4747AA052FAF622A00B07D13 /* WebViewRepresentable.swift in Sources */,
+				479BD4C92FB1017A009F014D /* CatalogServiceProtocol.swift in Sources */,
 				4747AA092FAF678300B07D13 /* NetworkClientError+LocalizedError.swift in Sources */,
+				479BD4CC2FB10893009F014D /* MockCatalogService.swift in Sources */,
 				ABC5E1992C31F666002B4068 /* Fonts.swift in Sources */,
 				4747AA0F2FAF6AB700B07D13 /* SkeletonView.swift in Sources */,
+				479BD4C72FB0FE8F009F014D /* NftCollection.swift in Sources */,
 				ABC5E1B72C31FC70002B4068 /* ServicesAssembly.swift in Sources */,
 				4747AA072FAF622F00B07D13 /* WebViewScreen.swift in Sources */,
 				4747AA1A2FAF700100B07D13 /* CartServiceProtocol.swift in Sources */,
@@ -486,6 +524,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				ABC5E17D2C31F5B0002B4068 /* RouterTests.swift in Sources */,
+				479BD4CE2FB108C3009F014D /* CatalogServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -561,7 +600,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -624,7 +663,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

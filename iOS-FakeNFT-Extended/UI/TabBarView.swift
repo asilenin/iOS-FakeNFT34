@@ -36,9 +36,11 @@ struct TabBarView: View {
         case .catalog:
             NavigationStack(path: $router.catalogPath) {
                 CatalogView()
-                    .navigationDestination(for: CatalogRoute.self) { _ in
-                        // TODO(catalog epic): map CatalogRoute cases to their destination views.
-                        EmptyView()
+                    .navigationDestination(for: CatalogRoute.self) { route in
+                        switch route {
+                        case .collection(let collection):
+                            CollectionDetailView(collection: collection)
+                        }
                     }
             }
         case .cart:
