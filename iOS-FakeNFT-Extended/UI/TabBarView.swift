@@ -40,6 +40,8 @@ struct TabBarView: View {
                         switch route {
                         case .collection(let collection):
                             CollectionDetailView(collection: collection)
+                        case .authorWeb(let url):
+                            WebViewScreen(url: url)
                         }
                     }
             }
