@@ -4,18 +4,6 @@ import Foundation
 @MainActor
 final class CatalogViewModel {
 
-    /// Состояние загрузки и данные каталога.
-    ///
-    /// `.idle` — начальное состояние перед первой загрузкой.
-    /// `.loading` — идёт загрузка коллекций с сервера.
-    /// `.loaded([collections])` — коллекции успешно загружены и отсортированы.
-    /// `.error` — произошла ошибка при загрузке; детали в `error`.
-    enum CatalogState {
-        case loading
-        case success
-        case error
-    }
-
     /// Текущее состояние загрузки.
     private(set) var state: CatalogState = .loading
 
