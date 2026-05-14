@@ -98,9 +98,10 @@ struct CollectionDetailView: View {
     // MARK: - Actions
 
     private func handleAuthorTap(_ viewModel: CollectionDetailViewModel) {
+        let websiteString = viewModel.author?.website ?? collection.website?.absoluteString
         guard
-            let website = viewModel.author?.website,
-            let url = URL(string: website)
+            let websiteString,
+            let url = URL(string: websiteString)
         else {
             return
         }

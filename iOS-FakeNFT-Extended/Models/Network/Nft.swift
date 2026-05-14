@@ -7,12 +7,12 @@ import Foundation
 /// и `@MainActor` ViewModel.
 struct Nft: Sendable, Decodable, Identifiable, Equatable {
     let id: String
-    let createdAt: String
-    let name: String
-    let images: [URL]
-    let rating: Int
-    let description: String
-    let price: Float
-    let author: String
-    let website: String
+    let createdAt: String?
+    let name: String?
+    let images: [URL]?
+    let rating: Int?
+    let description: String?
+    let price: Float?
+    let author: String?
+    let website: String?
 }

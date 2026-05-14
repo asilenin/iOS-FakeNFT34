@@ -43,14 +43,14 @@ struct CollectionHeader: View {
 
     private var textBlock: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(collection.name)
+            Text(collection.name ?? "—")
                 .font(.system(size: 22, weight: .bold))
                 .foregroundStyle(Color.ypBlack)
                 .padding(.bottom, 8)
 
             authorRow
 
-            Text(collection.description)
+            Text(collection.description ?? "—")
                 .font(.system(size: 13, weight: .regular))
                 .foregroundStyle(Color.ypBlack)
                 .fixedSize(horizontal: false, vertical: true)
@@ -64,11 +64,12 @@ struct CollectionHeader: View {
                 .foregroundStyle(Color.ypBlack)
 
             Button(action: onAuthorTap) {
-                Text(collection.author)
+                Text(collection.author ?? "—")
                     .font(.system(size: 15, weight: .regular))
                     .foregroundStyle(Color.ypBlueUniversal)
             }
             .buttonStyle(.plain)
+            .disabled(collection.author == nil)  
         }
         .frame(height: 28, alignment: .center)
     }

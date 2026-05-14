@@ -80,8 +80,8 @@ final class CollectionDetailViewModel {
     ) async {
         state = .loading
         do {
-            async let loadedAuthor = service.loadAuthor(by: collection.author)
-            async let loadedNfts = service.loadNfts(byIds: collection.nfts)
+            async let loadedAuthor = service.loadAuthor(by: collection.author ?? "")
+            async let loadedNfts = service.loadNfts(byIds: collection.nfts ?? [])
 
             let (author, nfts) = try await (loadedAuthor, loadedNfts)
             try Task.checkCancellation()
