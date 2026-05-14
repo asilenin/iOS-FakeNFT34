@@ -22,6 +22,8 @@ struct NftGridCell: View {
             infoBlock
         }
         .frame(width: 108, height: 172)
+        .contentShape(Rectangle())
+        .onTapGesture(perform: onCellTap)
     }
 
     // MARK: - Subviews
@@ -34,8 +36,6 @@ struct NftGridCell: View {
                 .frame(width: 108, height: 108)
                 .clipped()
                 .cornerRadius(12)
-                .contentShape(Rectangle())
-                .onTapGesture(perform: onCellTap)
 
             Button(action: onFavoriteTap) {
                 Image(systemName: isFavorite ? "heart.fill" : "heart")
