@@ -70,10 +70,16 @@ struct CatalogView: View {
     private func list(_ collections: [NftCollection]) -> some View {
         List {
             ForEach(collections) { collection in
-                NavigationLink(value: CatalogRoute.collection(collection)) {
+                ZStack {
+                    // Скрытый NavigationLink обновляет NavigationPath
+                    // (Router отслеживает push через path), но не рендерит chevron.
+                    NavigationLink(value: CatalogRoute.collection(collection)) {
+                        EmptyView()
+                    }
+                    .opacity(0)
+
                     CatalogRow(collection: collection)
                 }
-                .buttonStyle(.plain)
                 .listRowSeparator(.hidden)
                 .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 8, trailing: 16))
                 .listRowBackground(Color.ypWhite)
