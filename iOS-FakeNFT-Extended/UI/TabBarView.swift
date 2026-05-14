@@ -28,9 +28,15 @@ struct TabBarView: View {
         case .profile:
             NavigationStack(path: $router.profilePath) {
                 ProfileView()
-                    .navigationDestination(for: ProfileRoute.self) { _ in
-                        // TODO(profile epic): map ProfileRoute cases to their destination views.
-                        EmptyView()
+                    .navigationDestination(for: ProfileRoute.self) { route in
+                        switch route {
+                        case .myNfts:
+                            ProfilePlaceholderView(title: "Мои NFT")
+                        case .favorites:
+                            ProfilePlaceholderView(title: "Избранные NFT")
+                        case .userWeb(let url):
+                            WebViewScreen(url: url)
+                        }
                     }
             }
         case .catalog:

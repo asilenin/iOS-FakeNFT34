@@ -29,5 +29,8 @@ final class ServicesAssembly {
     //   - Cart:       ordersService, currenciesService
     //   - Profile:    profileService
     //   - Statistics: usersService
-    
+
+    var profileService: ProfileServiceProtocol {
+        ProfileService(networkClient: networkClient)
+    }
 }

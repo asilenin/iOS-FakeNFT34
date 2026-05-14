@@ -11,3 +11,9 @@
 "Error.retry" = "Повторить";
 
 "Common.sort" = "Сортировка";
+
+"Profile.error.load" = "Не удалось загрузить профиль: %@";
+"Profile.edit.accessibility" = "Редактировать профиль";
+"Profile.myNfts" = "Мои NFT";
+"Profile.favoriteNfts" = "Избранные NFT";
+"Profile.retry" = "Повторить";

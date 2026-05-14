@@ -13,11 +13,9 @@ enum CartRoute: Hashable {
 }
 
 enum ProfileRoute: Hashable {
-    case _placeholder
-    // case myNfts
-    // case favorites
-    // case edit
-    // case userWeb(URL)
+    case myNfts
+    case favorites
+    case userWeb(URL)
 }
 
 enum StatisticsRoute: Hashable {
