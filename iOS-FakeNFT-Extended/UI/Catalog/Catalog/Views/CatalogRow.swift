@@ -26,7 +26,7 @@ struct CatalogRow: View {
     }
 
     private var title: some View {
-        Text("\(collection.name) (\(collection.nfts.count))")
+        Text("\(collection.name ?? "—") (\(collection.nfts?.count ?? 0))")
             .font(.bold17)
             .foregroundStyle(.ypBlack)
             .frame(maxWidth: .infinity, alignment: .leading)

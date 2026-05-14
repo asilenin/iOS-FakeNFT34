@@ -69,7 +69,7 @@ struct CollectionHeader: View {
                     .foregroundStyle(Color.ypBlueUniversal)
             }
             .buttonStyle(.plain)
-            .disabled(collection.author == nil)  
+            .disabled(collection.author == nil)
         }
         .frame(height: 28, alignment: .center)
     }

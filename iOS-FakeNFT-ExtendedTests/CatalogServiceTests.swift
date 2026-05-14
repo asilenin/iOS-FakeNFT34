@@ -36,7 +36,7 @@ final class CatalogServiceTests: XCTestCase {
         let expectedNames = ["Peach", "Blue", "Brown", "Green", "Pink"]
 
         // When
-        let names = Set(try await service.loadCollections().map(\.name))
+        let names = Set(try await service.loadCollections().compactMap(\.name))
 
         // Then
         XCTAssertTrue(names.isSuperset(of: expectedNames))
@@ -56,11 +56,11 @@ final class CatalogServiceTests: XCTestCase {
 
         // Then
         for collection in collections {
-            XCTAssertFalse(collection.id.isEmpty, "id is empty for \(collection.name)")
-            XCTAssertFalse(collection.name.isEmpty, "name is empty for \(collection.id)")
-            XCTAssertFalse(collection.description.isEmpty, "description is empty for \(collection.name)")
-            XCTAssertFalse(collection.author.isEmpty, "author is empty for \(collection.name)")
-            XCTAssertFalse(collection.nfts.isEmpty, "nfts is empty for \(collection.name)")
+            XCTAssertFalse(collection.id.isEmpty, "id is empty for \(collection.name ?? "?")")
+            XCTAssertFalse(collection.name?.isEmpty ?? true, "name is missing for \(collection.id)")
+            XCTAssertFalse(collection.description?.isEmpty ?? true, "description is missing for \(collection.name ?? "?")")
+            XCTAssertFalse(collection.author?.isEmpty ?? true, "author is missing for \(collection.name ?? "?")")
+            XCTAssertFalse(collection.nfts?.isEmpty ?? true, "nfts is missing for \(collection.name ?? "?")")
         }
     }
 }
