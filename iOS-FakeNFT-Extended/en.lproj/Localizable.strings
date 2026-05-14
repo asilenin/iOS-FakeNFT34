@@ -18,3 +18,5 @@
 "Catalog.sort.byNftCount" = "По количеству NFT";
 
 "CollectionDetail.placeholder" = "Заглушка экрана коллекции";
+
+"CollectionHeader.author" = "Автор коллекции:";

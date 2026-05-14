@@ -59,7 +59,7 @@ struct CollectionHeader: View {
 
     private var authorRow: some View {
         HStack(alignment: .firstTextBaseline, spacing: 4) {
-            Text("Автор коллекции:")
+            Text("CollectionHeader.author")
                 .font(.system(size: 13, weight: .regular))
                 .foregroundStyle(Color.ypBlack)
 
