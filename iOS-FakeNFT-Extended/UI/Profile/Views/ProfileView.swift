@@ -38,7 +38,7 @@ struct ProfileView: View {
                             .frame(width: 42, height: 42)
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("Редактировать профиль")
+                    .accessibilityLabel(Text("Profile.edit.accessibility"))
                 }
             }
             .task {
@@ -73,18 +73,18 @@ struct ProfileView: View {
 
                 VStack(spacing: 0) {
                     navigationRow(
-                        title: "Мои NFT",
-                        count: profile.nfts.count,
+                        title: String(localized: "Profile.myNfts"),
+                        count: profile.nfts?.count ?? 0,
                         route: .myNfts
                     )
 
                     navigationRow(
-                        title: "Избранные NFT",
-                        count: profile.likes.count,
+                        title: String(localized: "Profile.favoriteNfts"),
+                        count: profile.likes?.count ?? 0,
                         route: .favorites
                     )
                 }
-                .padding(.top, 40)
+                .padding(.top, 32)
             }
             .padding(.horizontal, 16)
             .padding(.top, 20)
@@ -97,26 +97,29 @@ struct ProfileView: View {
     private func header(_ profile: Profile) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .center, spacing: 16) {
-                avatar(sources: avatarSources(from: profile.avatar))
+                avatar(sources: avatarSources(from: profile.avatar ?? ""))
 
-                Text(profile.name)
+                Text(profile.name ?? "")
                     .font(.bold22)
                     .foregroundStyle(Color.ypBlack)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .frame(height: 70)
 
-            Text(profile.description ?? "")
-                .font(.regular13)
-                .foregroundStyle(Color.ypBlack)
-                .fixedSize(horizontal: false, vertical: true)
-                .padding(.top, 20)
+            if let description = profile.description, !description.isEmpty {
+                Text(description)
+                    .font(.regular13)
+                    .foregroundStyle(Color.ypBlack)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.top, 20)
+            }
 
-            if let websiteURL = URL(string: profile.website) {
+            if let website = profile.website,
+               let websiteURL = URL(string: website) {
                 Button {
                     router.push(ProfileRoute.userWeb(websiteURL), in: .profile)
                 } label: {
-                    Text(websiteTitle(for: profile.website))
+                    Text(websiteTitle(for: website))
                         .font(.regular15)
                         .foregroundStyle(Color.ypBlueUniversal)
                         .lineLimit(1)
@@ -126,7 +129,6 @@ struct ProfileView: View {
                 .padding(.top, 8)
             }
         }
-        .frame(height: 162, alignment: .topLeading)
     }
 
     // MARK: - Avatar
@@ -232,7 +234,7 @@ struct ProfileView: View {
                 .foregroundStyle(Color.ypBlack)
                 .multilineTextAlignment(.center)
 
-            Button("Повторить") {
+            Button(String(localized: "Profile.retry")) {
                 Task {
                     await viewModel?.loadProfile()
                 }

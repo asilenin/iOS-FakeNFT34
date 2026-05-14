@@ -8,11 +8,11 @@
 import Foundation
 
 struct Profile: Codable, Sendable {
-    let id: String
-    let name: String
+    let id: String?
+    let name: String?
     let description: String?
-    let website: String
-    let avatar: String
-    let nfts: [String]
-    let likes: [String]
+    let website: String?
+    let avatar: String?
+    let nfts: [String]?
+    let likes: [String]?
 }

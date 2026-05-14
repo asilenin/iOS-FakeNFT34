@@ -44,7 +44,11 @@ final class ProfileViewModel {
             let profile = try await profileService.loadProfile()
             state = .loaded(profile)
         } catch {
-            state = .failed("Не удалось загрузить профиль: \(error.localizedDescription)")
+            let message = String(
+                format: String(localized: "Profile.error.load"),
+                error.localizedDescription
+            )
+            state = .failed(message)
         }
     }
 }
