@@ -14,14 +14,6 @@ actor CartService: CartServiceProtocol {
         self.networkClient = networkClient
     }
 
-    func loadCart() async throws -> Set<String> {
-        let order: CartOrderDTO = try await networkClient.send(
-            request: LoadOrderRequest()
-        )
-
-        return Set(order.nfts)
-    }
-
     func loadCartItems() async throws -> [CartItem] {
         let ids = try await loadCart()
 
@@ -50,6 +42,14 @@ actor CartService: CartServiceProtocol {
         }
     }
 
+    func loadCart() async throws -> Set<String> {
+        let order: CartOrderDTO = try await networkClient.send(
+            request: LoadOrderRequest()
+        )
+
+        return Set(order.nfts)
+    }
+
     func setCart(_ ids: Set<String>) async throws {
         // Sprint 3 adds PUT /api/v1/orders/1 with form-urlencoded body.
         _ = ids
@@ -63,7 +63,7 @@ enum CartServiceError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .updateOrderNotImplemented:
-            return "Обновление корзины будет реализовано в Sprint 3."
+            "Обновление корзины будет реализовано в Sprint 3."
         }
     }
 }

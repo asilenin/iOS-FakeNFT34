@@ -40,7 +40,7 @@ struct CartItemView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
 
             Button(action: onDeleteTap) {
-                Image("cart-Delete")
+                Image(.cartDelete)
                     .resizable()
                     .renderingMode(.template)
                     .foregroundStyle(.ypBlack)
