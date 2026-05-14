@@ -60,7 +60,13 @@ struct CatalogView: View {
             case .success:
                 list(viewModel.collections)  // ← передаём collections явно
             case .error:
-                Color.clear
+                ScrollView {
+                    CatalogEmptyStateView(message: "Catalog.loadErrorHint")
+                        .frame(minHeight: 400)
+                }
+                .refreshable {
+                    await viewModel.load()
+                }
             }
         } else {
             LoadingSpinner(size: .medium)

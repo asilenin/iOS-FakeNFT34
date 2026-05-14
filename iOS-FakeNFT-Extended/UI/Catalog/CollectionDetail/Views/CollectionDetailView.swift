@@ -50,7 +50,13 @@ struct CollectionDetailView: View {
             case .success:
                 successContent(viewModel)
             case .error:
-                Color.clear
+                ScrollView {
+                    CatalogEmptyStateView(message: "Catalog.loadErrorHint")
+                        .frame(minHeight: 400)
+                }
+                .refreshable {
+                    await viewModel.load()
+                }
             }
         } else {
             LoadingSpinner(size: .medium)
@@ -69,6 +75,9 @@ struct CollectionDetailView: View {
                     .padding(.top, 8)
                     .padding(.bottom, 16)
             }
+        }
+        .refreshable {
+            await viewModel.load()
         }
         .ignoresSafeArea(.container, edges: .top)
     }
