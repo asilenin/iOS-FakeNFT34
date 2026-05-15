@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Profile: Codable, Sendable {
+struct Profile: Codable, Hashable, Identifiable, Sendable {
     let id: String?
     let name: String?
     let description: String?

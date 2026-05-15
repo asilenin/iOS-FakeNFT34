@@ -3,6 +3,7 @@ import SwiftUI
 struct TabBarView: View {
 
     @Environment(Router.self) private var router
+    @Environment(ServicesAssembly.self) private var servicesAssembly
 
     var body: some View {
         @Bindable var router = router
@@ -26,19 +27,10 @@ struct TabBarView: View {
 
         switch router.selectedTab {
         case .profile:
-            NavigationStack(path: $router.profilePath) {
-                ProfileView()
-                    .navigationDestination(for: ProfileRoute.self) { route in
-                        switch route {
-                        case .myNfts:
-                            ProfilePlaceholderView(title: "Мои NFT")
-                        case .favorites:
-                            ProfilePlaceholderView(title: "Избранные NFT")
-                        case .userWeb(let url):
-                            WebViewScreen(url: url)
-                        }
-                    }
-            }
+            ProfileTabRoot(
+                profileService: servicesAssembly.profileService,
+                nftService: servicesAssembly.nftService
+            )
         case .catalog:
             NavigationStack(path: $router.catalogPath) {
                 CatalogView()
@@ -73,6 +65,64 @@ struct TabBarView: View {
         case .catalog:    !router.catalogPath.isEmpty
         case .cart:       !router.cartPath.isEmpty
         case .statistics: !router.statisticsPath.isEmpty
+        }
+    }
+}
+
+// MARK: - ProfileTabRoot
+
+private struct ProfileTabRoot: View {
+
+    // MARK: - Environment
+
+    @Environment(Router.self) private var router
+
+    // MARK: - State
+
+    @State private var viewModel: ProfileViewModel
+
+    // MARK: - Properties
+
+    private let profileService: ProfileServiceProtocol
+    private let nftService: NftServiceProtocol
+
+    // MARK: - Initializers
+
+    init(
+        profileService: ProfileServiceProtocol,
+        nftService: NftServiceProtocol
+    ) {
+        self.profileService = profileService
+        self.nftService = nftService
+        _viewModel = State(initialValue: ProfileViewModel(profileService: profileService))
+    }
+
+    // MARK: - Body
+
+    var body: some View {
+        @Bindable var router = router
+
+        NavigationStack(path: $router.profilePath) {
+            ProfileView(viewModel: viewModel)
+                .navigationDestination(for: ProfileRoute.self) { route in
+                    switch route {
+                    case .myNfts(let nftIds):
+                        MyNFTsView(
+                            nftIds: nftIds,
+                            nftService: nftService
+                        )
+                    case .favorites:
+                        ProfilePlaceholderView(title: "Избранные NFT")
+                    case .edit(let profile):
+                        EditProfileView(
+                            profile: profile,
+                            profileService: profileService,
+                            onSaved: viewModel.updateLoadedProfile
+                        )
+                    case .userWeb(let url):
+                        WebViewScreen(url: url)
+                    }
+                }
         }
     }
 }
