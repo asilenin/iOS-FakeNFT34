@@ -95,12 +95,12 @@ struct CollectionDetailView: View {
                 NftGridCell(
                     configuration: NftGridCellConfiguration(
                         nft: nft,
-                        isFavorite: viewModel.favoriteIds.contains(nft.id),
-                        isInCart: viewModel.cartIds.contains(nft.id)
+                        isFavorite: viewModel.isFavorite(nft.id),
+                        isInCart: viewModel.isInCart(nft.id)
                     ),
                     actions: NftGridCellActions(
-                        onFavoriteTap: { viewModel.toggleFavorite(nft.id) },
-                        onCartTap: { viewModel.toggleCart(nft.id) },
+                        onFavoriteTap: { viewModel.didTapFavorite(nft.id) },
+                        onCartTap: { viewModel.didTapCart(nft.id) },
                         onCellTap: { router.push(CatalogRoute.nftDetail(nft.id), in: .catalog) }
                     )
                 )
@@ -111,13 +111,7 @@ struct CollectionDetailView: View {
     // MARK: - Actions
 
     private func handleAuthorTap(_ viewModel: CollectionDetailViewModel) {
-        let websiteString = viewModel.author?.website ?? collection.website?.absoluteString
-        guard
-            let websiteString,
-            let url = URL(string: websiteString)
-        else {
-            return
-        }
+        guard let url = viewModel.authorURL else { return }
         router.push(CatalogRoute.authorWeb(url), in: .catalog)
     }
 
