@@ -7,35 +7,49 @@ import SwiftUI
 /// Используется в ячейках каталога для визуализации оценки NFT.
 struct RatingStarsView: View {
 
+    // MARK: - Constants
+
+    private enum Constants {
+        static let maxRating = 5
+        static let starSize = CGSize(width: 12, height: 12)
+        static let spacing: CGFloat = 2
+        static let totalWidth: CGFloat = 68
+    }
+
+    // MARK: - Input
+
     /// Рейтинг от 0 до 5.
     let rating: Int
 
+    // MARK: - Body
+
     var body: some View {
-        HStack(spacing: 2) {
-            ForEach(0..<5, id: \.self) { index in
-                if index < rating {
-                    Image(.starActive)
-                        .resizable()
-                        .scaledToFit()
-                } else {
-                    Image(.starInactive)
-                        .resizable()
-                        .scaledToFit()
-                }
+        HStack(spacing: Constants.spacing) {
+            ForEach(0..<Constants.maxRating, id: \.self) { index in
+                Image(index < normalizedRating ? .starActive : .starInactive)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(
+                        width: Constants.starSize.width,
+                        height: Constants.starSize.height
+                    )
             }
         }
-        .frame(width: 68, height: 12)
+        .frame(width: Constants.totalWidth, height: Constants.starSize.height)
+    }
+
+    // MARK: - Private
+
+    private var normalizedRating: Int {
+        min(max(rating, 0), Constants.maxRating)
     }
 }
 
 #Preview {
     VStack(alignment: .leading, spacing: 12) {
-        RatingStarsView(rating: 0)
-        RatingStarsView(rating: 1)
-        RatingStarsView(rating: 2)
-        RatingStarsView(rating: 3)
-        RatingStarsView(rating: 4)
-        RatingStarsView(rating: 5)
+        ForEach(0...5, id: \.self) { rating in
+            RatingStarsView(rating: rating)
+        }
     }
     .padding()
 }
