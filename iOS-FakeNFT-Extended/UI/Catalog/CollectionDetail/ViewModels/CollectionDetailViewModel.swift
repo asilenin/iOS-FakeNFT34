@@ -17,18 +17,18 @@ final class CollectionDetailViewModel {
     // MARK: - State
 
     private(set) var state: CollectionDetailState = .loading
-
     private(set) var nfts: [Nft] = []
-
     private(set) var author: Author?
-
-    private(set) var favoriteIds: Set<String> = []
-
-    private(set) var cartIds: Set<String> = []
 
     /// Бинди́тся в `errorAlert` modifier во View.
     var error: Error?
 
+    // Множества state НЕ читаются View напрямую — только через
+    // `isFavorite(_:)` / `isInCart(_:)`. `private(set)` сохранён для того,
+    // чтобы `@Observable` мог отслеживать изменения и триггерить ре-рендер.
+    private(set) var favoriteIds: Set<String> = []
+    private(set) var cartIds: Set<String> = []
+    
     // MARK: - Internal
 
     private let service: CollectionDetailServiceProtocol
@@ -39,6 +39,23 @@ final class CollectionDetailViewModel {
     init(collection: NftCollection, service: CollectionDetailServiceProtocol) {
         self.collection = collection
         self.service = service
+    }
+
+    // MARK: - Public Queries
+
+    func isFavorite(_ nftId: String) -> Bool {
+        favoriteIds.contains(nftId)
+    }
+
+    func isInCart(_ nftId: String) -> Bool {
+        cartIds.contains(nftId)
+    }
+
+    /// URL для перехода на сайт автора.
+    /// Возвращает `nil`, если автор не загружен или website невалидный.
+    var authorURL: URL? {
+        guard let website = author?.website else { return nil }
+        return URL(string: website)
     }
 
     // MARK: - Public Methods
@@ -57,7 +74,17 @@ final class CollectionDetailViewModel {
 
     // MARK: - User Actions
 
-    func toggleFavorite(_ nftId: String) {
+    func didTapFavorite(_ nftId: String) {
+        toggleFavorite(nftId)
+    }
+
+    func didTapCart(_ nftId: String) {
+        toggleCart(nftId)
+    }
+
+    // MARK: - Private
+    
+    private func toggleFavorite(_ nftId: String) {
         if favoriteIds.contains(nftId) {
             favoriteIds.remove(nftId)
         } else {
@@ -65,15 +92,13 @@ final class CollectionDetailViewModel {
         }
     }
 
-    func toggleCart(_ nftId: String) {
+    private func toggleCart(_ nftId: String) {
         if cartIds.contains(nftId) {
             cartIds.remove(nftId)
         } else {
             cartIds.insert(nftId)
         }
     }
-
-    // MARK: - Private
 
     private func performLoad(
         using service: CollectionDetailServiceProtocol,
