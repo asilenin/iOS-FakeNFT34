@@ -18,15 +18,32 @@ extension CatalogSortOption {
         switch self {
         case .name:
             return { lhs, rhs in
-                lhs.name.localizedStandardCompare(rhs.name) == .orderedAscending
+                Self.compareByName(lhs, rhs)
             }
         case .nftCount:
             return { lhs, rhs in
-                if lhs.nfts.count != rhs.nfts.count {
-                    return lhs.nfts.count > rhs.nfts.count
+                let lhsCount = lhs.nfts?.count ?? 0
+                let rhsCount = rhs.nfts?.count ?? 0
+                if lhsCount != rhsCount {
+                    return lhsCount > rhsCount
                 }
-                return lhs.name.localizedStandardCompare(rhs.name) == .orderedAscending
+                return Self.compareByName(lhs, rhs)
             }
+        }
+    }
+
+    /// Сравнение коллекций по имени с правилом:
+    /// коллекции с `name == nil` всегда уходят в конец списка.
+    private static func compareByName(_ lhs: NftCollection, _ rhs: NftCollection) -> Bool {
+        switch (lhs.name, rhs.name) {
+        case let (lhsName?, rhsName?):
+            return lhsName.localizedStandardCompare(rhsName) == .orderedAscending
+        case (_?, nil):
+            return true   // именованная < безымянной
+        case (nil, _?):
+            return false  // безымянная > именованной
+        case (nil, nil):
+            return false  // одинаковы, порядок не важен
         }
     }
 }

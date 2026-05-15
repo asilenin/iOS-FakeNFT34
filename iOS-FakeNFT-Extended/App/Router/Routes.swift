@@ -7,7 +7,11 @@ enum CatalogRoute: Hashable {
     /// Переход на экран деталей конкретной коллекции.
     case collection(NftCollection)
 
-    // case authorWeb(URL)  // TODO(PR#2): навигация на сайт автора
+    /// Переход на экран WebView с сайтом автора коллекции.
+    case authorWeb(URL)
+
+    /// Переход на экран деталей NFT по идентификатору.
+    case nftDetail(String)
 }
 
 enum CartRoute: Hashable {

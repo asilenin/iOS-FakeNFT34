@@ -11,23 +11,23 @@ struct NftCollection: Sendable, Decodable, Identifiable, Hashable {
     let id: String
 
     /// Название коллекции
-    let name: String
+    let name: String?
 
     /// URL обложки коллекции
-    let cover: URL
+    let cover: URL?
 
     /// Список идентификаторов NFT, входящих в коллекцию
-    let nfts: [String]
+    let nfts: [String]?
 
     /// Описание коллекции
-    let description: String
+    let description: String?
 
     /// Автор коллекции
-    let author: String
+    let author: String?
 
     /// Сайт коллекции или автора
-    let website: URL
+    let website: URL?
 
     /// Дата создания коллекции в формате строки, приходящей с backend
-    let createdAt: String
+    let createdAt: String?
 }

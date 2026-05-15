@@ -26,9 +26,11 @@ struct CatalogView: View {
             titleVisibility: .visible
         ) {
             Button("Catalog.sort.byName") {
+                viewModel?.sortOption = .name
                 storedSortOption = .name
             }
             Button("Catalog.sort.byNftCount") {
+                viewModel?.sortOption = .nftCount
                 storedSortOption = .nftCount
             }
             Button("Common.close", role: .cancel) {}
@@ -38,14 +40,12 @@ struct CatalogView: View {
         }
         .task {
             if viewModel == nil {
-                let vm = CatalogViewModel(service: services.catalogService)
-                vm.sortOption = storedSortOption
-                viewModel = vm
+                viewModel = CatalogViewModel(
+                    service: services.catalogService,
+                    initialSortOption: storedSortOption
+                )
             }
             await viewModel?.load()
-        }
-        .onChange(of: storedSortOption) { _, newValue in
-            viewModel?.sortOption = newValue
         }
     }
 
@@ -60,7 +60,13 @@ struct CatalogView: View {
             case .success:
                 list(viewModel.collections)  // ← передаём collections явно
             case .error:
-                Color.clear
+                ScrollView {
+                    CatalogEmptyStateView(message: "Catalog.loadErrorHint")
+                        .frame(minHeight: 400)
+                }
+                .refreshable {
+                    await viewModel.load()
+                }
             }
         } else {
             LoadingSpinner(size: .medium)
@@ -70,10 +76,16 @@ struct CatalogView: View {
     private func list(_ collections: [NftCollection]) -> some View {
         List {
             ForEach(collections) { collection in
-                NavigationLink(value: CatalogRoute.collection(collection)) {
+                ZStack {
+                    // Скрытый NavigationLink обновляет NavigationPath
+                    // (Router отслеживает push через path), но не рендерит chevron.
+                    NavigationLink(value: CatalogRoute.collection(collection)) {
+                        EmptyView()
+                    }
+                    .opacity(0)
+
                     CatalogRow(collection: collection)
                 }
-                .buttonStyle(.plain)
                 .listRowSeparator(.hidden)
                 .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 8, trailing: 16))
                 .listRowBackground(Color.ypWhite)
