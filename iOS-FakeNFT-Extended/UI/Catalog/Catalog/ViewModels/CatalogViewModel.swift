@@ -15,7 +15,7 @@ final class CatalogViewModel {
 
     /// Опция сортировки, выбранная пользователем.
     /// При изменении список коллекций автоматически пересортируется.
-    var sortOption: CatalogSortOption = .nftCount {
+    var sortOption: CatalogSortOption {
         didSet {
             guard sortOption != oldValue else { return }
             applySortToState()
@@ -25,8 +25,9 @@ final class CatalogViewModel {
     private let service: CatalogServiceProtocol
     private var currentTask: Task<Void, Never>?
 
-    init(service: CatalogServiceProtocol) {
+    init(service: CatalogServiceProtocol, initialSortOption: CatalogSortOption) {
         self.service = service
+        self.sortOption = initialSortOption
     }
 
     /// Загрузить коллекции с сервера и отсортировать по текущей опции.

@@ -26,9 +26,11 @@ struct CatalogView: View {
             titleVisibility: .visible
         ) {
             Button("Catalog.sort.byName") {
+                viewModel?.sortOption = .name
                 storedSortOption = .name
             }
             Button("Catalog.sort.byNftCount") {
+                viewModel?.sortOption = .nftCount
                 storedSortOption = .nftCount
             }
             Button("Common.close", role: .cancel) {}
@@ -38,14 +40,12 @@ struct CatalogView: View {
         }
         .task {
             if viewModel == nil {
-                let vm = CatalogViewModel(service: services.catalogService)
-                vm.sortOption = storedSortOption
-                viewModel = vm
+                viewModel = CatalogViewModel(
+                    service: services.catalogService,
+                    initialSortOption: storedSortOption
+                )
             }
             await viewModel?.load()
-        }
-        .onChange(of: storedSortOption) { _, newValue in
-            viewModel?.sortOption = newValue
         }
     }
 
