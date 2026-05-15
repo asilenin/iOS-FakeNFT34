@@ -4,8 +4,8 @@ import Foundation
 ///
 /// Отвечает за параллельную загрузку автора и списка NFT коллекции,
 /// а также за локальное состояние избранного и корзины.
-/// В P2 множества `favoriteIds`/`cartIds` живут только в памяти;
-/// в P3 будут синхронизироваться с `FavoritesService`/`CartService`.
+/// Данные автора (имя, сайт) приходят в составе `NftCollection` — отдельная
+/// сетевая загрузка не нужна, `Author` собирается синхронно в `init`.
 @Observable
 @MainActor
 final class CollectionDetailViewModel {
@@ -18,7 +18,11 @@ final class CollectionDetailViewModel {
 
     private(set) var state: CollectionDetailState = .loading
     private(set) var nfts: [Nft] = []
-    private(set) var author: Author?
+
+    /// Автор коллекции. Собирается из полей `NftCollection.author`/`website` в `init`,
+    /// потому что mock-сервер отдаёт эти данные внутри коллекции, а отдельной
+    /// ручки `/users/{id}` для авторов нет.
+    let author: Author
 
     /// Бинди́тся в `errorAlert` modifier во View.
     var error: Error?
@@ -39,6 +43,13 @@ final class CollectionDetailViewModel {
     init(collection: NftCollection, service: CollectionDetailServiceProtocol) {
         self.collection = collection
         self.service = service
+        self.author = Author(
+            // Используем имя автора как идентификатор: серверный id автора недоступен
+            // в ответе `/collections`, а имя по соглашению API уникально в рамках коллекции.
+            id: collection.author ?? "",
+            name: collection.author ?? "",
+            website: collection.website?.absoluteString ?? ""
+        )
     }
 
     // MARK: - Public Queries
@@ -52,10 +63,10 @@ final class CollectionDetailViewModel {
     }
 
     /// URL для перехода на сайт автора.
-    /// Возвращает `nil`, если автор не загружен или website невалидный.
+    /// Возвращает `nil`, если website пустой или невалидный.
     var authorURL: URL? {
-        guard let website = author?.website else { return nil }
-        return URL(string: website)
+        guard !author.website.isEmpty else { return nil }
+        return URL(string: author.website)
     }
 
     // MARK: - Public Methods
@@ -106,13 +117,9 @@ final class CollectionDetailViewModel {
     ) async {
         state = .loading
         do {
-            async let loadedAuthor = service.loadAuthor(by: collection.author ?? "")
-            async let loadedNfts = service.loadNfts(byIds: collection.nfts ?? [])
-
-            let (author, nfts) = try await (loadedAuthor, loadedNfts)
+            let nfts = try await service.loadNfts(byIds: collection.nfts ?? [])
             try Task.checkCancellation()
 
-            self.author = author
             self.nfts = nfts
             self.state = .success
         } catch is CancellationError {

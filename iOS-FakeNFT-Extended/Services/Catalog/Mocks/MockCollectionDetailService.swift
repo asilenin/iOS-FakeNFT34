@@ -28,15 +28,6 @@ actor MockCollectionDetailService: CollectionDetailServiceProtocol {
             )
         }
     }
-
-    func loadAuthor(by id: String) async throws -> Author {
-        try await Task.sleep(for: .milliseconds(500))
-        return Author(
-            id: id,
-            name: Self.mockAuthorName,
-            website: Self.mockAuthorWebsite
-        )
-    }
 }
 
 // MARK: - Mock data
