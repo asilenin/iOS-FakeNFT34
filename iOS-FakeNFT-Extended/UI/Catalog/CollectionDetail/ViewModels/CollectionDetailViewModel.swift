@@ -10,35 +10,38 @@ import Foundation
 @MainActor
 final class CollectionDetailViewModel {
 
-    /// Коллекция, выбранная пользователем (приходит из навигации).
+    // MARK: - Dependencies
+
     let collection: NftCollection
 
-    /// Текущее состояние загрузки.
+    // MARK: - State
+
     private(set) var state: CollectionDetailState = .loading
 
-    /// Загруженный список NFT коллекции.
     private(set) var nfts: [Nft] = []
 
-    /// Автор коллекции (загружается параллельно с NFT).
     private(set) var author: Author?
 
-    /// Идентификаторы NFT, добавленных в избранное (локальное состояние P2).
     private(set) var favoriteIds: Set<String> = []
 
-    /// Идентификаторы NFT в корзине (локальное состояние P2).
     private(set) var cartIds: Set<String> = []
 
-    /// Ошибка последней попытки загрузки, если она была.
-    /// Используется для отображения алерта через `ErrorAlert` компонент.
+    /// Бинди́тся в `errorAlert` modifier во View.
     var error: Error?
+
+    // MARK: - Internal
 
     private let service: CollectionDetailServiceProtocol
     private var currentTask: Task<Void, Never>?
+
+    // MARK: - Init
 
     init(collection: NftCollection, service: CollectionDetailServiceProtocol) {
         self.collection = collection
         self.service = service
     }
+
+    // MARK: - Public Methods
 
     /// Загрузить автора и NFT параллельно.
     /// Отменяет предыдущую загрузку, если она была в процессе.
@@ -52,8 +55,8 @@ final class CollectionDetailViewModel {
         await task.value
     }
 
-    /// Переключить состояние избранного для указанного NFT.
-    /// В P2 меняет только локальное множество; в P3 будет вызов сети.
+    // MARK: - User Actions
+
     func toggleFavorite(_ nftId: String) {
         if favoriteIds.contains(nftId) {
             favoriteIds.remove(nftId)
@@ -62,8 +65,6 @@ final class CollectionDetailViewModel {
         }
     }
 
-    /// Переключить состояние корзины для указанного NFT.
-    /// В P2 меняет только локальное множество; в P3 будет вызов сети.
     func toggleCart(_ nftId: String) {
         if cartIds.contains(nftId) {
             cartIds.remove(nftId)
