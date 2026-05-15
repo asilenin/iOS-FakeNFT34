@@ -7,14 +7,19 @@ import Kingfisher
 /// Размер: 108×172pt. Изображение: 108×108pt (corner radius 12pt).
 /// Нижний блок содержит рейтинг, название с кнопкой корзины и цену.
 /// Используется в `LazyVGrid` экрана коллекции (см. 2.8).
+///
+/// Принимает `NftGridCellConfiguration` (данные + UI-state) и
+/// `NftGridCellActions` (действия пользователя). Такое разделение
+/// упрощает Preview, тестирование и переиспользование ячейки
+/// в других контекстах при расширении приложения.
 struct NftGridCell: View {
 
-    let nft: Nft
-    let isFavorite: Bool
-    let isInCart: Bool
-    let onFavoriteTap: () -> Void
-    let onCartTap: () -> Void
-    let onCellTap: () -> Void
+    // MARK: - Input
+
+    let configuration: NftGridCellConfiguration
+    let actions: NftGridCellActions
+
+    // MARK: - Body
 
     var body: some View {
         VStack(spacing: 8) {
@@ -23,26 +28,26 @@ struct NftGridCell: View {
         }
         .frame(width: 108, height: 172)
         .contentShape(Rectangle())
-        .onTapGesture(perform: onCellTap)
+        .onTapGesture(perform: actions.onCellTap)
     }
 
     // MARK: - Subviews
 
     private var imageWithFavoriteButton: some View {
         ZStack(alignment: .topTrailing) {
-            KFImage(nft.images?.first)
+            KFImage(configuration.nft.images?.first)
                 .resizable()
                 .scaledToFill()
                 .frame(width: 108, height: 108)
                 .clipped()
                 .cornerRadius(12)
 
-            Button(action: onFavoriteTap) {
-                Image(systemName: isFavorite ? "heart.fill" : "heart")
+            Button(action: actions.onFavoriteTap) {
+                Image(systemName: configuration.isFavorite ? "heart.fill" : "heart")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 20, height: 20)
-                    .foregroundStyle(isFavorite ? Color.red : Color.white)
+                    .foregroundStyle(configuration.isFavorite ? Color.red : Color.white)
                     .frame(width: 40, height: 40)
                     .contentShape(Rectangle())
             }
@@ -53,12 +58,12 @@ struct NftGridCell: View {
 
     private var infoBlock: some View {
         VStack(alignment: .leading, spacing: 0) {
-            RatingStarsView(rating: nft.rating ?? 0)
+            RatingStarsView(rating: configuration.nft.rating ?? 0)
                 .padding(.bottom, 5)
 
             HStack(alignment: .center, spacing: 0) {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(nft.name ?? "—")
+                    Text(configuration.nft.name ?? "—")
                         .font(.system(size: 17, weight: .bold))
                         .foregroundStyle(Color.ypBlack)
                         .lineLimit(1)
@@ -69,8 +74,8 @@ struct NftGridCell: View {
                 }
                 .frame(width: 68, alignment: .leading)
 
-                Button(action: onCartTap) {
-                    Image(isInCart ? .cartDelete : .cartAdd)
+                Button(action: actions.onCartTap) {
+                    Image(configuration.isInCart ? .cartDelete : .cartAdd)
                         .renderingMode(.template)
                         .resizable()
                         .scaledToFit()
@@ -87,7 +92,7 @@ struct NftGridCell: View {
     // MARK: - Private
 
     private var priceString: String {
-        guard let price = nft.price else { return "— ETH" }
+        guard let price = configuration.nft.price else { return "— ETH" }
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.minimumFractionDigits = 0
@@ -101,21 +106,21 @@ struct NftGridCell: View {
 #Preview {
     HStack(spacing: 9) {
         NftGridCell(
-            nft: MockCollectionDetailService.mockNfts[0],
-            isFavorite: false,
-            isInCart: false,
-            onFavoriteTap: {},
-            onCartTap: {},
-            onCellTap: {}
+            configuration: NftGridCellConfiguration(
+                nft: MockCollectionDetailService.mockNfts[0],
+                isFavorite: false,
+                isInCart: false
+            ),
+            actions: .preview
         )
 
         NftGridCell(
-            nft: MockCollectionDetailService.mockNfts[1],
-            isFavorite: true,
-            isInCart: true,
-            onFavoriteTap: {},
-            onCartTap: {},
-            onCellTap: {}
+            configuration: NftGridCellConfiguration(
+                nft: MockCollectionDetailService.mockNfts[1],
+                isFavorite: true,
+                isInCart: true
+            ),
+            actions: .preview
         )
     }
     .padding()

@@ -93,12 +93,16 @@ struct CollectionDetailView: View {
         ) {
             ForEach(viewModel.nfts) { nft in
                 NftGridCell(
-                    nft: nft,
-                    isFavorite: viewModel.favoriteIds.contains(nft.id),
-                    isInCart: viewModel.cartIds.contains(nft.id),
-                    onFavoriteTap: { viewModel.toggleFavorite(nft.id) },
-                    onCartTap: { viewModel.toggleCart(nft.id) },
-                    onCellTap: { router.push(CatalogRoute.nftDetail(nft.id), in: .catalog) }
+                    configuration: NftGridCellConfiguration(
+                        nft: nft,
+                        isFavorite: viewModel.favoriteIds.contains(nft.id),
+                        isInCart: viewModel.cartIds.contains(nft.id)
+                    ),
+                    actions: NftGridCellActions(
+                        onFavoriteTap: { viewModel.toggleFavorite(nft.id) },
+                        onCartTap: { viewModel.toggleCart(nft.id) },
+                        onCellTap: { router.push(CatalogRoute.nftDetail(nft.id), in: .catalog) }
+                    )
                 )
             }
         }
