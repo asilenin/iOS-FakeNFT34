@@ -53,11 +53,7 @@ final class MyNFTsViewModel {
         guard !state.isLoading else { return }
 
         guard !nftIds.isEmpty else {
-            #if DEBUG
-            state = .loaded(sorted(Self.mockNFTs))
-            #else
             state = .empty
-            #endif
             return
         }
 
@@ -104,34 +100,6 @@ final class MyNFTsViewModel {
         }
     }
 
-    #if DEBUG
-    private static let mockNFTs = [
-        ProfileNft(
-            id: "mock-1",
-            name: "April-1",
-            images: ["https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/April/1.png"],
-            rating: 3,
-            author: "Joaquin Phoenix",
-            price: 1.81
-        ),
-        ProfileNft(
-            id: "mock-2",
-            name: "April-2",
-            images: ["https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/April/2.png"],
-            rating: 4,
-            author: "Anastasia",
-            price: 3.42
-        ),
-        ProfileNft(
-            id: "mock-3",
-            name: "April-3",
-            images: ["https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/April/3.png"],
-            rating: 5,
-            author: "Practicum",
-            price: 1.17
-        )
-    ]
-    #endif
 }
 
 // MARK: - MyNFTsViewModel.State
