@@ -64,10 +64,18 @@ final class MyNFTsViewModel {
         state = .loading
 
         do {
-            var loadedNFTs: [ProfileNft] = []
+            let loadedNFTs = try await withThrowingTaskGroup(of: ProfileNft.self) { group in
+                for nftId in nftIds {
+                    group.addTask { [nftService] in
+                        try await nftService.loadNft(id: nftId)
+                    }
+                }
 
-            for nftId in nftIds {
-                loadedNFTs.append(try await nftService.loadNft(id: nftId))
+                var nfts: [ProfileNft] = []
+                for try await nft in group {
+                    nfts.append(nft)
+                }
+                return nfts
             }
 
             state = loadedNFTs.isEmpty ? .empty : .loaded(sorted(loadedNFTs))
