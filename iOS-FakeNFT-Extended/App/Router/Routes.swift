@@ -22,7 +22,5 @@ enum ProfileRoute: Hashable {
 
 enum StatisticsRoute: Hashable {
     case _placeholder
-    // case user(User)
-    // case userCollection(User)
-    // case userWeb(URL)
+    case userPlaceholder(StatisticsUser)
 }

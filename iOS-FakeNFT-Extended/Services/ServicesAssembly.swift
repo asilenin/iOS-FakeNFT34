@@ -30,4 +30,8 @@ final class ServicesAssembly {
     //   - Profile:    profileService
     //   - Statistics: usersService
     
+    var statisticsService: any StatisticsServiceProtocol {
+        MockStatisticsService()
+    }
+    
 }

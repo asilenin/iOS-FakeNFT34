@@ -11,3 +11,10 @@
 "Error.retry" = "Повторить";
 
 "Common.sort" = "Сортировка";
+
+"Statistics.sort.byRating" = "По рейтингу";
+"Statistics.sort.byName" = "По имени";
+"Statistics.sort.byNftsCount" = "По количеству NFT";
+"Statistics.empty" = "Список пользователей пуст";
+"Statistics.user.title" = "Пользователь";
+"Statistics.user.placeholder" = "Здесь будет экран пользователя";
