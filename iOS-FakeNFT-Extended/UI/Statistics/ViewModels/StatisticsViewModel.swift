@@ -12,47 +12,50 @@ import Observation
 @MainActor
 final class StatisticsViewModel {
 
-    private let statisticsService: any StatisticsServiceProtocol
+    // MARK: - Dependencies
+
+    private let statisticsService: StatisticsServiceProtocol
+    private let sortSettings: StatisticsSortSettingsStorage
+
+    // MARK: - State
 
     private(set) var users: [StatisticsUser] = []
-    private(set) var isLoading = false
-    var loadError: Error?
+    private(set) var state: StatisticsState = .loading
+    var sortOption: StatisticsSortOption
 
-    var sortOption: StatisticsSortOption {
-        didSet {
-            UserDefaults.standard.set(sortOption.rawValue, forKey: StatisticsSortOption.appStorageKey)
-            applySort()
-        }
-    }
+    // MARK: - Init
 
-    init(statisticsService: any StatisticsServiceProtocol) {
+    init(
+        statisticsService: StatisticsServiceProtocol,
+        sortSettings: StatisticsSortSettingsStorage = UserDefaultsStatisticsSortSettings()
+    ) {
         self.statisticsService = statisticsService
-        if let raw = UserDefaults.standard.string(forKey: StatisticsSortOption.appStorageKey),
-           let saved = StatisticsSortOption(rawValue: raw) {
-            self.sortOption = saved
-        } else {
-            self.sortOption = .default
-        }
+        self.sortSettings = sortSettings
+        self.sortOption = sortSettings.load()
     }
+
+    // MARK: - Public Methods
 
     func load() async {
-        guard !isLoading else { return }
-        isLoading = true
-        loadError = nil
+        state = .loading
         do {
             let fetched = try await statisticsService.fetchRankingUsers()
             users = fetched
             applySort()
+            state = users.isEmpty ? .empty : .success
         } catch {
             users = []
-            loadError = error
+            state = .error(error)
         }
-        isLoading = false
     }
 
     func setSortOption(_ option: StatisticsSortOption) {
         sortOption = option
+        sortSettings.save(option)
+        if case .success = state { applySort() }
     }
+
+    // MARK: - Private Methods
 
     private func applySort() {
         switch sortOption {

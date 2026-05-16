@@ -3,6 +3,7 @@ import SwiftUI
 struct TabBarView: View {
 
     @Environment(Router.self) private var router
+    @Environment(ServicesAssembly.self) private var services
 
     var body: some View {
         @Bindable var router = router
@@ -51,7 +52,11 @@ struct TabBarView: View {
             }
         case .statistics:
             NavigationStack(path: $router.statisticsPath) {
-                StatisticsView()
+                    StatisticsView(
+                        viewModel: StatisticsViewModel(
+                            statisticsService: services.statisticsService
+                        )
+                    )
                     .navigationDestination(for: StatisticsRoute.self) { route in
                         switch route {
                         case .userPlaceholder(let user):

@@ -8,11 +8,15 @@
 import SwiftUI
 import Kingfisher
 
-struct StatisticsRow: View {
+struct StatisticsRowView: View {
+    
+    // MARK: - Properties
 
     let rank: Int
     let user: StatisticsUser
     let onSelect: () -> Void
+    
+    // MARK: - Body
 
     var body: some View {
         Button(action: onSelect) {
@@ -41,6 +45,8 @@ struct StatisticsRow: View {
         .buttonStyle(.plain)
     }
 
+    // MARK: - Private Views
+
     @ViewBuilder
     private var avatar: some View {
         let side: CGFloat = 48
@@ -67,6 +73,6 @@ struct StatisticsRow: View {
 
 #Preview {
     List {
-        StatisticsRow(rank: 1, user: StatisticsUser(id: "p", name: "Preview", avatarURL: nil, nftsCount: 10, rating: 50), onSelect: {})
+        StatisticsRowView(rank: 1, user: StatisticsUser(id: "p", name: "Preview", avatarURL: nil, nftsCount: 10, rating: 50), onSelect: {})
     }
 }
