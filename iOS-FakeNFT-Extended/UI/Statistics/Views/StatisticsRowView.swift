@@ -1,5 +1,5 @@
 //
-//  StatisticsRow.swift
+//  StatisticsRowView.swift
 //  iOS-FakeNFT-Extended
 //
 //  Created by МAK on 12.05.2026.
@@ -9,13 +9,13 @@ import SwiftUI
 import Kingfisher
 
 struct StatisticsRowView: View {
-    
+
     // MARK: - Properties
 
     let rank: Int
     let user: StatisticsUser
     let onSelect: () -> Void
-    
+
     // MARK: - Body
 
     var body: some View {
@@ -27,17 +27,9 @@ struct StatisticsRowView: View {
                     .frame(minWidth: 24, alignment: .leading)
 
                 avatar
-
-                Text(user.name)
-                    .font(.regular17)
-                    .foregroundStyle(Color.ypBlack)
-                    .lineLimit(1)
-
+                nameLabel
                 Spacer(minLength: 8)
-
-                Text("\(user.nftsCount)")
-                    .font(.regular17)
-                    .foregroundStyle(Color.ypBlack)
+                nftCountLabel
             }
             .padding(.vertical, 8)
             .contentShape(Rectangle())
@@ -46,6 +38,19 @@ struct StatisticsRowView: View {
     }
 
     // MARK: - Private Views
+
+    private var nameLabel: some View {
+        Text(user.name)
+            .font(.regular17)
+            .foregroundStyle(Color.ypBlack)
+            .lineLimit(1)
+    }
+
+    private var nftCountLabel: some View {
+        Text("\(user.nftsCount)")
+            .font(.regular17)
+            .foregroundStyle(Color.ypBlack)
+    }
 
     @ViewBuilder
     private var avatar: some View {
@@ -73,6 +78,10 @@ struct StatisticsRowView: View {
 
 #Preview {
     List {
-        StatisticsRowView(rank: 1, user: StatisticsUser(id: "p", name: "Preview", avatarURL: nil, nftsCount: 10, rating: 50), onSelect: {})
+        StatisticsRowView(
+            rank: 1,
+            user: StatisticsUser(id: "p", name: "Preview", avatarURL: nil, nftsCount: 10, rating: 50),
+            onSelect: {}
+        )
     }
 }

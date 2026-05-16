@@ -21,15 +21,19 @@ struct StatisticsView: View {
     let services = ServicesAssembly(networkClient: DefaultNetworkClient())
 
     NavigationStack(path: $router.statisticsPath) {
-        StatisticsView()
-            .navigationDestination(for: StatisticsRoute.self) { route in
-                switch route {
-                case .userPlaceholder(let user):
-                    StatisticsUserPlaceholderView(user: user)
-                case ._placeholder:
-                    EmptyView()
-                }
+        StatisticsView(
+            viewModel: StatisticsViewModel(
+                statisticsService: services.statisticsService
+            )
+        )
+        .navigationDestination(for: StatisticsRoute.self) { route in
+            switch route {
+            case .userPlaceholder(let user):
+                StatisticsUserPlaceholderView(user: user)
+            case ._placeholder:
+                EmptyView()
             }
+        }
     }
     .environment(router)
     .environment(services)

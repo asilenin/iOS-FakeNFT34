@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-private struct StatisticsViewContent: View {
-    
+struct StatisticsViewContentView: View {
+
     @Environment(Router.self) private var router
     @Bindable var viewModel: StatisticsViewModel
-    
+
     var body: some View {
         ZStack {
             Color.ypWhite.ignoresSafeArea()
@@ -20,8 +20,13 @@ private struct StatisticsViewContent: View {
         .navigationTitle(Text("Tab.statistics"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { sortToolbar }
+        .errorAlert(error: $viewModel.loadError) {
+            Task { await viewModel.load() }
+        }
     }
-    
+
+    // MARK: - Content
+
     @ViewBuilder
     private var content: some View {
         switch viewModel.state {
@@ -32,14 +37,16 @@ private struct StatisticsViewContent: View {
         case .success:
             statisticsList
         case .error:
-            emptyView
+            Color.clear
         }
     }
-    
+
+    // MARK: - Private Views
+
     private var loadingView: some View {
         LoadingSpinner(size: .large)
     }
-    
+
     private var emptyView: some View {
         Text("Statistics.empty")
             .font(.regular17)
@@ -47,7 +54,7 @@ private struct StatisticsViewContent: View {
             .multilineTextAlignment(.center)
             .padding()
     }
-    
+
     private var statisticsList: some View {
         List {
             ForEach(Array(viewModel.users.enumerated()), id: \.element.id) { index, user in
@@ -59,5 +66,34 @@ private struct StatisticsViewContent: View {
         }
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
+    }
+
+    @ToolbarContentBuilder
+    private var sortToolbar: some ToolbarContent {
+        ToolbarItem(placement: .topBarTrailing) {
+            Menu {
+                ForEach(StatisticsSortOption.allCases) { option in
+                    Button {
+                        viewModel.setSortOption(option)
+                    } label: {
+                        HStack {
+                            Text(option.localizedTitle)
+                            if viewModel.sortOption == option {
+                                Image(systemName: "checkmark")
+                            }
+                        }
+                    }
+                }
+            } label: {
+                Image(.menu)
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 42, height: 42)
+                    .foregroundStyle(Color.ypBlack)
+                    .contentShape(Rectangle())
+            }
+            .accessibilityLabel(Text("Common.sort"))
+        }
     }
 }

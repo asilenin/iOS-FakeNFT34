@@ -21,6 +21,7 @@ final class StatisticsViewModel {
 
     private(set) var users: [StatisticsUser] = []
     private(set) var state: StatisticsState = .loading
+    var loadError: Error?
     var sortOption: StatisticsSortOption
 
     // MARK: - Init
@@ -38,6 +39,7 @@ final class StatisticsViewModel {
 
     func load() async {
         state = .loading
+        loadError = nil
         do {
             let fetched = try await statisticsService.fetchRankingUsers()
             users = fetched
@@ -45,6 +47,7 @@ final class StatisticsViewModel {
             state = users.isEmpty ? .empty : .success
         } catch {
             users = []
+            loadError = error
             state = .error(error)
         }
     }
