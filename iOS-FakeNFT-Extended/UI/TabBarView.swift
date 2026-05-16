@@ -43,7 +43,7 @@ struct TabBarView: View {
             }
         case .cart:
             NavigationStack(path: $router.cartPath) {
-                CartView(viewModel: .previewLoaded())
+                CartView()
                     .navigationDestination(for: CartRoute.self) { route in
                         switch route {
                         case .payment:

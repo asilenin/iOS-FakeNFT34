@@ -3,24 +3,20 @@ import SwiftUI
 struct CartView: View {
     @Environment(Router.self) private var router
     @Environment(ServicesAssembly.self) private var services
+
     @State private var viewModel: CartViewModel
     @State private var itemPendingDeletion: CartItem?
     @State private var isSortDialogPresented = false
 
-    private let useMockData: Bool
+    @AppStorage("cart.sort.option") private var storedSortOption: CartSortOption = .name
 
     @MainActor
-    init(useMockData: Bool = false) {
-        self.useMockData = useMockData
+    init() {
         _viewModel = State(initialValue: CartViewModel())
     }
 
     @MainActor
-    init(
-        viewModel: CartViewModel,
-        useMockData: Bool = false
-    ) {
-        self.useMockData = useMockData
+    init(viewModel: CartViewModel) {
         _viewModel = State(initialValue: viewModel)
     }
 
@@ -40,27 +36,41 @@ struct CartView: View {
             .toolbar {
                 if shouldShowSortButton {
                     ToolbarItem(placement: .topBarTrailing) {
-                        sortButton
+                        MenuButton {
+                            isSortDialogPresented = true
+                        }
                     }
                 }
             }
-            .fullScreenCover(isPresented: $isSortDialogPresented) {
-                sortSheet
-                    .presentationBackground(.clear)
+            .confirmationDialog(
+                Text("Сортировка"),
+                isPresented: $isSortDialogPresented,
+                titleVisibility: .visible
+            ) {
+                Button("По цене") {
+                    storedSortOption = .price
+                }
+
+                Button("По рейтингу") {
+                    storedSortOption = .rating
+                }
+
+                Button("По названию") {
+                    storedSortOption = .name
+                }
+
+                Button("Закрыть", role: .cancel) { }
             }
             .fullScreenCover(item: $itemPendingDeletion) { item in
                 deleteConfirmation(for: item)
                     .presentationBackground(.ultraThinMaterial)
             }
             .task {
-                #if DEBUG
-                if useMockData {
-                    viewModel.loadMock()
-                    return
-                }
-                #endif
-
+                viewModel.sortOption = storedSortOption
                 await viewModel.loadIfNeeded(service: services.cartService)
+            }
+            .onChange(of: storedSortOption) { _, newValue in
+                viewModel.sortOption = newValue
             }
             .errorAlert(error: $viewModel.error) {
                 Task {
@@ -75,104 +85,12 @@ struct CartView: View {
             && !viewModel.isDeleting
     }
 
-    private var sortButton: some View {
-        Button {
-            isSortDialogPresented = true
-        } label: {
-            Image(.menu)
-                .renderingMode(.template)
-                .foregroundStyle(.ypBlack)
-                .frame(
-                    width: Constants.sortButtonTapSize,
-                    height: Constants.sortButtonTapSize
-                )
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(Text("Сортировка"))
-    }
-
-    private var sortSheet: some View {
-        ZStack(alignment: .bottom) {
-            Color.ypBlack
-                .opacity(Constants.sortOverlayOpacity)
-                .ignoresSafeArea()
-                .onTapGesture {
-                    isSortDialogPresented = false
-                }
-
-            VStack(spacing: Constants.sortCancelTopSpacing) {
-                VStack(spacing: 0) {
-                    Text("Сортировка")
-                        .font(.regular17)
-                        .foregroundStyle(.ypBlack)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: Constants.sortTitleHeight)
-
-                    Divider()
-
-                    sortOptionButton("По цене", option: .price)
-
-                    Divider()
-
-                    sortOptionButton("По рейтингу", option: .rating)
-
-                    Divider()
-
-                    sortOptionButton("По названию", option: .name)
-                }
-                .background(.ypWhite)
-                .clipShape(
-                    RoundedRectangle(
-                        cornerRadius: Constants.sortSheetCornerRadius
-                    )
-                )
-
-                Button {
-                    isSortDialogPresented = false
-                } label: {
-                    Text("Закрыть")
-                        .font(.bold17)
-                        .foregroundStyle(.ypBlueUniversal)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: Constants.sortButtonHeight)
-                        .background(.ypWhite)
-                        .clipShape(
-                            RoundedRectangle(
-                                cornerRadius: Constants.sortSheetCornerRadius
-                            )
-                        )
-                }
-                .buttonStyle(.plain)
-            }
-            .padding(.horizontal, Constants.sortSheetHorizontalPadding)
-            .padding(.bottom, Constants.sortSheetBottomPadding)
-        }
-        .ignoresSafeArea()
-    }
-
-    private func sortOptionButton(
-        _ title: String,
-        option: CartSortOption
-    ) -> some View {
-        Button {
-            viewModel.sortOption = option
-            isSortDialogPresented = false
-        } label: {
-            Text(title)
-                .font(.regular17)
-                .foregroundStyle(.ypBlueUniversal)
-                .frame(maxWidth: .infinity)
-                .frame(height: Constants.sortButtonHeight)
-        }
-        .buttonStyle(.plain)
-    }
-
     private var mainContent: some View {
         ZStack {
             Color.ypWhite.ignoresSafeArea()
             content
         }
-        .safeAreaInset(edge: .bottom) {
+        .safeAreaInset(edge: .bottom, spacing: 0) {
             if viewModel.state == .loaded {
                 bottomPanel
             }
@@ -260,11 +178,22 @@ struct CartView: View {
                         )
                     )
             }
+            .buttonStyle(.plain)
         }
         .padding(.horizontal, Constants.bottomHorizontalPadding)
-        .padding(.vertical, Constants.bottomVerticalPadding)
-        .frame(height: Constants.bottomPanelHeight)
-        .background(.ypGrayLight)
+        .padding(.top, Constants.bottomVerticalPadding)
+        .padding(.bottom, Constants.bottomBottomPadding)
+        .frame(minHeight: Constants.bottomPanelHeight)
+        .background {
+            UnevenRoundedRectangle(
+                cornerRadii: .init(
+                    topLeading: Constants.bottomPanelCornerRadius,
+                    topTrailing: Constants.bottomPanelCornerRadius
+                )
+            )
+            .fill(.ypGrayLight)
+            .ignoresSafeArea(edges: .bottom)
+        }
     }
 
     private func deleteConfirmation(for item: CartItem) -> some View {
@@ -297,15 +226,6 @@ private extension CartView {
     enum Constants {
         static let horizontalPadding: CGFloat = 16
 
-        static let sortButtonTapSize: CGFloat = 44
-        static let sortOverlayOpacity: CGFloat = 0.35
-        static let sortSheetHorizontalPadding: CGFloat = 8
-        static let sortSheetBottomPadding: CGFloat = 34
-        static let sortSheetCornerRadius: CGFloat = 13
-        static let sortTitleHeight: CGFloat = 48
-        static let sortButtonHeight: CGFloat = 66
-        static let sortCancelTopSpacing: CGFloat = 8
-
         static let errorSpacing: CGFloat = 12
 
         static let loaderBackgroundOpacity: CGFloat = 0.12
@@ -316,8 +236,10 @@ private extension CartView {
 
         static let bottomHorizontalPadding: CGFloat = 16
         static let bottomVerticalPadding: CGFloat = 16
+        static let bottomBottomPadding: CGFloat = 34
 
         static let bottomPanelHeight: CGFloat = 76
+        static let bottomPanelCornerRadius: CGFloat = 12
 
         static let payButtonWidth: CGFloat = 240
         static let payButtonHeight: CGFloat = 44
@@ -325,45 +247,9 @@ private extension CartView {
     }
 }
 
-#Preview("Cart - Loaded") {
+#Preview("Cart") {
     NavigationStack {
-        CartView(viewModel: .previewLoaded())
-            .environment(Router())
-            .environment(
-                ServicesAssembly(
-                    networkClient: DefaultNetworkClient()
-                )
-            )
-    }
-}
-
-#Preview("Cart - Empty") {
-    NavigationStack {
-        CartView(viewModel: .previewEmpty())
-            .environment(Router())
-            .environment(
-                ServicesAssembly(
-                    networkClient: DefaultNetworkClient()
-                )
-            )
-    }
-}
-
-#Preview("Cart - Loading") {
-    NavigationStack {
-        CartView(viewModel: .previewLoading())
-            .environment(Router())
-            .environment(
-                ServicesAssembly(
-                    networkClient: DefaultNetworkClient()
-                )
-            )
-    }
-}
-
-#Preview("Cart - Error") {
-    NavigationStack {
-        CartView(viewModel: .previewError())
+        CartView()
             .environment(Router())
             .environment(
                 ServicesAssembly(

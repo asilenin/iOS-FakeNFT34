@@ -18,8 +18,13 @@ final class ServicesAssembly {
     }
 
     var cartService: CartServiceProtocol {
-        CartService(networkClient: networkClient)
-    }
+            // TODO: switch Cart flow to real CartService
+            // after payment integration is finished.
+            MockCartService()
+
+            // Real implementation is ready:
+            // CartService(networkClient: networkClient)
+        }
 
     // MARK: - Epics services
     // Each epic registers its services here as it lands:

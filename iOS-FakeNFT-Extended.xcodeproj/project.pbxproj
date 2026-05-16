@@ -90,6 +90,7 @@
 		479FAED82FAF4B0F009D7D33 /* Statistics */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Statistics; sourceTree = "<group>"; };
 		D00F13D12FAFB83A00540F07 /* Cart */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Cart; sourceTree = "<group>"; };
 		D00F13DE2FAFBAFE00540F07 /* Cart */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Cart; sourceTree = "<group>"; };
+		D0B2FFD42FB871D8003BD081 /* Mock */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Mock; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +166,7 @@
 		4747AA152FAF6FCE00B07D13 /* Cart */ = {
 			isa = PBXGroup;
 			children = (
+				D0B2FFD42FB871D8003BD081 /* Mock */,
 				D01E16CC2FB227210075BF16 /* CartService.swift */,
 				D0A1C5982FB6413800800521 /* UpdateOrderRequest.swift */,
 			);
@@ -351,6 +353,7 @@
 				479FAED82FAF4B0F009D7D33 /* Statistics */,
 				D00F13D12FAFB83A00540F07 /* Cart */,
 				D00F13DE2FAFBAFE00540F07 /* Cart */,
+				D0B2FFD42FB871D8003BD081 /* Mock */,
 			);
 			name = "iOS-FakeNFT-Extended";
 			packageProductDependencies = (

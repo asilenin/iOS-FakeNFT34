@@ -35,28 +35,19 @@ final class CartViewModel {
         case error
     }
 
-    private enum Constants {
-        static let sortStorageKey = "cart.sort.option"
-    }
-
     private(set) var state: State = .idle
     private(set) var items: [CartItem] = []
     private(set) var isDeleting = false
     var error: Error?
 
-    var sortOption: CartSortOption {
+    var sortOption: CartSortOption = .name {
         didSet {
-            UserDefaults.standard.set(sortOption.rawValue, forKey: Constants.sortStorageKey)
+            guard sortOption != oldValue else { return }
             applySorting()
         }
     }
 
     private var lastDeleteItem: CartItem?
-
-    init() {
-        let savedSort = UserDefaults.standard.string(forKey: Constants.sortStorageKey)
-        sortOption = savedSort.flatMap(CartSortOption.init(rawValue:)) ?? .name
-    }
 
     var totalCountText: String {
         "\(items.count) NFT"
@@ -99,6 +90,7 @@ final class CartViewModel {
         isDeleting = true
         error = nil
         lastDeleteItem = item
+
         items.removeAll { $0.id == item.id }
         state = items.isEmpty ? .empty : .loaded
 
@@ -130,67 +122,12 @@ final class CartViewModel {
             items.sort {
                 $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending
             }
+
         case .price:
             items.sort { $0.price < $1.price }
+
         case .rating:
             items.sort { $0.rating > $1.rating }
         }
     }
-
-#if DEBUG
-    func loadMock() {
-        items = [
-            CartItem(
-                id: "1",
-                title: "April",
-                imageURL: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки/April_1.png"),
-                rating: 1,
-                price: 1.78
-            ),
-            CartItem(
-                id: "2",
-                title: "Greena",
-                imageURL: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки/Greena_1.png"),
-                rating: 3,
-                price: 1.78
-            ),
-            CartItem(
-                id: "3",
-                title: "Spring",
-                imageURL: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Обложки/Spring_1.png"),
-                rating: 5,
-                price: 1.78
-            )
-        ]
-
-        applySorting()
-        state = .loaded
-    }
-
-    static func previewLoaded() -> CartViewModel {
-        let viewModel = CartViewModel()
-        viewModel.loadMock()
-        return viewModel
-    }
-
-    static func previewEmpty() -> CartViewModel {
-        let viewModel = CartViewModel()
-        viewModel.items = []
-        viewModel.state = .empty
-        return viewModel
-    }
-
-    static func previewLoading() -> CartViewModel {
-        let viewModel = CartViewModel()
-        viewModel.state = .loading
-        return viewModel
-    }
-
-    static func previewError() -> CartViewModel {
-        let viewModel = CartViewModel()
-        viewModel.items = []
-        viewModel.state = .error
-        return viewModel
-    }
-#endif
 }
