@@ -7,9 +7,8 @@ enum CatalogRoute: Hashable {
 }
 
 enum CartRoute: Hashable {
-    case _placeholder
-    // case currencySelection
-    // case userAgreement(URL)
+    case payment
+    case userAgreement(URL)
 }
 
 enum ProfileRoute: Hashable {

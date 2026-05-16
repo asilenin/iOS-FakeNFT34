@@ -107,16 +107,46 @@ private extension CartItemView {
     }
 }
 
-#Preview {
+private extension CartItem {
+    static let previewItems: [CartItem] = [
+        CartItem(
+            id: "1",
+            title: "April",
+            imageURL: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Peach/Biscuit/1.png"),
+            rating: 1,
+            price: 1.78
+        ),
+        CartItem(
+            id: "2",
+            title: "Greena",
+            imageURL: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/White/Lumpy/1.png"),
+            rating: 3,
+            price: 1.78
+        ),
+        CartItem(
+            id: "3",
+            title: "Spring",
+            imageURL: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Blue/Clover/1.png"),
+            rating: 5,
+            price: 1.78
+        )
+    ]
+}
+
+#Preview("Cart Item") {
     List {
         CartItemView(
-            item: CartItem(
-                id: "1",
-                title: "April",
-                imageURL: nil,
-                rating: 4,
-                price: 1.78
-            ),
+            item: CartItem.previewItems[0],
+            onDeleteTap: {}
+        )
+    }
+    .listStyle(.plain)
+}
+
+#Preview("Cart Items List") {
+    List(CartItem.previewItems) { item in
+        CartItemView(
+            item: item,
             onDeleteTap: {}
         )
     }

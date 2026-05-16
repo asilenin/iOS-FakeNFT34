@@ -43,10 +43,14 @@ struct TabBarView: View {
             }
         case .cart:
             NavigationStack(path: $router.cartPath) {
-                CartView()
-                    .navigationDestination(for: CartRoute.self) { _ in
-                        // TODO(cart epic): map CartRoute cases to their destination views.
-                        EmptyView()
+                CartView(viewModel: .previewLoaded())
+                    .navigationDestination(for: CartRoute.self) { route in
+                        switch route {
+                        case .payment:
+                            PaymentView()
+                        case .userAgreement(let url):
+                            WebViewScreen(url: url)
+                        }
                     }
             }
         case .statistics:
