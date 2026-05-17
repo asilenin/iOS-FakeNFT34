@@ -106,19 +106,3 @@ private extension CartItemView {
         static let maxRating = 5
     }
 }
-
-#Preview {
-    List {
-        CartItemView(
-            item: CartItem(
-                id: "1",
-                title: "April",
-                imageURL: nil,
-                rating: 4,
-                price: 1.78
-            ),
-            onDeleteTap: {}
-        )
-    }
-    .listStyle(.plain)
-}

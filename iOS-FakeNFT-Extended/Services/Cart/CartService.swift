@@ -51,19 +51,8 @@ actor CartService: CartServiceProtocol {
     }
 
     func setCart(_ ids: Set<String>) async throws {
-        // Sprint 3 adds PUT /api/v1/orders/1 with form-urlencoded body.
-        _ = ids
-        throw CartServiceError.updateOrderNotImplemented
-    }
-}
-
-enum CartServiceError: LocalizedError {
-    case updateOrderNotImplemented
-
-    var errorDescription: String? {
-        switch self {
-        case .updateOrderNotImplemented:
-            "Обновление корзины будет реализовано в Sprint 3."
-        }
+        _ = try await networkClient.send(
+            request: UpdateOrderRequest(ids: ids)
+        )
     }
 }

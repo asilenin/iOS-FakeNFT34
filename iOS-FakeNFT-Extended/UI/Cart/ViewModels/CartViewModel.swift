@@ -8,6 +8,22 @@
 import Foundation
 import Observation
 
+enum CartSortOption: String, CaseIterable, Identifiable, Sendable {
+    case name
+    case price
+    case rating
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .name: "По названию"
+        case .price: "По цене"
+        case .rating: "По рейтингу"
+        }
+    }
+}
+
 @Observable
 @MainActor
 final class CartViewModel {
@@ -21,7 +37,17 @@ final class CartViewModel {
 
     private(set) var state: State = .idle
     private(set) var items: [CartItem] = []
+    private(set) var isDeleting = false
     var error: Error?
+
+    var sortOption: CartSortOption = .name {
+        didSet {
+            guard sortOption != oldValue else { return }
+            applySorting()
+        }
+    }
+
+    private var lastDeleteItem: CartItem?
 
     var totalCountText: String {
         "\(items.count) NFT"
@@ -29,7 +55,7 @@ final class CartViewModel {
 
     var totalPriceText: String {
         let total = items.reduce(0) { $0 + $1.price }
-        return String(format: "%.2f ETH", total)
+        return "\(Self.priceFormatter.string(from: total as NSNumber) ?? "\(total)") ETH"
     }
 
     func loadIfNeeded(service: CartServiceProtocol) async {
@@ -40,12 +66,12 @@ final class CartViewModel {
     func load(service: CartServiceProtocol) async {
         state = .loading
         error = nil
+        lastDeleteItem = nil
 
         do {
-            let loadedItems = try await service.loadCartItems()
-
-            items = loadedItems
-            state = loadedItems.isEmpty ? .empty : .loaded
+            items = try await service.loadCartItems()
+            applySorting()
+            state = items.isEmpty ? .empty : .loaded
         } catch {
             items = []
             self.error = error
@@ -53,59 +79,64 @@ final class CartViewModel {
         }
     }
 
-#if DEBUG
-    func loadMock() {
-        items = [
-            CartItem(
-                id: "1",
-                title: "April",
-                imageURL: nil,
-                rating: 4,
-                price: 1.78
-            ),
-            CartItem(
-                id: "2",
-                title: "Wave",
-                imageURL: nil,
-                rating: 5,
-                price: 2.14
-            ),
-            CartItem(
-                id: "3",
-                title: "Future",
-                imageURL: nil,
-                rating: 3,
-                price: 0.92
-            )
-        ]
+    func delete(_ item: CartItem, service: CartServiceProtocol) async {
+        guard !isDeleting else { return }
 
-        state = .loaded
+        let previousItems = items
+        let updatedIDs = Set(items.map(\.id)).subtracting([item.id])
+
+        isDeleting = true
+        error = nil
+        lastDeleteItem = item
+
+        items.removeAll { $0.id == item.id }
+        state = items.isEmpty ? .empty : .loaded
+
+        do {
+            try await service.setCart(updatedIDs)
+            lastDeleteItem = nil
+        } catch {
+            items = previousItems
+            applySorting()
+            state = items.isEmpty ? .empty : .loaded
+            self.error = error
+        }
+
+        isDeleting = false
     }
 
-    static func previewLoaded() -> CartViewModel {
-        let viewModel = CartViewModel()
-        viewModel.loadMock()
-        return viewModel
+    func retryLastDelete(service: CartServiceProtocol) async {
+        guard let lastDeleteItem else {
+            await load(service: service)
+            return
+        }
+
+        await delete(lastDeleteItem, service: service)
     }
 
-    static func previewEmpty() -> CartViewModel {
-        let viewModel = CartViewModel()
-        viewModel.items = []
-        viewModel.state = .empty
-        return viewModel
-    }
+    private func applySorting() {
+        switch sortOption {
+        case .name:
+            items.sort {
+                $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending
+            }
 
-    static func previewLoading() -> CartViewModel {
-        let viewModel = CartViewModel()
-        viewModel.state = .loading
-        return viewModel
-    }
+        case .price:
+            items.sort { $0.price < $1.price }
 
-    static func previewError() -> CartViewModel {
-        let viewModel = CartViewModel()
-        viewModel.items = []
-        viewModel.state = .error
-        return viewModel
+        case .rating:
+            items.sort { $0.rating > $1.rating }
+        }
     }
-#endif
+}
+
+private extension CartViewModel {
+    static let priceFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale.current
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        return formatter
+    }()
 }

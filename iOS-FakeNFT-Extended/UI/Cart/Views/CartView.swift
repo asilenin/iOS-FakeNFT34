@@ -1,45 +1,93 @@
 import SwiftUI
 
 struct CartView: View {
+    @Environment(Router.self) private var router
     @Environment(ServicesAssembly.self) private var services
+
     @State private var viewModel: CartViewModel
+    @State private var itemPendingDeletion: CartItem?
+    @State private var isSortDialogPresented = false
+
+    @AppStorage("cart.sort.option") private var storedSortOption: CartSortOption = .name
 
     @MainActor
     init() {
         _viewModel = State(initialValue: CartViewModel())
     }
 
-    @MainActor
-    init(viewModel: CartViewModel) {
-        _viewModel = State(initialValue: viewModel)
-    }
-
     var body: some View {
         @Bindable var viewModel = viewModel
 
+        mainContent
+            .overlay {
+                if viewModel.isDeleting {
+                    Color.ypBlack.opacity(Constants.loaderBackgroundOpacity)
+                        .ignoresSafeArea()
+
+                    LoadingSpinner(size: .medium)
+                }
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                if shouldShowSortButton {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        MenuButton {
+                            isSortDialogPresented = true
+                        }
+                    }
+                }
+            }
+            .confirmationDialog(
+                Text(Strings.sortTitle),
+                isPresented: $isSortDialogPresented,
+                titleVisibility: .visible
+            ) {
+                Button(Strings.sortByPrice) {
+                    storedSortOption = .price
+                }
+
+                Button(Strings.sortByRating) {
+                    storedSortOption = .rating
+                }
+
+                Button(Strings.sortByName) {
+                    storedSortOption = .name
+                }
+
+                Button(Strings.close, role: .cancel) { }
+            }
+            .fullScreenCover(item: $itemPendingDeletion) { item in
+                deleteConfirmation(for: item)
+                    .presentationBackground(.ultraThinMaterial)
+            }
+            .task {
+                viewModel.sortOption = storedSortOption
+                await viewModel.loadIfNeeded(service: services.cartService)
+            }
+            .onChange(of: storedSortOption) { _, newValue in
+                viewModel.sortOption = newValue
+            }
+            .errorAlert(error: $viewModel.error) {
+                Task {
+                    await viewModel.retryLastDelete(service: services.cartService)
+                }
+            }
+    }
+
+    private var shouldShowSortButton: Bool {
+        viewModel.state == .loaded
+        && itemPendingDeletion == nil
+        && !viewModel.isDeleting
+    }
+
+    private var mainContent: some View {
         ZStack {
             Color.ypWhite.ignoresSafeArea()
-
             content
         }
-        .navigationBarTitleDisplayMode(.inline)
-        .safeAreaInset(edge: .bottom) {
+        .safeAreaInset(edge: .bottom, spacing: 0) {
             if viewModel.state == .loaded {
                 bottomPanel
-            }
-        }
-        .task {
-            #if DEBUG
-            if viewModel.state == .idle {
-                viewModel.loadMock()
-            }
-            #else
-            await viewModel.loadIfNeeded(service: services.cartService)
-            #endif
-        }
-        .errorAlert(error: $viewModel.error) {
-            Task {
-                await viewModel.load(service: services.cartService)
             }
         }
     }
@@ -64,7 +112,7 @@ struct CartView: View {
     private var cartList: some View {
         List(viewModel.items) { item in
             CartItemView(item: item) {
-                // Sprint 3: show delete confirmation and update order through PUT.
+                itemPendingDeletion = item
             }
         }
         .listStyle(.plain)
@@ -73,18 +121,18 @@ struct CartView: View {
     }
 
     private var emptyView: some View {
-        Text("Корзина пуста")
+        Text(Strings.emptyCart)
             .font(.bold17)
             .foregroundStyle(.ypBlack)
     }
 
     private var emptyErrorView: some View {
         VStack(spacing: Constants.errorSpacing) {
-            Text("Не удалось загрузить корзину")
+            Text(Strings.loadingError)
                 .font(.bold17)
                 .foregroundStyle(.ypBlack)
 
-            Button("Повторить") {
+            Button(Strings.retry) {
                 Task {
                     await viewModel.load(service: services.cartService)
                 }
@@ -109,9 +157,9 @@ struct CartView: View {
             Spacer()
 
             Button {
-                // Sprint 3: push payment screen through CartRoute.
+                router.push(CartRoute.payment, in: .cart)
             } label: {
-                Text("К оплате")
+                Text(Strings.pay)
                     .font(.bold17)
                     .foregroundStyle(.ypWhite)
                     .frame(
@@ -125,19 +173,68 @@ struct CartView: View {
                         )
                     )
             }
+            .buttonStyle(.plain)
         }
         .padding(.horizontal, Constants.bottomHorizontalPadding)
         .padding(.vertical, Constants.bottomVerticalPadding)
         .frame(height: Constants.bottomPanelHeight)
-        .background(.ypGrayLight)
+        .background {
+            UnevenRoundedRectangle(
+                cornerRadii: .init(
+                    topLeading: Constants.bottomPanelCornerRadius,
+                    topTrailing: Constants.bottomPanelCornerRadius
+                )
+            )
+            .fill(.ypGrayLight)
+        }
+    }
+
+    private func deleteConfirmation(for item: CartItem) -> some View {
+        ZStack {
+            Color.clear
+                .ignoresSafeArea()
+                .onTapGesture {
+                    itemPendingDeletion = nil
+                }
+
+            DeleteCartItemConfirmationView(
+                item: item,
+                onDelete: {
+                    itemPendingDeletion = nil
+                    Task {
+                        await viewModel.delete(item, service: services.cartService)
+                    }
+                },
+                onCancel: {
+                    itemPendingDeletion = nil
+                }
+            )
+            .padding(.horizontal, Constants.deleteConfirmationHorizontalPadding)
+        }
+        .ignoresSafeArea()
     }
 }
 
 private extension CartView {
+    enum Strings {
+        static let sortTitle = "Сортировка"
+        static let sortByPrice = "По цене"
+        static let sortByRating = "По рейтингу"
+        static let sortByName = "По названию"
+        static let close = "Закрыть"
+        static let emptyCart = "Корзина пуста"
+        static let loadingError = "Не удалось загрузить корзину"
+        static let retry = "Повторить"
+        static let pay = "К оплате"
+    }
+
     enum Constants {
         static let horizontalPadding: CGFloat = 16
 
         static let errorSpacing: CGFloat = 12
+
+        static let loaderBackgroundOpacity: CGFloat = 0.12
+        static let deleteConfirmationHorizontalPadding: CGFloat = 62
 
         static let bottomPanelSpacing: CGFloat = 16
         static let bottomTextSpacing: CGFloat = 2
@@ -146,6 +243,7 @@ private extension CartView {
         static let bottomVerticalPadding: CGFloat = 16
 
         static let bottomPanelHeight: CGFloat = 76
+        static let bottomPanelCornerRadius: CGFloat = 12
 
         static let payButtonWidth: CGFloat = 240
         static let payButtonHeight: CGFloat = 44
@@ -153,68 +251,14 @@ private extension CartView {
     }
 }
 
-#Preview("Cart - Loaded") {
+#Preview("Cart") {
     NavigationStack {
-        CartView(viewModel: .previewLoaded())
+        CartView()
+            .environment(Router())
             .environment(
                 ServicesAssembly(
                     networkClient: DefaultNetworkClient()
                 )
             )
     }
-}
-
-#Preview("Cart - Empty") {
-    NavigationStack {
-        CartView(viewModel: .previewEmpty())
-            .environment(
-                ServicesAssembly(
-                    networkClient: DefaultNetworkClient()
-                )
-            )
-    }
-}
-
-#Preview("Cart - Loading") {
-    NavigationStack {
-        CartView(viewModel: .previewLoading())
-            .environment(
-                ServicesAssembly(
-                    networkClient: DefaultNetworkClient()
-                )
-            )
-    }
-}
-
-#Preview("Cart - Error") {
-    NavigationStack {
-        CartView(viewModel: .previewError())
-            .environment(
-                ServicesAssembly(
-                    networkClient: DefaultNetworkClient()
-                )
-            )
-    }
-}
-
-#Preview("Cart - Dark") {
-    NavigationStack {
-        CartView(viewModel: .previewLoaded())
-            .environment(
-                ServicesAssembly(
-                    networkClient: DefaultNetworkClient()
-                )
-            )
-            .preferredColorScheme(.dark)
-    }
-}
-
-#Preview("CartView with TabBar") {
-    TabBarView()
-        .environment(Router())
-        .environment(
-            ServicesAssembly(
-                networkClient: DefaultNetworkClient()
-            )
-        )
 }

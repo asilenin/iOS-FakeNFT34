@@ -31,6 +31,7 @@
 		ABC5E1D82C3204A9002B4068 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = ABC5E1D72C3204A9002B4068 /* Kingfisher */; };
 		ABC5E1EB2C32084F002B4068 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = ABC5E1E92C32084F002B4068 /* Localizable.strings */; };
 		D01E16CD2FB227210075BF16 /* CartService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01E16CC2FB227210075BF16 /* CartService.swift */; };
+		D0A1C5992FB6413800800521 /* UpdateOrderRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A1C5982FB6413800800521 /* UpdateOrderRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 		ABC5E1B62C31FC70002B4068 /* ServicesAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesAssembly.swift; sourceTree = "<group>"; };
 		ABC5E1EA2C32084F002B4068 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D01E16CC2FB227210075BF16 /* CartService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartService.swift; sourceTree = "<group>"; };
+		D0A1C5982FB6413800800521 /* UpdateOrderRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateOrderRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -88,6 +90,7 @@
 		479FAED82FAF4B0F009D7D33 /* Statistics */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Statistics; sourceTree = "<group>"; };
 		D00F13D12FAFB83A00540F07 /* Cart */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Cart; sourceTree = "<group>"; };
 		D00F13DE2FAFBAFE00540F07 /* Cart */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Cart; sourceTree = "<group>"; };
+		D0B2FFD42FB871D8003BD081 /* Mock */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Mock; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,7 +166,9 @@
 		4747AA152FAF6FCE00B07D13 /* Cart */ = {
 			isa = PBXGroup;
 			children = (
+				D0B2FFD42FB871D8003BD081 /* Mock */,
 				D01E16CC2FB227210075BF16 /* CartService.swift */,
+				D0A1C5982FB6413800800521 /* UpdateOrderRequest.swift */,
 			);
 			path = Cart;
 			sourceTree = "<group>";
@@ -348,6 +353,7 @@
 				479FAED82FAF4B0F009D7D33 /* Statistics */,
 				D00F13D12FAFB83A00540F07 /* Cart */,
 				D00F13DE2FAFBAFE00540F07 /* Cart */,
+				D0B2FFD42FB871D8003BD081 /* Mock */,
 			);
 			name = "iOS-FakeNFT-Extended";
 			packageProductDependencies = (
@@ -509,6 +515,7 @@
 				ABC5E1A62C31F815002B4068 /* NetworkRequest.swift in Sources */,
 				ABC5E1A42C31F800002B4068 /* NetworkClient.swift in Sources */,
 				ABC5E16C2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift in Sources */,
+				D0A1C5992FB6413800800521 /* UpdateOrderRequest.swift in Sources */,
 				ABC5E1A82C31FA90002B4068 /* DateFormatters+Presets.swift in Sources */,
 				4747AA112FAF6E8A00B07D13 /* MenuButton.swift in Sources */,
 				ABC5E1B02C31FB90002B4068 /* RequestConstants.swift in Sources */,
