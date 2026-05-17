@@ -15,11 +15,6 @@ struct CartView: View {
         _viewModel = State(initialValue: CartViewModel())
     }
 
-    @MainActor
-    init(viewModel: CartViewModel) {
-        _viewModel = State(initialValue: viewModel)
-    }
-
     var body: some View {
         @Bindable var viewModel = viewModel
 
@@ -43,23 +38,23 @@ struct CartView: View {
                 }
             }
             .confirmationDialog(
-                Text("Сортировка"),
+                Text(Strings.sortTitle),
                 isPresented: $isSortDialogPresented,
                 titleVisibility: .visible
             ) {
-                Button("По цене") {
+                Button(Strings.sortByPrice) {
                     storedSortOption = .price
                 }
 
-                Button("По рейтингу") {
+                Button(Strings.sortByRating) {
                     storedSortOption = .rating
                 }
 
-                Button("По названию") {
+                Button(Strings.sortByName) {
                     storedSortOption = .name
                 }
 
-                Button("Закрыть", role: .cancel) { }
+                Button(Strings.close, role: .cancel) { }
             }
             .fullScreenCover(item: $itemPendingDeletion) { item in
                 deleteConfirmation(for: item)
@@ -81,8 +76,8 @@ struct CartView: View {
 
     private var shouldShowSortButton: Bool {
         viewModel.state == .loaded
-            && itemPendingDeletion == nil
-            && !viewModel.isDeleting
+        && itemPendingDeletion == nil
+        && !viewModel.isDeleting
     }
 
     private var mainContent: some View {
@@ -126,18 +121,18 @@ struct CartView: View {
     }
 
     private var emptyView: some View {
-        Text("Корзина пуста")
+        Text(Strings.emptyCart)
             .font(.bold17)
             .foregroundStyle(.ypBlack)
     }
 
     private var emptyErrorView: some View {
         VStack(spacing: Constants.errorSpacing) {
-            Text("Не удалось загрузить корзину")
+            Text(Strings.loadingError)
                 .font(.bold17)
                 .foregroundStyle(.ypBlack)
 
-            Button("Повторить") {
+            Button(Strings.retry) {
                 Task {
                     await viewModel.load(service: services.cartService)
                 }
@@ -164,7 +159,7 @@ struct CartView: View {
             Button {
                 router.push(CartRoute.payment, in: .cart)
             } label: {
-                Text("К оплате")
+                Text(Strings.pay)
                     .font(.bold17)
                     .foregroundStyle(.ypWhite)
                     .frame(
@@ -181,9 +176,8 @@ struct CartView: View {
             .buttonStyle(.plain)
         }
         .padding(.horizontal, Constants.bottomHorizontalPadding)
-        .padding(.top, Constants.bottomVerticalPadding)
-        .padding(.bottom, Constants.bottomBottomPadding)
-        .frame(minHeight: Constants.bottomPanelHeight)
+        .padding(.vertical, Constants.bottomVerticalPadding)
+        .frame(height: Constants.bottomPanelHeight)
         .background {
             UnevenRoundedRectangle(
                 cornerRadii: .init(
@@ -192,7 +186,6 @@ struct CartView: View {
                 )
             )
             .fill(.ypGrayLight)
-            .ignoresSafeArea(edges: .bottom)
         }
     }
 
@@ -223,6 +216,18 @@ struct CartView: View {
 }
 
 private extension CartView {
+    enum Strings {
+        static let sortTitle = "Сортировка"
+        static let sortByPrice = "По цене"
+        static let sortByRating = "По рейтингу"
+        static let sortByName = "По названию"
+        static let close = "Закрыть"
+        static let emptyCart = "Корзина пуста"
+        static let loadingError = "Не удалось загрузить корзину"
+        static let retry = "Повторить"
+        static let pay = "К оплате"
+    }
+
     enum Constants {
         static let horizontalPadding: CGFloat = 16
 
@@ -236,7 +241,6 @@ private extension CartView {
 
         static let bottomHorizontalPadding: CGFloat = 16
         static let bottomVerticalPadding: CGFloat = 16
-        static let bottomBottomPadding: CGFloat = 34
 
         static let bottomPanelHeight: CGFloat = 76
         static let bottomPanelCornerRadius: CGFloat = 12

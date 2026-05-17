@@ -11,7 +11,13 @@ actor MockCartService: CartServiceProtocol {
     private var items: [CartItem]
 
     init() {
-        items = Self.mockItems
+        let savedIDs = Self.loadSavedIDs()
+
+        if let savedIDs {
+            items = Self.mockItems.filter { savedIDs.contains($0.id) }
+        } else {
+            items = Self.mockItems
+        }
     }
 
     func loadCart() async throws -> Set<String> {
@@ -25,7 +31,30 @@ actor MockCartService: CartServiceProtocol {
 
     func setCart(_ ids: Set<String>) async throws {
         try await Task.sleep(for: .milliseconds(Constants.delay))
-        items = items.filter { ids.contains($0.id) }
+
+        items = Self.mockItems.filter { ids.contains($0.id) }
+        Self.saveIDs(ids)
+    }
+}
+
+// MARK: - Storage
+
+private extension MockCartService {
+    static func loadSavedIDs() -> Set<String>? {
+        guard let ids = UserDefaults.standard.array(
+            forKey: Constants.storageKey
+        ) as? [String] else {
+            return nil
+        }
+
+        return Set(ids)
+    }
+
+    static func saveIDs(_ ids: Set<String>) {
+        UserDefaults.standard.set(
+            Array(ids),
+            forKey: Constants.storageKey
+        )
     }
 }
 
@@ -34,6 +63,7 @@ actor MockCartService: CartServiceProtocol {
 private extension MockCartService {
     enum Constants {
         static let delay: Int64 = 500
+        static let storageKey = "mock.cart.ids"
     }
 
     static let mockItems: [CartItem] = [

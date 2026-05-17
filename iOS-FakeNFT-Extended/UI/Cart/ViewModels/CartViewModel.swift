@@ -55,9 +55,7 @@ final class CartViewModel {
 
     var totalPriceText: String {
         let total = items.reduce(0) { $0 + $1.price }
-
-        return String(format: "%.2f ETH", total)
-            .replacingOccurrences(of: ".", with: ",")
+        return "\(Self.priceFormatter.string(from: total as NSNumber) ?? "\(total)") ETH"
     }
 
     func loadIfNeeded(service: CartServiceProtocol) async {
@@ -130,4 +128,15 @@ final class CartViewModel {
             items.sort { $0.rating > $1.rating }
         }
     }
+}
+
+private extension CartViewModel {
+    static let priceFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.locale = Locale.current
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 2
+        formatter.maximumFractionDigits = 2
+        return formatter
+    }()
 }
