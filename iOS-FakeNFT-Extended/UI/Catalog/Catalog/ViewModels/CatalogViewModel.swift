@@ -14,11 +14,13 @@ final class CatalogViewModel {
     var error: Error?
 
     /// Опция сортировки, выбранная пользователем.
-    /// При изменении список коллекций автоматически пересортируется.
+    /// При изменении триггерится повторная загрузка с сервера (с новым `sortBy`).
+    /// Запрос проходит через кэш `CatalogService` — если такой sortBy уже загружался,
+    /// сеть не дёргается, ответ приходит мгновенно.
     var sortOption: CatalogSortOption {
         didSet {
             guard sortOption != oldValue else { return }
-            applySortToState()
+            Task { await load() }
         }
     }
 
@@ -30,24 +32,31 @@ final class CatalogViewModel {
         self.sortOption = initialSortOption
     }
 
-    /// Загрузить коллекции с сервера и отсортировать по текущей опции.
+    /// Загрузить коллекции с сервера с текущей `sortOption`.
     /// Отменяет предыдущую загрузку, если она была в процессе.
     func load() async {
         currentTask?.cancel()
 
-        let task = Task { [service] in
-            await performLoad(using: service)
+        let task = Task { [service, sortOption] in
+            await performLoad(using: service, sortOption: sortOption)
         }
         currentTask = task
         await task.value
     }
 
-    private func performLoad(using service: CatalogServiceProtocol) async {
+    /// Принудительно перезагружает с сервера, минуя кэш.
+    /// Вызывается из pull-to-refresh.
+    func reload() async {
+        await service.invalidateCache()
+        await load()
+    }
+
+    private func performLoad(using service: CatalogServiceProtocol, sortOption: CatalogSortOption) async {
         state = .loading
         do {
-            let loaded = try await service.loadCollections()
+            let loaded = try await service.loadCollections(sortBy: sortOption)
             try Task.checkCancellation()
-            collections = loaded.sorted(by: sortOption.comparator)
+            collections = loaded
             state = .success
         } catch is CancellationError {
             return
@@ -55,10 +64,5 @@ final class CatalogViewModel {
             state = .error
             self.error = error
         }
-    }
-
-    /// Пересортировать текущий набор коллекций (вызывается при смене `sortOption`).
-    private func applySortToState() {
-        collections = collections.sorted(by: sortOption.comparator)
     }
 }

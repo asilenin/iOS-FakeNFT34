@@ -14,6 +14,19 @@ enum CatalogSortOption: String, CaseIterable {
 
 extension CatalogSortOption {
 
+    /// Ключ для query-параметра `sortBy` в `CollectionsRequest`.
+    /// Соответствует значениям, поддерживаемым mock-сервером Practicum.
+    var apiSortKey: String {
+        switch self {
+        case .name:
+            return "name"
+        case .nftCount:
+            return "nfts"
+        }
+    }
+
+    /// Локальный компаратор. Используется в `MockCatalogService` для
+    /// имитации серверной сортировки и в тестах.
     var comparator: (NftCollection, NftCollection) -> Bool {
         switch self {
         case .name:

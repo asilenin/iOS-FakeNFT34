@@ -25,7 +25,7 @@ final class CatalogServiceTests: XCTestCase {
 
     func test_loadCollections_returnsAtLeastFiveCollections() async throws {
         // When
-        let collections = try await service.loadCollections()
+        let collections = try await service.loadCollections(sortBy: nil)
 
         // Then
         XCTAssertGreaterThanOrEqual(collections.count, 5)
@@ -36,7 +36,7 @@ final class CatalogServiceTests: XCTestCase {
         let expectedNames = ["Peach", "Blue", "Brown", "Green", "Pink"]
 
         // When
-        let names = Set(try await service.loadCollections().compactMap(\.name))
+        let names = Set(try await service.loadCollections(sortBy: nil).compactMap(\.name))
 
         // Then
         XCTAssertTrue(names.isSuperset(of: expectedNames))
@@ -44,7 +44,7 @@ final class CatalogServiceTests: XCTestCase {
 
     func test_loadCollections_returnsUniqueIds() async throws {
         // When
-        let ids = try await service.loadCollections().map(\.id)
+        let ids = try await service.loadCollections(sortBy: nil).map(\.id)
 
         // Then
         XCTAssertEqual(Set(ids).count, ids.count)
@@ -52,7 +52,7 @@ final class CatalogServiceTests: XCTestCase {
 
     func test_loadCollections_everyCollectionHasNonEmptyMandatoryFields() async throws {
         // When
-        let collections = try await service.loadCollections()
+        let collections = try await service.loadCollections(sortBy: nil)
 
         // Then
         for collection in collections {

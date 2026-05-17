@@ -65,7 +65,7 @@ struct CatalogView: View {
                         .frame(minHeight: 400)
                 }
                 .refreshable {
-                    await viewModel.load()
+                    await viewModel.reload()
                 }
             }
         } else {
@@ -96,7 +96,7 @@ struct CatalogView: View {
         .background(Color.ypWhite)
         .contentMargins(.top, 20, for: .scrollContent)
         .refreshable {
-            await viewModel?.load()
+            await viewModel?.reload()
         }
     }
 

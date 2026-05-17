@@ -8,10 +8,16 @@ actor MockCatalogService: CatalogServiceProtocol {
         self.collections = MockCatalogService.mockCollections
     }
 
-    func loadCollections() async throws -> [NftCollection] {
+    func loadCollections(sortBy: CatalogSortOption?) async throws -> [NftCollection] {
         try await Task.sleep(for: .seconds(1))
-        return collections
+        guard let sortBy else {
+            return collections
+        }
+        return collections.sorted(by: sortBy.comparator)
     }
+
+    /// Мок не кэширует — `loadCollections` всегда возвращает свежие данные.
+    func invalidateCache() {}
 }
 
 // MARK: - Mock data
