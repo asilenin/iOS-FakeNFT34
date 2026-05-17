@@ -14,14 +14,6 @@ enum CartSortOption: String, CaseIterable, Identifiable, Sendable {
     case rating
 
     var id: String { rawValue }
-
-    var title: String {
-        switch self {
-        case .name: "По названию"
-        case .price: "По цене"
-        case .rating: "По рейтингу"
-        }
-    }
 }
 
 @Observable
@@ -55,7 +47,7 @@ final class CartViewModel {
 
     var totalPriceText: String {
         let total = items.reduce(0) { $0 + $1.price }
-        return "\(Self.priceFormatter.string(from: total as NSNumber) ?? "\(total)") ETH"
+        return CartPriceFormatter.eth(total)
     }
 
     func loadIfNeeded(service: CartServiceProtocol) async {

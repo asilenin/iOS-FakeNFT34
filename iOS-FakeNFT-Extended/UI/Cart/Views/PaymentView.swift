@@ -2,41 +2,120 @@ import SwiftUI
 
 struct PaymentView: View {
     @Environment(Router.self) private var router
+    @Environment(ServicesAssembly.self) private var services
+
+    @State private var viewModel = PaymentViewModel()
+
+    private let columns = [
+        GridItem(.flexible(), spacing: 7),
+        GridItem(.flexible(), spacing: 7)
+    ]
 
     private let agreementURL = URL(
         string: "https://yandex.ru/legal/practicum_termsofuse"
     )
 
     var body: some View {
-        VStack(spacing: 0) {
-            content
+        @Bindable var viewModel = viewModel
 
-            Spacer()
-        }
-        .background(.ypWhite)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("Выбор способа оплаты")
-                    .font(.bold17)
-                    .foregroundStyle(.ypBlack)
+        content
+            .background(.ypWhite)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text(Strings.title)
+                        .font(.bold17)
+                        .foregroundStyle(.ypBlack)
+                }
             }
-        }
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            bottomPanel
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                if viewModel.state != .success {
+                    bottomPanel
+                }
+            }
+            .overlay {
+                if viewModel.isPaying {
+                    Color.ypBlack.opacity(Constants.loaderBackgroundOpacity)
+                        .ignoresSafeArea()
+
+                    LoadingSpinner(size: .medium)
+                }
+            }
+            .task {
+                await viewModel.loadIfNeeded(service: services.paymentService)
+            }
+            .alert(
+                Strings.paymentError,
+                isPresented: paymentErrorBinding
+            ) {
+                Button(Strings.cancel, role: .cancel) {
+                    viewModel.error = nil
+                }
+
+                Button(Strings.retry) {
+                    Task {
+                        await viewModel.retryPayment(
+                            paymentService: services.paymentService,
+                            cartService: services.cartService
+                        )
+                    }
+                }
+            }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        switch viewModel.state {
+        case .idle, .loading:
+            LoadingSpinner(size: .large)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+        case .loaded:
+            currenciesGrid
+
+        case .success:
+            PaymentSuccessView {
+                router.popToRoot(in: .cart)
+            }
+
+        case .error:
+            errorView
         }
     }
 
-    private var content: some View {
-        VStack {
-            Text("Экран валют будет реализован в Sprint 4")
-                .font(.regular17)
-                .foregroundStyle(.ypBlack)
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding(.top, Constants.placeholderTopPadding)
+    private var currenciesGrid: some View {
+        ScrollView {
+            LazyVGrid(columns: columns, spacing: Constants.gridSpacing) {
+                ForEach(viewModel.currencies) { currency in
+                    PaymentCurrencyCellView(
+                        currency: currency,
+                        isSelected: viewModel.selectedCurrency == currency
+                    ) {
+                        viewModel.select(currency)
+                    }
+                }
+            }
+            .padding(.horizontal, Constants.horizontalPadding)
+            .padding(.top, Constants.gridTopPadding)
+            .padding(.bottom, Constants.gridBottomPadding)
         }
-        .padding(.horizontal, Constants.horizontalPadding)
-        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var errorView: some View {
+        VStack(spacing: Constants.errorSpacing) {
+            Text(Strings.loadingError)
+                .font(.bold17)
+                .foregroundStyle(.ypBlack)
+
+            Button(Strings.retry) {
+                Task {
+                    await viewModel.load(service: services.paymentService)
+                }
+            }
+            .font(.regular17)
+            .foregroundStyle(.ypBlueUniversal)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 
     private var bottomPanel: some View {
@@ -44,14 +123,19 @@ struct PaymentView: View {
             agreementText
 
             Button {
-                // Оплата будет реализована в Sprint 4
+                Task {
+                    await viewModel.pay(
+                        paymentService: services.paymentService,
+                        cartService: services.cartService
+                    )
+                }
             } label: {
-                Text("Оплатить")
+                Text(Strings.pay)
                     .font(.bold17)
                     .foregroundStyle(.ypWhite)
                     .frame(maxWidth: .infinity)
                     .frame(height: Constants.payButtonHeight)
-                    .background(.ypBlack)
+                    .background(payButtonBackground)
                     .clipShape(
                         RoundedRectangle(
                             cornerRadius: Constants.payButtonCornerRadius
@@ -59,6 +143,7 @@ struct PaymentView: View {
                     )
             }
             .buttonStyle(.plain)
+            .disabled(!viewModel.canPay)
         }
         .padding(.horizontal, Constants.bottomHorizontalPadding)
         .padding(.top, Constants.bottomTopPadding)
@@ -77,18 +162,32 @@ struct PaymentView: View {
 
     private var agreementText: some View {
         VStack(alignment: .leading, spacing: Constants.agreementSpacing) {
-            Text("Совершая покупку, вы соглашаетесь с условиями")
+            Text(Strings.agreementPrefix)
                 .font(.regular13)
                 .foregroundStyle(.ypBlack)
 
             Button {
                 openAgreement()
             } label: {
-                Text("Пользовательского соглашения")
+                Text(Strings.agreementLink)
                     .font(.regular13)
                     .foregroundStyle(.ypBlueUniversal)
             }
             .buttonStyle(.plain)
+        }
+    }
+
+    private var payButtonBackground: Color {
+        viewModel.canPay ? .ypBlack : .ypGrayUniversal
+    }
+
+    private var paymentErrorBinding: Binding<Bool> {
+        Binding {
+            viewModel.error != nil
+        } set: { isPresented in
+            if !isPresented {
+                viewModel.error = nil
+            }
         }
     }
 
@@ -103,9 +202,25 @@ struct PaymentView: View {
 }
 
 private extension PaymentView {
+    enum Strings {
+        static let title = "Выбор способа оплаты"
+        static let loadingError = "Не удалось загрузить валюты"
+        static let paymentError = "Не удалось произвести оплату"
+        static let retry = "Повторить"
+        static let cancel = "Отмена"
+        static let pay = "Оплатить"
+        static let agreementPrefix = "Совершая покупку, вы соглашаетесь с условиями"
+        static let agreementLink = "Пользовательского соглашения"
+    }
+
     enum Constants {
         static let horizontalPadding: CGFloat = 16
-        static let placeholderTopPadding: CGFloat = 260
+        static let gridSpacing: CGFloat = 7
+        static let gridTopPadding: CGFloat = 20
+        static let gridBottomPadding: CGFloat = 176
+
+        static let errorSpacing: CGFloat = 12
+        static let loaderBackgroundOpacity: CGFloat = 0.12
 
         static let bottomHorizontalPadding: CGFloat = 16
         static let bottomTopPadding: CGFloat = 16
@@ -124,5 +239,10 @@ private extension PaymentView {
     NavigationStack {
         PaymentView()
             .environment(Router())
+            .environment(
+                ServicesAssembly(
+                    networkClient: DefaultNetworkClient()
+                )
+            )
     }
 }

@@ -28,7 +28,7 @@ struct CartItemView: View {
                     .frame(height: Constants.priceTopSpacing)
 
                 VStack(alignment: .leading, spacing: Constants.priceTextSpacing) {
-                    Text("Цена")
+                    Text(Strings.priceTitle)
                         .font(.regular13)
                         .foregroundStyle(.ypBlack)
 
@@ -86,8 +86,13 @@ struct CartItemView: View {
     }
 
     private var priceText: String {
-        String(format: "%.2f ETH", item.price)
-            .replacingOccurrences(of: ".", with: ",")
+        CartPriceFormatter.eth(item.price)
+    }
+}
+
+private extension CartItemView {
+    enum Strings {
+        static let priceTitle = "Цена"
     }
 }
 

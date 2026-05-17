@@ -6,18 +6,21 @@ final class ServicesAssembly {
 
     private let networkClient: NetworkClient
     private let cartServiceStorage: CartServiceProtocol
+    private let paymentServiceStorage: PaymentServiceProtocol
     private let favoritesServiceStorage: FavoritesServiceProtocol
+
+    private let useMockCart = true
 
     init(networkClient: NetworkClient) {
         self.networkClient = networkClient
 
-        // TODO: Sprint 4 — switch Cart flow to real CartService
-        // after payment integration is finished.
-        cartServiceStorage = MockCartService()
+        if useMockCart {
+            cartServiceStorage = MockCartService()
+        } else {
+            cartServiceStorage = CartService(networkClient: networkClient)
+        }
 
-        // Real implementation is ready:
-        // cartServiceStorage = CartService(networkClient: networkClient)
-
+        paymentServiceStorage = PaymentService(networkClient: networkClient)
         favoritesServiceStorage = NoOpFavoritesService()
     }
 
@@ -29,6 +32,10 @@ final class ServicesAssembly {
 
     var cartService: CartServiceProtocol {
         cartServiceStorage
+    }
+
+    var paymentService: PaymentServiceProtocol {
+        paymentServiceStorage
     }
 
     // MARK: - Epics services

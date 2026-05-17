@@ -62,8 +62,8 @@ private extension MockCartService {
 
 private extension MockCartService {
     enum Constants {
-        static let delay: Int64 = 500
-        static let storageKey = "mock.cart.ids"
+        static let delay = 500
+        static let storageKey = "cart.mock.ids"
     }
 
     static let mockItems: [CartItem] = [
