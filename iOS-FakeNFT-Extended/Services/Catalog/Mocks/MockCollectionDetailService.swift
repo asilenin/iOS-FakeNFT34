@@ -28,6 +28,9 @@ actor MockCollectionDetailService: CollectionDetailServiceProtocol {
             )
         }
     }
+
+    /// Мок не кэширует — `loadNfts` всегда возвращает свежие данные.
+    func invalidateCache() {}
 }
 
 // MARK: - Mock data

@@ -11,6 +11,7 @@
 		4723FFAF2FB47E0F00CB43CB /* CollectionDetailServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4723FFAE2FB47E0E00CB43CB /* CollectionDetailServiceProtocol.swift */; };
 		4723FFB12FB47E2100CB43CB /* MockCollectionDetailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4723FFB02FB47E2000CB43CB /* MockCollectionDetailService.swift */; };
 		472DAC5E2FB9D389005D4B5B /* CatalogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472DAC5D2FB9D388005D4B5B /* CatalogService.swift */; };
+		472DAC602FB9DB81005D4B5B /* CollectionDetailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472DAC5F2FB9DB80005D4B5B /* CollectionDetailService.swift */; };
 		473238812FB72CFA00AF30A9 /* NftByIdRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473238802FB72CED00AF30A9 /* NftByIdRequest.swift */; };
 		473238832FB72D1D00AF30A9 /* CollectionsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473238822FB72D1C00AF30A9 /* CollectionsRequest.swift */; };
 		4747AA052FAF622A00B07D13 /* WebViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA042FAF622900B07D13 /* WebViewRepresentable.swift */; };
@@ -64,6 +65,7 @@
 		4723FFAE2FB47E0E00CB43CB /* CollectionDetailServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDetailServiceProtocol.swift; sourceTree = "<group>"; };
 		4723FFB02FB47E2000CB43CB /* MockCollectionDetailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCollectionDetailService.swift; sourceTree = "<group>"; };
 		472DAC5D2FB9D388005D4B5B /* CatalogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogService.swift; sourceTree = "<group>"; };
+		472DAC5F2FB9DB80005D4B5B /* CollectionDetailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDetailService.swift; sourceTree = "<group>"; };
 		473238802FB72CED00AF30A9 /* NftByIdRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftByIdRequest.swift; sourceTree = "<group>"; };
 		473238822FB72D1C00AF30A9 /* CollectionsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsRequest.swift; sourceTree = "<group>"; };
 		47470DE62FAF5EF4005D4D4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 		4747AA162FAF6FD200B07D13 /* Catalog */ = {
 			isa = PBXGroup;
 			children = (
+				472DAC5F2FB9DB80005D4B5B /* CollectionDetailService.swift */,
 				472DAC5D2FB9D388005D4B5B /* CatalogService.swift */,
 				473238842FB72E5B00AF30A9 /* Requests */,
 				4723FFAE2FB47E0E00CB43CB /* CollectionDetailServiceProtocol.swift */,
@@ -537,6 +540,7 @@
 				4723FFAF2FB47E0F00CB43CB /* CollectionDetailServiceProtocol.swift in Sources */,
 				ABC5E1B72C31FC70002B4068 /* ServicesAssembly.swift in Sources */,
 				4747AA072FAF622F00B07D13 /* WebViewScreen.swift in Sources */,
+				472DAC602FB9DB81005D4B5B /* CollectionDetailService.swift in Sources */,
 				4747AA1A2FAF700100B07D13 /* CartServiceProtocol.swift in Sources */,
 				4747AA0D2FAF69D300B07D13 /* LoadingSpinner.swift in Sources */,
 				ABC5E1B52C31FC57002B4068 /* TabBarView.swift in Sources */,

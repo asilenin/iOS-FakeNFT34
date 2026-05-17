@@ -26,7 +26,7 @@ struct CollectionDetailView: View {
             }
         }
         .errorAlert(error: errorBinding) {
-            Task { await viewModel?.load() }
+            Task { await viewModel?.reload() }
         }
         .task {
             if viewModel == nil {
@@ -35,7 +35,7 @@ struct CollectionDetailView: View {
                     service: services.collectionDetailService
                 )
             }
-            await viewModel?.load()
+            await viewModel?.reload()
         }
     }
 

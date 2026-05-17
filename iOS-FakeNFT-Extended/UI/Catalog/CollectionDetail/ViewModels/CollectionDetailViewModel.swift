@@ -2,8 +2,7 @@ import Foundation
 
 /// ViewModel экрана коллекции NFT.
 ///
-/// Отвечает за параллельную загрузку автора и списка NFT коллекции,
-/// а также за локальное состояние избранного и корзины.
+/// Отвечает за загрузку списка NFT коллекции и за локальное состояние избранного и корзины.
 /// Данные автора (имя, сайт) приходят в составе `NftCollection` — отдельная
 /// сетевая загрузка не нужна, `Author` собирается синхронно в `init`.
 @Observable
@@ -71,7 +70,7 @@ final class CollectionDetailViewModel {
 
     // MARK: - Public Methods
 
-    /// Загрузить автора и NFT параллельно.
+    /// Загрузить NFT коллекции.
     /// Отменяет предыдущую загрузку, если она была в процессе.
     func load() async {
         currentTask?.cancel()
@@ -81,6 +80,13 @@ final class CollectionDetailViewModel {
         }
         currentTask = task
         await task.value
+    }
+
+    /// Принудительно перезагружает с сервера, минуя кэш.
+    /// Вызывается из pull-to-refresh.
+    func reload() async {
+        await service.invalidateCache()
+        await load()
     }
 
     // MARK: - User Actions
