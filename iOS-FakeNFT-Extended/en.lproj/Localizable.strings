@@ -11,10 +11,22 @@
 "Error.retry" = "Повторить";
 
 "Common.sort" = "Сортировка";
+"Common.close" = "Закрыть";
 
 "Statistics.sort.byRating" = "По рейтингу";
 "Statistics.sort.byName" = "По имени";
 "Statistics.sort.byNftsCount" = "По количеству NFT";
 "Statistics.empty" = "Список пользователей пуст";
-"Statistics.user.title" = "Пользователь";
-"Statistics.user.placeholder" = "Здесь будет экран пользователя";
+"Statistics.loadErrorHint" = "Не удалось загрузить статистику";
+
+"Statistics.user.title" = "Информация о пользователе";
+"Statistics.user.website" = "Перейти на сайт";
+"Statistics.user.openCollection" = "Открыть коллекцию";
+"Statistics.user.nftsCount" = "Количество NFT: %lld";
+
+"Statistics.collection.title" = "Коллекция";
+"Statistics.collection.empty" = "У пользователя пока нет NFT";
+"Statistics.collection.loadErrorHint" = "Не удалось загрузить коллекцию";
+
+"Statistics.nftDetail.title" = "NFT";
+"Statistics.nftDetail.placeholder" = "Экран NFT будет в отдельном эпике";

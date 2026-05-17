@@ -28,8 +28,25 @@ struct StatisticsView: View {
         )
         .navigationDestination(for: StatisticsRoute.self) { route in
             switch route {
-            case .userPlaceholder(let user):
-                StatisticsUserPlaceholderView(user: user)
+            case .userDetail(let user):
+                StatisticsUserDetailView(
+                    viewModel: StatisticsUserDetailViewModel(
+                        summary: user,
+                        statisticsService: services.statisticsService
+                    )
+                )
+            case .userCollection(let userId, let userName):
+                StatisticsUserCollectionView(
+                    viewModel: StatisticsUserCollectionViewModel(
+                        userId: userId,
+                        userName: userName,
+                        statisticsService: services.statisticsService
+                    )
+                )
+            case .userWebsite(let url):
+                WebViewScreen(url: url)
+            case .nftDetail(let nftId):
+                StatisticsNftDetailView(nftId: nftId)
             case ._placeholder:
                 EmptyView()
             }

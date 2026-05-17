@@ -59,7 +59,7 @@ struct StatisticsViewContentView: View {
         List {
             ForEach(Array(viewModel.users.enumerated()), id: \.element.id) { index, user in
                 StatisticsRowView(rank: index + 1, user: user) {
-                    router.push(StatisticsRoute.userPlaceholder(user), in: .statistics)
+                    router.push(StatisticsRoute.userDetail(user), in: .statistics)
                 }
                 .listRowBackground(Color.ypWhite)
             }

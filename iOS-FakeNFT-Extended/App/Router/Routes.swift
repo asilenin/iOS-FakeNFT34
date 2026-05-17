@@ -22,5 +22,12 @@ enum ProfileRoute: Hashable {
 
 enum StatisticsRoute: Hashable {
     case _placeholder
-    case userPlaceholder(StatisticsUser)
+    
+    case userDetail(StatisticsUser)
+    
+    case userCollection(userId: String, userName: String)
+    
+    case userWebsite(URL)
+    
+    case nftDetail(String)
 }

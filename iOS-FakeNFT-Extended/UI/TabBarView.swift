@@ -30,7 +30,6 @@ struct TabBarView: View {
             NavigationStack(path: $router.profilePath) {
                 ProfileView()
                     .navigationDestination(for: ProfileRoute.self) { _ in
-                        // TODO(profile epic): map ProfileRoute cases to their destination views.
                         EmptyView()
                     }
             }
@@ -38,7 +37,6 @@ struct TabBarView: View {
             NavigationStack(path: $router.catalogPath) {
                 CatalogView()
                     .navigationDestination(for: CatalogRoute.self) { _ in
-                        // TODO(catalog epic): map CatalogRoute cases to their destination views.
                         EmptyView()
                     }
             }
@@ -46,35 +44,55 @@ struct TabBarView: View {
             NavigationStack(path: $router.cartPath) {
                 CartView()
                     .navigationDestination(for: CartRoute.self) { _ in
-                        // TODO(cart epic): map CartRoute cases to their destination views.
                         EmptyView()
                     }
             }
         case .statistics:
             NavigationStack(path: $router.statisticsPath) {
-                    StatisticsView(
-                        viewModel: StatisticsViewModel(
-                            statisticsService: services.statisticsService
-                        )
+                StatisticsView(
+                    viewModel: StatisticsViewModel(
+                        statisticsService: services.statisticsService
                     )
-                    .navigationDestination(for: StatisticsRoute.self) { route in
-                        switch route {
-                        case .userPlaceholder(let user):
-                            StatisticsUserPlaceholderView(user: user)
-                        case ._placeholder:
-                            EmptyView()
-                        }
-                    }
+                )
+                .navigationDestination(for: StatisticsRoute.self) { route in
+                    statisticsDestination(for: route)
+                }
             }
         }
     }
 
-    /// True when the currently selected tab has any pushed screens.
+    @ViewBuilder
+    private func statisticsDestination(for route: StatisticsRoute) -> some View {
+        switch route {
+        case .userDetail(let user):
+            StatisticsUserDetailView(
+                viewModel: StatisticsUserDetailViewModel(
+                    summary: user,
+                    statisticsService: services.statisticsService
+                )
+            )
+        case .userCollection(let userId, let userName):
+            StatisticsUserCollectionView(
+                viewModel: StatisticsUserCollectionViewModel(
+                    userId: userId,
+                    userName: userName,
+                    statisticsService: services.statisticsService
+                )
+            )
+        case .userWebsite(let url):
+            WebViewScreen(url: url)
+        case .nftDetail(let nftId):
+            StatisticsNftDetailView(nftId: nftId)
+        case ._placeholder:
+            EmptyView()
+        }
+    }
+
     private func isCurrentTabPushed(_ router: Router) -> Bool {
         switch router.selectedTab {
-        case .profile:    !router.profilePath.isEmpty
-        case .catalog:    !router.catalogPath.isEmpty
-        case .cart:       !router.cartPath.isEmpty
+        case .profile: !router.profilePath.isEmpty
+        case .catalog: !router.catalogPath.isEmpty
+        case .cart: !router.cartPath.isEmpty
         case .statistics: !router.statisticsPath.isEmpty
         }
     }
