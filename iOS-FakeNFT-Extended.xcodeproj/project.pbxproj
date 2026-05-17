@@ -12,6 +12,8 @@
 		4723FFB12FB47E2100CB43CB /* MockCollectionDetailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4723FFB02FB47E2000CB43CB /* MockCollectionDetailService.swift */; };
 		472DAC5E2FB9D389005D4B5B /* CatalogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472DAC5D2FB9D388005D4B5B /* CatalogService.swift */; };
 		472DAC602FB9DB81005D4B5B /* CollectionDetailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472DAC5F2FB9DB80005D4B5B /* CollectionDetailService.swift */; };
+		472DAC632FB9EC76005D4B5B /* MockNetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472DAC622FB9EC75005D4B5B /* MockNetworkClient.swift */; };
+		472DAC662FB9EC94005D4B5B /* CollectionDetailServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472DAC652FB9EC93005D4B5B /* CollectionDetailServiceTests.swift */; };
 		473238812FB72CFA00AF30A9 /* NftByIdRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473238802FB72CED00AF30A9 /* NftByIdRequest.swift */; };
 		473238832FB72D1D00AF30A9 /* CollectionsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473238822FB72D1C00AF30A9 /* CollectionsRequest.swift */; };
 		4747AA052FAF622A00B07D13 /* WebViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA042FAF622900B07D13 /* WebViewRepresentable.swift */; };
@@ -66,6 +68,8 @@
 		4723FFB02FB47E2000CB43CB /* MockCollectionDetailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCollectionDetailService.swift; sourceTree = "<group>"; };
 		472DAC5D2FB9D388005D4B5B /* CatalogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogService.swift; sourceTree = "<group>"; };
 		472DAC5F2FB9DB80005D4B5B /* CollectionDetailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDetailService.swift; sourceTree = "<group>"; };
+		472DAC622FB9EC75005D4B5B /* MockNetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkClient.swift; sourceTree = "<group>"; };
+		472DAC652FB9EC93005D4B5B /* CollectionDetailServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDetailServiceTests.swift; sourceTree = "<group>"; };
 		473238802FB72CED00AF30A9 /* NftByIdRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftByIdRequest.swift; sourceTree = "<group>"; };
 		473238822FB72D1C00AF30A9 /* CollectionsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsRequest.swift; sourceTree = "<group>"; };
 		47470DE62FAF5EF4005D4D4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -135,6 +139,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		472DAC612FB9EC68005D4B5B /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				472DAC622FB9EC75005D4B5B /* MockNetworkClient.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		472DAC642FB9EC85005D4B5B /* Catalog */ = {
+			isa = PBXGroup;
+			children = (
+				472DAC652FB9EC93005D4B5B /* CollectionDetailServiceTests.swift */,
+				479BD4CD2FB108C2009F014D /* CatalogServiceTests.swift */,
+			);
+			path = Catalog;
+			sourceTree = "<group>";
+		};
 		473238842FB72E5B00AF30A9 /* Requests */ = {
 			isa = PBXGroup;
 			children = (
@@ -275,7 +296,8 @@
 		ABC5E17B2C31F5B0002B4068 /* iOS-FakeNFT-ExtendedTests */ = {
 			isa = PBXGroup;
 			children = (
-				479BD4CD2FB108C2009F014D /* CatalogServiceTests.swift */,
+				472DAC642FB9EC85005D4B5B /* Catalog */,
+				472DAC612FB9EC68005D4B5B /* Helpers */,
 				ABC5E17C2C31F5B0002B4068 /* RouterTests.swift */,
 			);
 			path = "iOS-FakeNFT-ExtendedTests";
@@ -562,6 +584,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				472DAC662FB9EC94005D4B5B /* CollectionDetailServiceTests.swift in Sources */,
+				472DAC632FB9EC76005D4B5B /* MockNetworkClient.swift in Sources */,
 				ABC5E17D2C31F5B0002B4068 /* RouterTests.swift in Sources */,
 				479BD4CE2FB108C3009F014D /* CatalogServiceTests.swift in Sources */,
 			);
