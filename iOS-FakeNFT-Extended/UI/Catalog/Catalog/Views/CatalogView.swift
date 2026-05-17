@@ -8,6 +8,15 @@ struct CatalogView: View {
 
     @AppStorage("catalogSortOption") private var storedSortOption: CatalogSortOption = .nftCount
 
+    init() {}
+
+    /// Designated initializer for Preview. Provides a pre-built ViewModel so the
+    /// `.task` block reuses it instead of creating one through `ServicesAssembly`.
+    /// Keeps SwiftUI Previews offline.
+    fileprivate init(previewViewModel: CatalogViewModel) {
+        _viewModel = State(wrappedValue: previewViewModel)
+    }
+
     var body: some View {
         ZStack {
             Color.ypWhite.ignoresSafeArea()
@@ -112,8 +121,13 @@ struct CatalogView: View {
 
 #Preview {
     NavigationStack {
-        CatalogView()
-            .environment(ServicesAssembly(networkClient: DefaultNetworkClient()))
-            .environment(Router())
+        CatalogView(previewViewModel: CatalogViewModel(
+            service: MockCatalogService(),
+            initialSortOption: .nftCount
+        ))
+        // ServicesAssembly is still required by @Environment, but its services
+        // are not accessed because the ViewModel is pre-built above.
+        .environment(ServicesAssembly(networkClient: DefaultNetworkClient()))
+        .environment(Router())
     }
 }

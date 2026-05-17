@@ -26,7 +26,7 @@ protocol CollectionDetailServiceProtocol: Sendable {
     /// - Returns: Массив загруженных NFT в порядке переданных `ids`. Может быть короче `ids`.
     /// - Throws: Ошибка, если ни один NFT не удалось загрузить.
     func loadNfts(byIds ids: [String]) async throws -> [Nft]
-    
+
     /// Сбрасывает внутренний кэш загруженных NFT.
     /// Вызывается из ViewModel при pull-to-refresh.
     func invalidateCache() async

@@ -9,6 +9,18 @@ struct CollectionDetailView: View {
 
     @State private var viewModel: CollectionDetailViewModel?
 
+    init(collection: NftCollection) {
+        self.collection = collection
+    }
+
+    /// Designated initializer for Preview. Provides a pre-built ViewModel so the
+    /// `.task` block reuses it instead of creating one through `ServicesAssembly`.
+    /// Keeps SwiftUI Previews offline.
+    fileprivate init(collection: NftCollection, previewViewModel: CollectionDetailViewModel) {
+        self.collection = collection
+        _viewModel = State(wrappedValue: previewViewModel)
+    }
+
     var body: some View {
         ZStack {
             Color.ypWhite.ignoresSafeArea()
@@ -126,9 +138,18 @@ struct CollectionDetailView: View {
 }
 
 #Preview {
+    let collection = MockCatalogService.mockCollections[0]
     NavigationStack {
-        CollectionDetailView(collection: MockCatalogService.mockCollections[0])
-            .environment(ServicesAssembly(networkClient: DefaultNetworkClient()))
-            .environment(Router())
+        CollectionDetailView(
+            collection: collection,
+            previewViewModel: CollectionDetailViewModel(
+                collection: collection,
+                service: MockCollectionDetailService()
+            )
+        )
+        // ServicesAssembly is still required by @Environment, but its services
+        // are not accessed because the ViewModel is pre-built above.
+        .environment(ServicesAssembly(networkClient: DefaultNetworkClient()))
+        .environment(Router())
     }
 }

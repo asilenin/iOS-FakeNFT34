@@ -24,13 +24,19 @@ final class ServicesAssembly {
     }
 
     // MARK: - Epics services
-    var catalogService: CatalogServiceProtocol {
-        // TODO: swap for CatalogService(networkClient: networkClient).
-        MockCatalogService()
-    }
-    var collectionDetailService: CollectionDetailServiceProtocol {
-        // TODO: swap for CollectionDetailService(networkClient: networkClient) in P3.
-        MockCollectionDetailService()
-    }
+
+    // Real services are stored as `lazy var` so the same actor instance survives across
+    // multiple accesses. Critical for the in-memory caches inside the services —
+    // a fresh computed-property instance per access would reset the cache on every read.
+    // @ObservationIgnored is required because @Observable converts vars to computed,
+    // which conflicts with `lazy`.
+
+    @ObservationIgnored
+    private lazy var _catalogService: CatalogServiceProtocol = CatalogService(networkClient: networkClient)
+    var catalogService: CatalogServiceProtocol { _catalogService }
+
+    @ObservationIgnored
+    private lazy var _collectionDetailService: CollectionDetailServiceProtocol = CollectionDetailService(networkClient: networkClient)
+    var collectionDetailService: CollectionDetailServiceProtocol { _collectionDetailService }
 
 }
