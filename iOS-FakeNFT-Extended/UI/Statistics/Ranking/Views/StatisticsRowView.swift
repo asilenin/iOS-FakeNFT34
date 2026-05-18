@@ -10,78 +10,65 @@ import Kingfisher
 
 struct StatisticsRowView: View {
 
-    // MARK: - Properties
-
     let rank: Int
     let user: StatisticsUser
     let onSelect: () -> Void
 
-    // MARK: - Body
+    private enum Layout {
+        static let rowHeight: CGFloat = 70
+        static let avatarSide: CGFloat = 35
+        static let rankWidth: CGFloat = 28
+        static let cardCornerRadius: CGFloat = 12
+    }
 
     var body: some View {
-        Button(action: onSelect) {
-            HStack(spacing: 12) {
-                Text("\(rank)")
-                    .font(.regular15)
-                    .foregroundStyle(Color.ypBlack)
-                    .frame(minWidth: 24, alignment: .leading)
+        HStack(alignment: .center, spacing: 8) {
+            Text("\(rank)")
+                .font(.regular17)
+                .foregroundStyle(Color.ypBlack)
+                .frame(width: Layout.rankWidth, alignment: .trailing)
 
-                avatar
-                nameLabel
-                Spacer(minLength: 8)
-                nftCountLabel
+            Button(action: onSelect) {
+                HStack(spacing: 12) {
+                    avatar
+                    Text(user.name)
+                        .font(.bold17)
+                        .foregroundStyle(Color.ypBlack)
+                        .lineLimit(1)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Text("\(user.nftsCount)")
+                        .font(.regular17)
+                        .foregroundStyle(Color.ypBlack)
+                }
+                .padding(.horizontal, 12)
+                .frame(height: Layout.rowHeight)
+                .frame(maxWidth: .infinity)
+                .background(Color.ypGrayLight)
+                .clipShape(RoundedRectangle(cornerRadius: Layout.cardCornerRadius))
+                .contentShape(Rectangle())
             }
-            .padding(.vertical, 8)
-            .contentShape(Rectangle())
+            .buttonStyle(.plain)
         }
-        .buttonStyle(.plain)
-    }
-
-    // MARK: - Private Views
-
-    private var nameLabel: some View {
-        Text(user.name)
-            .font(.regular17)
-            .foregroundStyle(Color.ypBlack)
-            .lineLimit(1)
-    }
-
-    private var nftCountLabel: some View {
-        Text("\(user.nftsCount)")
-            .font(.regular17)
-            .foregroundStyle(Color.ypBlack)
     }
 
     @ViewBuilder
     private var avatar: some View {
-        let side: CGFloat = 48
         if let url = user.avatarURL {
             KFImage(url)
-                .placeholder {
-                    LoadingSpinner(size: .small)
-                }
+                .placeholder { LoadingSpinner(size: .small) }
                 .resizable()
                 .scaledToFill()
-                .frame(width: side, height: side)
+                .frame(width: Layout.avatarSide, height: Layout.avatarSide)
                 .clipShape(Circle())
         } else {
             Circle()
-                .fill(Color.ypGrayLight)
-                .frame(width: side, height: side)
+                .fill(Color.ypWhite)
+                .frame(width: Layout.avatarSide, height: Layout.avatarSide)
                 .overlay {
                     Image(systemName: "person.fill")
+                        .font(.system(size: 16))
                         .foregroundStyle(Color.ypGrayUniversal)
                 }
         }
-    }
-}
-
-#Preview {
-    List {
-        StatisticsRowView(
-            rank: 1,
-            user: StatisticsUser(id: "p", name: "Preview", avatarURL: nil, nftsCount: 10, rating: 50),
-            onSelect: {}
-        )
     }
 }

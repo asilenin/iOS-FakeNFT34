@@ -12,6 +12,8 @@ struct StatisticsViewContentView: View {
     @Environment(Router.self) private var router
     @Bindable var viewModel: StatisticsViewModel
 
+    @State private var isShowingSortDialog = false
+
     var body: some View {
         ZStack {
             Color.ypWhite.ignoresSafeArea()
@@ -19,40 +21,44 @@ struct StatisticsViewContentView: View {
         }
         .navigationTitle(Text("Tab.statistics"))
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar { sortToolbar }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                MenuButton { isShowingSortDialog = true }
+            }
+        }
+        .confirmationDialog(
+            Text("Statistics.sort.title"),
+            isPresented: $isShowingSortDialog,
+            titleVisibility: .visible
+        ) {
+            Button("Statistics.sort.byName") {
+                viewModel.setSortOption(.byName)
+            }
+            Button("Statistics.sort.byRating") {
+                viewModel.setSortOption(.byRating)
+            }
+            Button("Statistics.sort.byNftsCount") {
+                viewModel.setSortOption(.byNftsCount)
+            }
+            Button("Common.close", role: .cancel) {}
+        }
         .errorAlert(error: $viewModel.loadError) {
             Task { await viewModel.load() }
         }
     }
 
-    // MARK: - Content
-
     @ViewBuilder
     private var content: some View {
         switch viewModel.state {
         case .loading:
-            loadingView
+            LoadingSpinner(size: .large)
         case .empty:
-            emptyView
+            StatisticsEmptyStateView(message: "Statistics.empty")
         case .success:
             statisticsList
         case .error:
-            Color.clear
+            StatisticsEmptyStateView(message: "Statistics.loadErrorHint")
         }
-    }
-
-    // MARK: - Private Views
-
-    private var loadingView: some View {
-        LoadingSpinner(size: .large)
-    }
-
-    private var emptyView: some View {
-        Text("Statistics.empty")
-            .font(.regular17)
-            .foregroundStyle(Color.ypGrayUniversal)
-            .multilineTextAlignment(.center)
-            .padding()
     }
 
     private var statisticsList: some View {
@@ -61,39 +67,13 @@ struct StatisticsViewContentView: View {
                 StatisticsRowView(rank: index + 1, user: user) {
                     router.push(StatisticsRoute.userDetail(user), in: .statistics)
                 }
+                .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
+                .listRowSeparator(.hidden)
                 .listRowBackground(Color.ypWhite)
             }
         }
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
-    }
-
-    @ToolbarContentBuilder
-    private var sortToolbar: some ToolbarContent {
-        ToolbarItem(placement: .topBarTrailing) {
-            Menu {
-                ForEach(StatisticsSortOption.allCases) { option in
-                    Button {
-                        viewModel.setSortOption(option)
-                    } label: {
-                        HStack {
-                            Text(option.localizedTitle)
-                            if viewModel.sortOption == option {
-                                Image(systemName: "checkmark")
-                            }
-                        }
-                    }
-                }
-            } label: {
-                Image(.menu)
-                    .renderingMode(.template)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 42, height: 42)
-                    .foregroundStyle(Color.ypBlack)
-                    .contentShape(Rectangle())
-            }
-            .accessibilityLabel(Text("Common.sort"))
-        }
+        .contentMargins(.top, 20, for: .scrollContent)
     }
 }

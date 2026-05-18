@@ -88,6 +88,17 @@ struct StatisticsNftGridCell: View {
             .font(.medium10)
             .foregroundStyle(Color.ypBlack)
     }
+    
+    private var priceBlock: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text("Statistics.nft.priceLabel")
+                .font(.medium10)
+                .foregroundStyle(Color.ypGrayUniversal)
+            Text(priceString)
+                .font(.medium10)
+                .foregroundStyle(Color.ypBlack)
+        }
+    }
 
     private var priceString: String {
         let formatter = NumberFormatter()

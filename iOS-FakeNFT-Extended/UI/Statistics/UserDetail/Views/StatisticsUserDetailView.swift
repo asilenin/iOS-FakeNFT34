@@ -22,7 +22,6 @@ struct StatisticsUserDetailView: View {
             Color.ypWhite.ignoresSafeArea()
             content
         }
-        .navigationTitle(Text("Statistics.user.title"))
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -57,85 +56,94 @@ struct StatisticsUserDetailView: View {
 
     private var successContent: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                avatar
-                nameLabel
-                descriptionLabel
-                nftsCountLabel
+            VStack(alignment: .leading, spacing: 0) {
+                profileHeader
 
                 if viewModel.websiteURL != nil {
                     websiteButton
+                        .padding(.top, 20)
                 }
 
-                collectionButton
+                collectionRow
+                    .padding(.top, 32)
             }
-            .padding(16)
+            .padding(.horizontal, 16)
+            .padding(.top, 20)
+            .padding(.bottom, 24)
         }
     }
 
-    // MARK: - Subviews
+    // MARK: - Header
+
+    private var profileHeader: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(alignment: .center, spacing: 16) {
+                avatar
+                Text(viewModel.displayName)
+                    .font(.bold22)
+                    .foregroundStyle(Color.ypBlack)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            .frame(height: 70)
+
+            if !viewModel.displayDescription.isEmpty {
+                Text(viewModel.displayDescription)
+                    .font(.regular13)
+                    .foregroundStyle(Color.ypBlack)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.top, 20)
+            }
+        }
+    }
 
     @ViewBuilder
     private var avatar: some View {
-        let side: CGFloat = 310
+        let side: CGFloat = 70
         if let url = viewModel.avatarURL {
             KFImage(url)
-                .placeholder { LoadingSpinner(size: .medium) }
+                .placeholder {
+                    ZStack {
+                        Color.ypBackgroundUniversal
+                        LoadingSpinner(size: .medium, tint: .ypWhiteUniversal)
+                    }
+                }
                 .resizable()
                 .scaledToFill()
-                .frame(maxWidth: .infinity)
-                .frame(height: side)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .frame(width: side, height: side)
+                .clipShape(Circle())
         } else {
-            RoundedRectangle(cornerRadius: 12)
-                .fill(Color.ypGrayLight)
-                .frame(height: side)
-                .overlay {
-                    Image(systemName: "person.fill")
-                        .font(.system(size: 48))
-                        .foregroundStyle(Color.ypGrayUniversal)
-                }
+            Image(systemName: "person.crop.circle.fill")
+                .resizable()
+                .scaledToFit()
+                .foregroundStyle(Color.ypGrayLight)
+                .frame(width: side, height: side)
         }
     }
 
-    private var nameLabel: some View {
-        Text(viewModel.displayName)
-            .font(.bold22)
-            .foregroundStyle(Color.ypBlack)
-    }
-
-    private var descriptionLabel: some View {
-        Text(viewModel.displayDescription)
-            .font(.regular15)
-            .foregroundStyle(Color.ypBlack)
-            .fixedSize(horizontal: false, vertical: true)
-    }
-
-    private var nftsCountLabel: some View {
-        Text(
-            String(
-                format: NSLocalizedString("Statistics.user.nftsCount", comment: ""),
-                viewModel.nftsCount
-            )
-        )
-        .font(.regular17)
-        .foregroundStyle(Color.ypGrayUniversal)
-    }
+    // MARK: - Website
 
     private var websiteButton: some View {
         Button {
             guard let url = viewModel.websiteURL else { return }
             router.push(StatisticsRoute.userWebsite(url), in: .statistics)
         } label: {
-            Text("Statistics.user.website")
+            Text("Statistics.user.openWebsite")
                 .font(.regular17)
-                .foregroundStyle(Color.ypBlueUniversal)
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .foregroundStyle(Color.ypBlack)
+                .frame(maxWidth: .infinity)
+                .frame(height: 60)
+                .background(Color.ypWhite)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.ypBlack, lineWidth: 1)
+                }
         }
         .buttonStyle(.plain)
     }
 
-    private var collectionButton: some View {
+    // MARK: - Collection row
+
+    private var collectionRow: some View {
         Button {
             router.push(
                 StatisticsRoute.userCollection(
@@ -145,16 +153,27 @@ struct StatisticsUserDetailView: View {
                 in: .statistics
             )
         } label: {
-            Text("Statistics.user.openCollection")
+            HStack(spacing: 12) {
+                Text(
+                    String(
+                        format: NSLocalizedString("Statistics.user.collectionRow", comment: ""),
+                        viewModel.nftsCount
+                    )
+                )
                 .font(.bold17)
-                .foregroundStyle(Color.ypWhiteUniversal)
-                .frame(maxWidth: .infinity)
-                .frame(height: 60)
-                .background(Color.ypBlack)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .foregroundStyle(Color.ypBlack)
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 17, weight: .semibold))
+                    .foregroundStyle(Color.ypBlack)
+                    .frame(width: 8, height: 14)
+            }
+            .frame(height: 54)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .padding(.top, 8)
     }
 }
 

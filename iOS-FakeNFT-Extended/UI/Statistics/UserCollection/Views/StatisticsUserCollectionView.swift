@@ -21,7 +21,7 @@ struct StatisticsUserCollectionView: View {
             Color.ypWhite.ignoresSafeArea()
             content
         }
-        .navigationTitle(Text(viewModel.userName))
+        .navigationTitle(Text("Statistics.collection.title"))
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .toolbar {
@@ -84,7 +84,8 @@ struct StatisticsUserCollectionView: View {
                 }
             }
             .padding(.horizontal, 16)
-            .padding(.vertical, 16)
+            .padding(.top, 20)
+            .padding(.bottom, 16)
         }
         .refreshable {
             await viewModel.load()
