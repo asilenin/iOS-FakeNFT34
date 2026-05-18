@@ -88,15 +88,32 @@ actor CatalogNetworkClient: NetworkClient {
     /// Известное ограничение: невозможно «сбросить лайки в пустой массив»
     /// одним запросом — сервер не принимает такой формат. Если все массивы
     /// пустые, body будет пустой строкой и запрос будет no-op для сервера.
+    ///
+    /// **Кодирование вручную, не через `URLComponents.queryItems`:**
+    /// `URLComponents` использует `.urlQueryAllowed` character set, который
+    /// валиден для query string в URL, но в form body символы `&`, `=`, `+`
+    /// имеют синтаксическое значение (разделители пар, space-as-plus).
+    /// Без явного экранирования значение `"a&b=c"` отправилось бы как
+    /// `likes=a&b=c`, и сервер распарсил бы его как две пары — `likes=a` и `b=c`.
     private static func encodeFormFields(_ fields: [String: [String]]) -> Data? {
-        var components = URLComponents()
-        var items: [URLQueryItem] = []
+        let allowed = formURLAllowedCharacters
+        var pairs: [String] = []
         for (key, values) in fields where !values.isEmpty {
+            let encodedKey = key.addingPercentEncoding(withAllowedCharacters: allowed) ?? key
             for value in values {
-                items.append(URLQueryItem(name: key, value: value))
+                let encodedValue = value.addingPercentEncoding(withAllowedCharacters: allowed) ?? value
+                pairs.append("\(encodedKey)=\(encodedValue)")
             }
         }
-        components.queryItems = items
-        return components.query?.data(using: .utf8)
+        guard !pairs.isEmpty else { return nil }
+        return pairs.joined(separator: "&").data(using: .utf8)
     }
+
+    /// Character set для form URL-encoding: `.urlQueryAllowed` минус `&`, `=`, `+`,
+    /// которые в form body имеют синтаксическое значение и должны быть экранированы.
+    private static let formURLAllowedCharacters: CharacterSet = {
+        var set = CharacterSet.urlQueryAllowed
+        set.remove(charactersIn: "&=+")
+        return set
+    }()
 }

@@ -41,12 +41,14 @@ struct CollectionDetailView: View {
             Task { await viewModel?.reload() }
         }
         .favoritesErrorAlert(viewModel: viewModel)
+        .cartErrorAlert(viewModel: viewModel)
         .task {
             if viewModel == nil {
                 viewModel = CollectionDetailViewModel(
                     collection: collection,
                     service: services.collectionDetailService,
-                    favoritesService: services.catalogFavoritesService
+                    favoritesService: services.catalogFavoritesService,
+                    cartService: services.catalogCartService
                 )
             }
             await viewModel?.reload()
@@ -112,11 +114,13 @@ struct CollectionDetailView: View {
                         isFavorite: viewModel.isFavorite(nft.id),
                         isInCart: viewModel.isInCart(nft.id),
                         isFavoriteDisabled:
-                            viewModel.favoritesDisabled || viewModel.isFavoritePending(nft.id)
+                            viewModel.favoritesDisabled || viewModel.isFavoritePending(nft.id),
+                        isCartDisabled:
+                            viewModel.cartDisabled || viewModel.isCartPending(nft.id)
                     ),
                     actions: NftGridCellActions(
                         onFavoriteTap: { Task { await viewModel.didTapFavorite(nft.id) } },
-                        onCartTap: { viewModel.didTapCart(nft.id) },
+                        onCartTap: { Task { await viewModel.didTapCart(nft.id) } },
                         onCellTap: { router.push(CatalogRoute.nftDetail(nft.id), in: .catalog) }
                     )
                 )
@@ -175,6 +179,34 @@ private extension View {
             Text(error.localizedDescription)
         }
     }
+    /// Алерт ошибки корзины. Две кнопки:
+    /// - "Повторить" → `retryLoadCart()` (повторно грузит корзину).
+    /// - "Отмена" → `disableCart()` (дизейблит кнопки корзины до reload).
+    func cartErrorAlert(viewModel: CollectionDetailViewModel?) -> some View {
+        alert(
+            Text("Error.title"),
+            isPresented: Binding(
+                get: { viewModel?.cartError != nil },
+                set: { newValue in
+                    if !newValue { viewModel?.cartError = nil }
+                }
+            ),
+            presenting: viewModel?.cartError
+        ) { _ in
+            Button(role: .cancel) {
+                viewModel?.disableCart()
+            } label: {
+                Text("Error.cancel")
+            }
+            Button {
+                Task { await viewModel?.retryLoadCart() }
+            } label: {
+                Text("Error.retry")
+            }
+        } message: { error in
+            Text(error.localizedDescription)
+        }
+    }
 }
 
 #Preview {
@@ -185,7 +217,8 @@ private extension View {
             previewViewModel: CollectionDetailViewModel(
                 collection: collection,
                 service: MockCollectionDetailService(),
-                favoritesService: MockCatalogFavoritesService()
+                favoritesService: MockCatalogFavoritesService(),
+                cartService: MockCatalogCartService()
             )
         )
         // ServicesAssembly is still required by @Environment, but its services

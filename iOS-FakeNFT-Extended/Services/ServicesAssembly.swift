@@ -50,4 +50,9 @@ final class ServicesAssembly {
     private lazy var _catalogFavoritesService: CatalogFavoritesServiceProtocol =
     CatalogFavoritesService(networkClient: _catalogNetworkClient)
     var catalogFavoritesService: CatalogFavoritesServiceProtocol { _catalogFavoritesService }
+
+    @ObservationIgnored
+    private lazy var _catalogCartService: CatalogCartServiceProtocol =
+    CatalogCartService(networkClient: _catalogNetworkClient)
+    var catalogCartService: CatalogCartServiceProtocol { _catalogCartService }
 }

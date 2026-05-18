@@ -50,8 +50,10 @@ struct NftGridCell: View {
                     .foregroundStyle(configuration.isFavorite ? Color.red : Color.white)
                     .frame(width: 40, height: 40)
                     .contentShape(Rectangle())
+                    .opacity(configuration.isFavoriteDisabled ? 0.4 : 1.0)
             }
             .buttonStyle(.plain)
+            .disabled(configuration.isFavoriteDisabled)
         }
         .frame(width: 108, height: 108)
     }
@@ -82,10 +84,10 @@ struct NftGridCell: View {
                         .frame(width: 40, height: 40)
                         .foregroundStyle(Color.ypBlack)
                         .contentShape(Rectangle())
-                        .opacity(configuration.isFavoriteDisabled ? 0.4 : 1.0)
+                        .opacity(configuration.isCartDisabled ? 0.4 : 1.0)
                 }
                 .buttonStyle(.plain)
-                .disabled(configuration.isFavoriteDisabled)
+                .disabled(configuration.isCartDisabled)
             }
         }
         .frame(width: 108, alignment: .topLeading)
