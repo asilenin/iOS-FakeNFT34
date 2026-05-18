@@ -61,6 +61,7 @@ final class CatalogViewModel {
         } catch is CancellationError {
             return
         } catch {
+            print("❌ [\(fileName())]: :\(#line)] \(#function) sortBy=\(sortOption.apiSortKey) error: \(error)")
             state = .error
             self.error = error
         }

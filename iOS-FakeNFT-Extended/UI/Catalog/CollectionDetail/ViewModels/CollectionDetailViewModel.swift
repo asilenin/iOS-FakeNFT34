@@ -145,6 +145,7 @@ final class CollectionDetailViewModel {
             favoriteIds = try await favoritesService.loadFavorites()
             favoritesError = nil
         } catch {
+            print("❌ [\(fileName())]: :\(#line)] \(#function) retry failed: \(error)")
             favoritesError = error
         }
     }
@@ -156,6 +157,7 @@ final class CollectionDetailViewModel {
             cartIds = try await cartService.loadCart()
             cartError = nil
         } catch {
+            print("❌ [\(fileName())]: :\(#line)] \(#function) retry failed: \(error)")
             cartError = error
         }
     }
@@ -202,6 +204,7 @@ final class CollectionDetailViewModel {
             let updated = try await favoritesService.setFavorites(favoriteIds)
             favoriteIds = updated
         } catch {
+            print("❌ [\(fileName())]: :\(#line)] \(#function) rollback for id=\(nftId): \(error)")
             favoriteIds = previous
             favoritesError = error
         }
@@ -223,6 +226,7 @@ final class CollectionDetailViewModel {
             let updated = try await cartService.setCart(cartIds)
             cartIds = updated
         } catch {
+            print("❌ [\(fileName())]: :\(#line)] \(#function) rollback for id=\(nftId): \(error)")
             cartIds = previous
             cartError = error
         }
@@ -236,7 +240,7 @@ final class CollectionDetailViewModel {
     ) async {
         state = .loading
         // NFT — критичный поток, ошибка → экран в .error.
-        // Favorites — best-effort, ошибка не валит экран, выставляет favoritesError.
+        // Favorites/Cart — best-effort, ошибки не валят экран, выставляют свои error-поля.
         async let nftsTask = service.loadNfts(byIds: collection.nfts ?? [])
         async let favoritesTask = loadFavoritesNonThrowing(using: favoritesService)
         async let cartTask = loadCartNonThrowing(using: cartService)
@@ -251,6 +255,7 @@ final class CollectionDetailViewModel {
             case .success(let ids):
                 self.favoriteIds = ids
             case .failure(let error):
+                print("❌ [\(fileName())]: :\(#line)] \(#function) favorites load failed (best-effort): \(error)")
                 self.favoritesError = error
             }
 
@@ -259,6 +264,7 @@ final class CollectionDetailViewModel {
             case .success(let ids):
                 self.cartIds = ids
             case .failure(let error):
+                print("❌ [\(fileName())]: :\(#line)] \(#function) cart load failed (best-effort): \(error)")
                 self.cartError = error
             }
 
@@ -266,6 +272,7 @@ final class CollectionDetailViewModel {
         } catch is CancellationError {
             return
         } catch {
+            print("❌ [\(fileName())]: :\(#line)] \(#function) NFT load failed (critical, screen → .error): \(error)")
             state = .error
             self.error = error
         }

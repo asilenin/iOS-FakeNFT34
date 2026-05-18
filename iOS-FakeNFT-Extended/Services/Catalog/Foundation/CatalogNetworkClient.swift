@@ -49,14 +49,24 @@ actor CatalogNetworkClient: NetworkClient {
 
     private func sendFormEncoded(_ request: FormEncodedRequest) async throws -> Data {
         let urlRequest = try buildFormEncodedURLRequest(from: request)
-        let (data, response) = try await session.data(for: urlRequest)
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw NetworkClientError.urlSessionError
+        let bodyString = urlRequest.httpBody.flatMap { String(data: $0, encoding: .utf8) } ?? ""
+        print("ℹ️ [\(fileName())]: :\(#line)] \(#function) \(request.httpMethod.rawValue) \(urlRequest.url?.absoluteString ?? "nil") body: \(bodyString)")
+
+        do {
+            let (data, response) = try await session.data(for: urlRequest)
+            guard let httpResponse = response as? HTTPURLResponse else {
+                throw NetworkClientError.urlSessionError
+            }
+            guard 200..<300 ~= httpResponse.statusCode else {
+                print("❌ [\(fileName())]: :\(#line)] \(#function) HTTP \(httpResponse.statusCode) for \(urlRequest.url?.absoluteString ?? "nil")")
+                throw NetworkClientError.httpStatusCode(httpResponse.statusCode)
+            }
+            print("ℹ️ [\(fileName())]: :\(#line)] \(#function) HTTP \(httpResponse.statusCode), \(data.count) bytes")
+            return data
+        } catch {
+            print("❌ [\(fileName())]: :\(#line)] \(#function) network error: \(error)")
+            throw error
         }
-        guard 200..<300 ~= httpResponse.statusCode else {
-            throw NetworkClientError.httpStatusCode(httpResponse.statusCode)
-        }
-        return data
     }
 
     private func buildFormEncodedURLRequest(from request: FormEncodedRequest) throws -> URLRequest {

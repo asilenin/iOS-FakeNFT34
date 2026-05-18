@@ -8,12 +8,18 @@ import Foundation
 /// (вызывается из pull-to-refresh во ViewModel).
 actor CatalogCartService: CatalogCartServiceProtocol {
 
+    // MARK: - Private
+
     private let networkClient: NetworkClient
     private var cached: Set<String>?
+
+    // MARK: - Init
 
     init(networkClient: NetworkClient) {
         self.networkClient = networkClient
     }
+
+    // MARK: - Public Methods
 
     func loadCart() async throws -> Set<String> {
         if let cached {
