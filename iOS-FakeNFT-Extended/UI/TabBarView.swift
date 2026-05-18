@@ -14,11 +14,9 @@ struct TabBarView: View {
 
             if !isCurrentTabPushed(router) {
                 CustomTabBar(selection: $router.selectedTab)
-                    .transition(.move(edge: .bottom))
             }
         }
         .ignoresSafeArea(.keyboard)
-        .animation(.easeInOut(duration: 0.2), value: isCurrentTabPushed(router))
     }
 
     @ViewBuilder
@@ -112,7 +110,7 @@ private struct ProfileTabRoot: View {
                             nftService: nftService
                         )
                     case .favorites:
-                        ProfilePlaceholderView(title: "Избранные NFT")
+                        ProfilePlaceholderView(title: String(localized: "Profile.favoriteNfts"))
                     case .edit(let profile):
                         EditProfileView(
                             profile: profile,

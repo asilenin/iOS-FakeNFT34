@@ -239,8 +239,14 @@ struct ProfilePlaceholderView: View {
             .foregroundStyle(Color.ypBlack)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.ypWhite)
-            .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text(title)
+                        .font(.bold17)
+                        .foregroundStyle(Color.ypBlack)
+                }
+            }
     }
 }
 

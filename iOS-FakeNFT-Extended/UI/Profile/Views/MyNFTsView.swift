@@ -29,9 +29,14 @@ struct MyNFTsView: View {
 
     var body: some View {
         content
-            .navigationTitle(String(localized: "Profile.MyNFTs.title"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text(String(localized: "Profile.MyNFTs.title"))
+                        .font(.bold17)
+                        .foregroundStyle(Color.ypBlack)
+                }
+
                 ToolbarItem(placement: .topBarTrailing) {
                     MenuButton {
                         isShowingSortDialog = true

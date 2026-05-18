@@ -47,43 +47,42 @@ struct EditProfileView: View {
     var body: some View {
         @Bindable var viewModel = viewModel
 
-        VStack(spacing: 0) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    backButton
-                        .padding(.top, 20)
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                backButton
+                    .padding(.top, 20)
 
-                    avatarEditor
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 12)
+                avatarEditor
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 12)
 
-                    VStack(alignment: .leading, spacing: 24) {
-                        editField(
-                            title: String(localized: "Profile.Edit.name"),
-                            text: $viewModel.name
-                        )
+                VStack(alignment: .leading, spacing: 24) {
+                    editField(
+                        title: String(localized: "Profile.Edit.name"),
+                        text: $viewModel.name
+                    )
 
-                        editDescription(text: $viewModel.description)
+                    editDescription(text: $viewModel.description)
 
-                        editField(
-                            title: String(localized: "Profile.Edit.website"),
-                            text: $viewModel.website,
-                            keyboardType: .URL
-                        )
+                    editField(
+                        title: String(localized: "Profile.Edit.website"),
+                        text: $viewModel.website,
+                        keyboardType: .URL
+                    )
 
-                        if let errorMessage = viewModel.errorMessage {
-                            Text(errorMessage)
-                                .font(.regular13)
-                                .foregroundStyle(Color.ypRedUniversal)
-                                .fixedSize(horizontal: false, vertical: true)
-                        }
+                    if let errorMessage = viewModel.errorMessage {
+                        Text(errorMessage)
+                            .font(.regular13)
+                            .foregroundStyle(Color.ypRedUniversal)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
-                    .padding(.top, 24)
                 }
-                .padding(.horizontal, 16)
-                .padding(.bottom, 24)
+                .padding(.top, 24)
             }
-
+            .padding(.horizontal, 16)
+            .padding(.bottom, 24)
+        }
+        .safeAreaInset(edge: .bottom) {
             saveButton
                 .padding(.horizontal, 16)
                 .padding(.bottom, 16)

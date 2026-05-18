@@ -8,7 +8,7 @@
 import Foundation
 import Observation
 
-enum MyNFTsSortOption {
+enum MyNFTsSortOption: String {
     case price
     case rating
 }
@@ -27,8 +27,9 @@ final class MyNFTsViewModel {
         case failed(String)
     }
 
-    var sortOption: MyNFTsSortOption = .price {
+    var sortOption: MyNFTsSortOption {
         didSet {
+            userDefaults.set(sortOption.rawValue, forKey: Constants.sortOptionKey)
             applySort()
         }
     }
@@ -39,12 +40,21 @@ final class MyNFTsViewModel {
 
     private let nftIds: [String]
     private let nftService: NftServiceProtocol
+    private let userDefaults: UserDefaults
 
     // MARK: - Initializers
 
-    init(nftIds: [String], nftService: NftServiceProtocol) {
+    init(
+        nftIds: [String],
+        nftService: NftServiceProtocol,
+        userDefaults: UserDefaults = .standard
+    ) {
         self.nftIds = nftIds
         self.nftService = nftService
+        self.userDefaults = userDefaults
+        sortOption = MyNFTsSortOption(
+            rawValue: userDefaults.string(forKey: Constants.sortOptionKey) ?? ""
+        ) ?? .price
     }
 
     // MARK: - Public Methods
@@ -99,7 +109,14 @@ final class MyNFTsViewModel {
             nfts.sorted { ($0.rating ?? 0) > ($1.rating ?? 0) }
         }
     }
+}
 
+// MARK: - Constants
+
+private extension MyNFTsViewModel {
+    enum Constants {
+        static let sortOptionKey = "profile.myNfts.sortOption"
+    }
 }
 
 // MARK: - MyNFTsViewModel.State
