@@ -7,7 +7,17 @@ import SwiftUI
 
 struct MenuButton: View {
 
+    // MARK: - Constants
+
+    private enum Constants {
+        static let size: CGFloat = 40
+    }
+
+    // MARK: - Properties
+
     let action: () -> Void
+
+    // MARK: - Body
 
     var body: some View {
         Button(action: action) {
@@ -16,7 +26,7 @@ struct MenuButton: View {
                 .resizable()
                 .scaledToFit()
                 .foregroundStyle(Color.ypBlack)
-                .frame(width: 40, height: 40)
+                .frame(width: Constants.size, height: Constants.size)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
