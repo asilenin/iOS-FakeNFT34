@@ -29,6 +29,17 @@
 		479BD4C92FB1017A009F014D /* CatalogServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479BD4C82FB10179009F014D /* CatalogServiceProtocol.swift */; };
 		479BD4CC2FB10893009F014D /* MockCatalogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479BD4CB2FB10892009F014D /* MockCatalogService.swift */; };
 		479BD4CE2FB108C3009F014D /* CatalogServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479BD4CD2FB108C2009F014D /* CatalogServiceTests.swift */; };
+		47C646CC2FBB12EA004206CB /* FormEncodedRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C646CB2FBB12E9004206CB /* FormEncodedRequest.swift */; };
+		47C646CE2FBB12F0004206CB /* CatalogNetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C646CD2FBB12EF004206CB /* CatalogNetworkClient.swift */; };
+		47C646D02FBB1303004206CB /* URLProtocolMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C646CF2FBB1302004206CB /* URLProtocolMock.swift */; };
+		47C646D22FBB1309004206CB /* CatalogNetworkClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C646D12FBB1309004206CB /* CatalogNetworkClientTests.swift */; };
+		47C646D52FBB1681004206CB /* CatalogProfileDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C646D42FBB167F004206CB /* CatalogProfileDto.swift */; };
+		47C646D72FBB169B004206CB /* ProfileGetRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C646D62FBB169B004206CB /* ProfileGetRequest.swift */; };
+		47C646D92FBB16B2004206CB /* ProfileSetLikesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C646D82FBB16B2004206CB /* ProfileSetLikesRequest.swift */; };
+		47C646DC2FBB16EC004206CB /* CatalogFavoritesServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C646DB2FBB16EB004206CB /* CatalogFavoritesServiceProtocol.swift */; };
+		47C646DE2FBB1709004206CB /* CatalogFavoritesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C646DD2FBB1708004206CB /* CatalogFavoritesService.swift */; };
+		47C646E02FBB171C004206CB /* MockCatalogFavoritesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C646DF2FBB171B004206CB /* MockCatalogFavoritesService.swift */; };
+		47C646E22FBB1738004206CB /* CatalogFavoritesServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C646E12FBB1737004206CB /* CatalogFavoritesServiceTests.swift */; };
 		ABC5E16C2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC5E16B2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift */; };
 		ABC5E1702C31F5AF002B4068 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABC5E16F2C31F5AF002B4068 /* Assets.xcassets */; };
 		ABC5E1732C31F5AF002B4068 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABC5E1722C31F5AF002B4068 /* Preview Assets.xcassets */; };
@@ -86,6 +97,17 @@
 		479BD4C82FB10179009F014D /* CatalogServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogServiceProtocol.swift; sourceTree = "<group>"; };
 		479BD4CB2FB10892009F014D /* MockCatalogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCatalogService.swift; sourceTree = "<group>"; };
 		479BD4CD2FB108C2009F014D /* CatalogServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogServiceTests.swift; sourceTree = "<group>"; };
+		47C646CB2FBB12E9004206CB /* FormEncodedRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormEncodedRequest.swift; sourceTree = "<group>"; };
+		47C646CD2FBB12EF004206CB /* CatalogNetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogNetworkClient.swift; sourceTree = "<group>"; };
+		47C646CF2FBB1302004206CB /* URLProtocolMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLProtocolMock.swift; sourceTree = "<group>"; };
+		47C646D12FBB1309004206CB /* CatalogNetworkClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogNetworkClientTests.swift; sourceTree = "<group>"; };
+		47C646D42FBB167F004206CB /* CatalogProfileDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogProfileDto.swift; sourceTree = "<group>"; };
+		47C646D62FBB169B004206CB /* ProfileGetRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileGetRequest.swift; sourceTree = "<group>"; };
+		47C646D82FBB16B2004206CB /* ProfileSetLikesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetLikesRequest.swift; sourceTree = "<group>"; };
+		47C646DB2FBB16EB004206CB /* CatalogFavoritesServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogFavoritesServiceProtocol.swift; sourceTree = "<group>"; };
+		47C646DD2FBB1708004206CB /* CatalogFavoritesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogFavoritesService.swift; sourceTree = "<group>"; };
+		47C646DF2FBB171B004206CB /* MockCatalogFavoritesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCatalogFavoritesService.swift; sourceTree = "<group>"; };
+		47C646E12FBB1737004206CB /* CatalogFavoritesServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogFavoritesServiceTests.swift; sourceTree = "<group>"; };
 		ABC5E1682C31F5AF002B4068 /* iOS-FakeNFT-Extended.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS-FakeNFT-Extended.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABC5E16B2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS_FakeNFT_ExtendedApp.swift; sourceTree = "<group>"; };
 		ABC5E16F2C31F5AF002B4068 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -142,6 +164,7 @@
 		472DAC612FB9EC68005D4B5B /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				47C646CF2FBB1302004206CB /* URLProtocolMock.swift */,
 				472DAC622FB9EC75005D4B5B /* MockNetworkClient.swift */,
 			);
 			path = Helpers;
@@ -150,6 +173,8 @@
 		472DAC642FB9EC85005D4B5B /* Catalog */ = {
 			isa = PBXGroup;
 			children = (
+				47C646E12FBB1737004206CB /* CatalogFavoritesServiceTests.swift */,
+				47C646D12FBB1309004206CB /* CatalogNetworkClientTests.swift */,
 				472DAC652FB9EC93005D4B5B /* CollectionDetailServiceTests.swift */,
 				479BD4CD2FB108C2009F014D /* CatalogServiceTests.swift */,
 			);
@@ -159,6 +184,8 @@
 		473238842FB72E5B00AF30A9 /* Requests */ = {
 			isa = PBXGroup;
 			children = (
+				47C646D82FBB16B2004206CB /* ProfileSetLikesRequest.swift */,
+				47C646D62FBB169B004206CB /* ProfileGetRequest.swift */,
 				473238822FB72D1C00AF30A9 /* CollectionsRequest.swift */,
 				473238802FB72CED00AF30A9 /* NftByIdRequest.swift */,
 			);
@@ -219,21 +246,14 @@
 		4747AA162FAF6FD200B07D13 /* Catalog */ = {
 			isa = PBXGroup;
 			children = (
+				47C646DD2FBB1708004206CB /* CatalogFavoritesService.swift */,
+				47C646DA2FBB16E3004206CB /* Protocols */,
+				47C646D32FBB1677004206CB /* Models */,
+				47C646CA2FBB12E2004206CB /* Foundation */,
 				472DAC5F2FB9DB80005D4B5B /* CollectionDetailService.swift */,
 				472DAC5D2FB9D388005D4B5B /* CatalogService.swift */,
 				473238842FB72E5B00AF30A9 /* Requests */,
-				4723FFAE2FB47E0E00CB43CB /* CollectionDetailServiceProtocol.swift */,
 				479BD4CA2FB1088B009F014D /* Mocks */,
-				479BD4C82FB10179009F014D /* CatalogServiceProtocol.swift */,
-			);
-			path = Catalog;
-			sourceTree = "<group>";
-		};
-		479BD4C52FB0FE83009F014D /* Catalog */ = {
-			isa = PBXGroup;
-			children = (
-				4723FFAC2FB47BC100CB43CB /* Author.swift */,
-				479BD4C62FB0FE8E009F014D /* NftCollection.swift */,
 			);
 			path = Catalog;
 			sourceTree = "<group>";
@@ -241,10 +261,40 @@
 		479BD4CA2FB1088B009F014D /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
+				47C646DF2FBB171B004206CB /* MockCatalogFavoritesService.swift */,
 				4723FFB02FB47E2000CB43CB /* MockCollectionDetailService.swift */,
 				479BD4CB2FB10892009F014D /* MockCatalogService.swift */,
 			);
 			path = Mocks;
+			sourceTree = "<group>";
+		};
+		47C646CA2FBB12E2004206CB /* Foundation */ = {
+			isa = PBXGroup;
+			children = (
+				47C646CD2FBB12EF004206CB /* CatalogNetworkClient.swift */,
+				47C646CB2FBB12E9004206CB /* FormEncodedRequest.swift */,
+			);
+			path = Foundation;
+			sourceTree = "<group>";
+		};
+		47C646D32FBB1677004206CB /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				47C646D42FBB167F004206CB /* CatalogProfileDto.swift */,
+				4723FFAC2FB47BC100CB43CB /* Author.swift */,
+				479BD4C62FB0FE8E009F014D /* NftCollection.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		47C646DA2FBB16E3004206CB /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				47C646DB2FBB16EB004206CB /* CatalogFavoritesServiceProtocol.swift */,
+				4723FFAE2FB47E0E00CB43CB /* CollectionDetailServiceProtocol.swift */,
+				479BD4C82FB10179009F014D /* CatalogServiceProtocol.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		ABC5E15F2C31F5AF002B4068 = {
@@ -332,7 +382,6 @@
 			isa = PBXGroup;
 			children = (
 				4723FFA92FB47B8F00CB43CB /* Network */,
-				479BD4C52FB0FE83009F014D /* Catalog */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -553,11 +602,14 @@
 				4747AA052FAF622A00B07D13 /* WebViewRepresentable.swift in Sources */,
 				4723FFB12FB47E2100CB43CB /* MockCollectionDetailService.swift in Sources */,
 				479BD4C92FB1017A009F014D /* CatalogServiceProtocol.swift in Sources */,
+				47C646DE2FBB1709004206CB /* CatalogFavoritesService.swift in Sources */,
 				4747AA092FAF678300B07D13 /* NetworkClientError+LocalizedError.swift in Sources */,
 				479BD4CC2FB10893009F014D /* MockCatalogService.swift in Sources */,
 				ABC5E1992C31F666002B4068 /* Fonts.swift in Sources */,
+				47C646DC2FBB16EC004206CB /* CatalogFavoritesServiceProtocol.swift in Sources */,
 				4747AA0F2FAF6AB700B07D13 /* SkeletonView.swift in Sources */,
 				473238812FB72CFA00AF30A9 /* NftByIdRequest.swift in Sources */,
+				47C646D72FBB169B004206CB /* ProfileGetRequest.swift in Sources */,
 				479BD4C72FB0FE8F009F014D /* NftCollection.swift in Sources */,
 				4723FFAF2FB47E0F00CB43CB /* CollectionDetailServiceProtocol.swift in Sources */,
 				ABC5E1B72C31FC70002B4068 /* ServicesAssembly.swift in Sources */,
@@ -568,10 +620,15 @@
 				ABC5E1B52C31FC57002B4068 /* TabBarView.swift in Sources */,
 				4747AA182FAF6FE300B07D13 /* FavoritesServiceProtocol.swift in Sources */,
 				4747AA0B2FAF679F00B07D13 /* ErrorAlert.swift in Sources */,
+				47C646D92FBB16B2004206CB /* ProfileSetLikesRequest.swift in Sources */,
 				ABC5E1A62C31F815002B4068 /* NetworkRequest.swift in Sources */,
+				47C646D52FBB1681004206CB /* CatalogProfileDto.swift in Sources */,
 				ABC5E1A42C31F800002B4068 /* NetworkClient.swift in Sources */,
 				ABC5E16C2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift in Sources */,
 				473238832FB72D1D00AF30A9 /* CollectionsRequest.swift in Sources */,
+				47C646CC2FBB12EA004206CB /* FormEncodedRequest.swift in Sources */,
+				47C646E02FBB171C004206CB /* MockCatalogFavoritesService.swift in Sources */,
+				47C646CE2FBB12F0004206CB /* CatalogNetworkClient.swift in Sources */,
 				ABC5E1A82C31FA90002B4068 /* DateFormatters+Presets.swift in Sources */,
 				4747AA112FAF6E8A00B07D13 /* MenuButton.swift in Sources */,
 				ABC5E1B02C31FB90002B4068 /* RequestConstants.swift in Sources */,
@@ -584,9 +641,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				47C646D02FBB1303004206CB /* URLProtocolMock.swift in Sources */,
+				47C646D22FBB1309004206CB /* CatalogNetworkClientTests.swift in Sources */,
 				472DAC662FB9EC94005D4B5B /* CollectionDetailServiceTests.swift in Sources */,
 				472DAC632FB9EC76005D4B5B /* MockNetworkClient.swift in Sources */,
 				ABC5E17D2C31F5B0002B4068 /* RouterTests.swift in Sources */,
+				47C646E22FBB1738004206CB /* CatalogFavoritesServiceTests.swift in Sources */,
 				479BD4CE2FB108C3009F014D /* CatalogServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

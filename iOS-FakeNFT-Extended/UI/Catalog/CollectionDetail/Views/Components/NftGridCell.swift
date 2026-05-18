@@ -82,8 +82,10 @@ struct NftGridCell: View {
                         .frame(width: 40, height: 40)
                         .foregroundStyle(Color.ypBlack)
                         .contentShape(Rectangle())
+                        .opacity(configuration.isFavoriteDisabled ? 0.4 : 1.0)
                 }
                 .buttonStyle(.plain)
+                .disabled(configuration.isFavoriteDisabled)
             }
         }
         .frame(width: 108, alignment: .topLeading)

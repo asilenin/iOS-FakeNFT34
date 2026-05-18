@@ -40,11 +40,13 @@ struct CollectionDetailView: View {
         .errorAlert(error: errorBinding) {
             Task { await viewModel?.reload() }
         }
+        .favoritesErrorAlert(viewModel: viewModel)
         .task {
             if viewModel == nil {
                 viewModel = CollectionDetailViewModel(
                     collection: collection,
-                    service: services.collectionDetailService
+                    service: services.collectionDetailService,
+                    favoritesService: services.catalogFavoritesService
                 )
             }
             await viewModel?.reload()
@@ -108,10 +110,12 @@ struct CollectionDetailView: View {
                     configuration: NftGridCellConfiguration(
                         nft: nft,
                         isFavorite: viewModel.isFavorite(nft.id),
-                        isInCart: viewModel.isInCart(nft.id)
+                        isInCart: viewModel.isInCart(nft.id),
+                        isFavoriteDisabled:
+                            viewModel.favoritesDisabled || viewModel.isFavoritePending(nft.id)
                     ),
                     actions: NftGridCellActions(
-                        onFavoriteTap: { viewModel.didTapFavorite(nft.id) },
+                        onFavoriteTap: { Task { await viewModel.didTapFavorite(nft.id) } },
                         onCartTap: { viewModel.didTapCart(nft.id) },
                         onCellTap: { router.push(CatalogRoute.nftDetail(nft.id), in: .catalog) }
                     )
@@ -137,6 +141,42 @@ struct CollectionDetailView: View {
     }
 }
 
+// MARK: - Favorites error alert
+
+private extension View {
+    /// Алерт ошибки лайков. Две кнопки:
+    /// - "Повторить" → `retryLoadFavorites()` (повторно грузит лайки).
+    /// - "Отмена" → `disableFavorites()` (дизейблит кнопки сердец до reload).
+    ///
+    /// Не использует общий `errorAlert`-modifier, потому что у того кнопка
+    /// "Отмена" просто закрывает алерт без дополнительного действия.
+    func favoritesErrorAlert(viewModel: CollectionDetailViewModel?) -> some View {
+        alert(
+            Text("Error.title"),
+            isPresented: Binding(
+                get: { viewModel?.favoritesError != nil },
+                set: { newValue in
+                    if !newValue { viewModel?.favoritesError = nil }
+                }
+            ),
+            presenting: viewModel?.favoritesError
+        ) { _ in
+            Button(role: .cancel) {
+                viewModel?.disableFavorites()
+            } label: {
+                Text("Error.cancel")
+            }
+            Button {
+                Task { await viewModel?.retryLoadFavorites() }
+            } label: {
+                Text("Error.retry")
+            }
+        } message: { error in
+            Text(error.localizedDescription)
+        }
+    }
+}
+
 #Preview {
     let collection = MockCatalogService.mockCollections[0]
     NavigationStack {
@@ -144,7 +184,8 @@ struct CollectionDetailView: View {
             collection: collection,
             previewViewModel: CollectionDetailViewModel(
                 collection: collection,
-                service: MockCollectionDetailService()
+                service: MockCollectionDetailService(),
+                favoritesService: MockCatalogFavoritesService()
             )
         )
         // ServicesAssembly is still required by @Environment, but its services

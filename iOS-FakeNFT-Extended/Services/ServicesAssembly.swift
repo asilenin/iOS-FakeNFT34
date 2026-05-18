@@ -31,6 +31,13 @@ final class ServicesAssembly {
     // @ObservationIgnored is required because @Observable converts vars to computed,
     // which conflicts with `lazy`.
 
+    /// Сетевой клиент эпика Каталога. Поддерживает form-urlencoded для PUT-запросов
+    /// (избранное, корзина). JSON-запросы делегирует в общий `DefaultNetworkClient`.
+    @ObservationIgnored
+    private lazy var _catalogNetworkClient: NetworkClient = CatalogNetworkClient(
+        inner: networkClient
+    )
+
     @ObservationIgnored
     private lazy var _catalogService: CatalogServiceProtocol = CatalogService(networkClient: networkClient)
     var catalogService: CatalogServiceProtocol { _catalogService }
@@ -39,4 +46,8 @@ final class ServicesAssembly {
     private lazy var _collectionDetailService: CollectionDetailServiceProtocol = CollectionDetailService(networkClient: networkClient)
     var collectionDetailService: CollectionDetailServiceProtocol { _collectionDetailService }
 
+    @ObservationIgnored
+    private lazy var _catalogFavoritesService: CatalogFavoritesServiceProtocol =
+    CatalogFavoritesService(networkClient: _catalogNetworkClient)
+    var catalogFavoritesService: CatalogFavoritesServiceProtocol { _catalogFavoritesService }
 }
