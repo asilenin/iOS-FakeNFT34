@@ -9,6 +9,16 @@ struct CollectionDetailView: View {
 
     @State private var viewModel: CollectionDetailViewModel?
 
+    init(collection: NftCollection) {
+        self.collection = collection
+    }
+
+    /// Init для Preview: готовый ViewModel, чтобы Preview работал офлайн.
+    fileprivate init(collection: NftCollection, previewViewModel: CollectionDetailViewModel) {
+        self.collection = collection
+        _viewModel = State(wrappedValue: previewViewModel)
+    }
+
     var body: some View {
         ZStack {
             Color.ypWhite.ignoresSafeArea()
@@ -26,16 +36,20 @@ struct CollectionDetailView: View {
             }
         }
         .errorAlert(error: errorBinding) {
-            Task { await viewModel?.load() }
+            Task { await viewModel?.reload() }
         }
+        .favoritesErrorAlert(viewModel: viewModel)
+        .cartErrorAlert(viewModel: viewModel)
         .task {
             if viewModel == nil {
                 viewModel = CollectionDetailViewModel(
                     collection: collection,
-                    service: services.collectionDetailService
+                    service: services.collectionDetailService,
+                    favoritesService: services.catalogFavoritesService,
+                    cartService: services.catalogCartService
                 )
             }
-            await viewModel?.load()
+            await viewModel?.reload()
         }
     }
 
@@ -96,11 +110,15 @@ struct CollectionDetailView: View {
                     configuration: NftGridCellConfiguration(
                         nft: nft,
                         isFavorite: viewModel.isFavorite(nft.id),
-                        isInCart: viewModel.isInCart(nft.id)
+                        isInCart: viewModel.isInCart(nft.id),
+                        isFavoriteDisabled:
+                            viewModel.favoritesDisabled || viewModel.isFavoritePending(nft.id),
+                        isCartDisabled:
+                            viewModel.cartDisabled || viewModel.isCartPending(nft.id)
                     ),
                     actions: NftGridCellActions(
-                        onFavoriteTap: { viewModel.didTapFavorite(nft.id) },
-                        onCartTap: { viewModel.didTapCart(nft.id) },
+                        onFavoriteTap: { Task { await viewModel.didTapFavorite(nft.id) } },
+                        onCartTap: { Task { await viewModel.didTapCart(nft.id) } },
                         onCellTap: { router.push(CatalogRoute.nftDetail(nft.id), in: .catalog) }
                     )
                 )
@@ -125,10 +143,78 @@ struct CollectionDetailView: View {
     }
 }
 
+// MARK: - Favorites error alert
+
+private extension View {
+    /// Алерт ошибки лайков: "Повторить" → `retryLoadFavorites`, "Отмена" → `disableFavorites`.
+    /// Не используем общий `errorAlert` — там у "Отмена" нет действия.
+    func favoritesErrorAlert(viewModel: CollectionDetailViewModel?) -> some View {
+        alert(
+            Text("Error.title"),
+            isPresented: Binding(
+                get: { viewModel?.favoritesError != nil },
+                set: { newValue in
+                    if !newValue { viewModel?.favoritesError = nil }
+                }
+            ),
+            presenting: viewModel?.favoritesError
+        ) { _ in
+            Button(role: .cancel) {
+                viewModel?.disableFavorites()
+            } label: {
+                Text("Error.cancel")
+            }
+            Button {
+                Task { await viewModel?.retryLoadFavorites() }
+            } label: {
+                Text("Error.retry")
+            }
+        } message: { error in
+            Text(error.localizedDescription)
+        }
+    }
+    /// Алерт ошибки корзины: "Повторить" → `retryLoadCart`, "Отмена" → `disableCart`.
+    func cartErrorAlert(viewModel: CollectionDetailViewModel?) -> some View {
+        alert(
+            Text("Error.title"),
+            isPresented: Binding(
+                get: { viewModel?.cartError != nil },
+                set: { newValue in
+                    if !newValue { viewModel?.cartError = nil }
+                }
+            ),
+            presenting: viewModel?.cartError
+        ) { _ in
+            Button(role: .cancel) {
+                viewModel?.disableCart()
+            } label: {
+                Text("Error.cancel")
+            }
+            Button {
+                Task { await viewModel?.retryLoadCart() }
+            } label: {
+                Text("Error.retry")
+            }
+        } message: { error in
+            Text(error.localizedDescription)
+        }
+    }
+}
+
 #Preview {
+    let collection = MockCatalogService.mockCollections[0]
     NavigationStack {
-        CollectionDetailView(collection: MockCatalogService.mockCollections[0])
-            .environment(ServicesAssembly(networkClient: DefaultNetworkClient()))
-            .environment(Router())
+        CollectionDetailView(
+            collection: collection,
+            previewViewModel: CollectionDetailViewModel(
+                collection: collection,
+                service: MockCollectionDetailService(),
+                favoritesService: MockCatalogFavoritesService(),
+                cartService: MockCatalogCartService()
+            )
+        )
+        // ServicesAssembly нужен для @Environment, но не используется (ViewModel уже построен).
+        .environment(ServicesAssembly(networkClient: DefaultNetworkClient()))
+        .environment(Router())
     }
 }

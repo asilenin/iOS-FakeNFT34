@@ -8,6 +8,13 @@ struct CatalogView: View {
 
     @AppStorage("catalogSortOption") private var storedSortOption: CatalogSortOption = .nftCount
 
+    init() {}
+
+    /// Init для Preview: готовый ViewModel, чтобы Preview работал офлайн.
+    fileprivate init(previewViewModel: CatalogViewModel) {
+        _viewModel = State(wrappedValue: previewViewModel)
+    }
+
     var body: some View {
         ZStack {
             Color.ypWhite.ignoresSafeArea()
@@ -58,14 +65,14 @@ struct CatalogView: View {
             case .loading:
                 LoadingSpinner(size: .medium)
             case .success:
-                list(viewModel.collections)  // ← передаём collections явно
+                list(viewModel.collections)
             case .error:
                 ScrollView {
                     CatalogEmptyStateView(message: "Catalog.loadErrorHint")
                         .frame(minHeight: 400)
                 }
                 .refreshable {
-                    await viewModel.load()
+                    await viewModel.reload()
                 }
             }
         } else {
@@ -96,7 +103,7 @@ struct CatalogView: View {
         .background(Color.ypWhite)
         .contentMargins(.top, 20, for: .scrollContent)
         .refreshable {
-            await viewModel?.load()
+            await viewModel?.reload()
         }
     }
 
@@ -112,8 +119,12 @@ struct CatalogView: View {
 
 #Preview {
     NavigationStack {
-        CatalogView()
-            .environment(ServicesAssembly(networkClient: DefaultNetworkClient()))
-            .environment(Router())
+        CatalogView(previewViewModel: CatalogViewModel(
+            service: MockCatalogService(),
+            initialSortOption: .nftCount
+        ))
+        // ServicesAssembly нужен для @Environment, но не используется (ViewModel уже построен).
+        .environment(ServicesAssembly(networkClient: DefaultNetworkClient()))
+        .environment(Router())
     }
 }

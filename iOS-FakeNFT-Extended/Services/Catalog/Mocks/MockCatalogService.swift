@@ -1,5 +1,6 @@
 import Foundation
 
+/// Мок `CatalogServiceProtocol` для Preview и тестов. Не кэширует.
 actor MockCatalogService: CatalogServiceProtocol {
 
     private let collections: [NftCollection]
@@ -8,10 +9,15 @@ actor MockCatalogService: CatalogServiceProtocol {
         self.collections = MockCatalogService.mockCollections
     }
 
-    func loadCollections() async throws -> [NftCollection] {
+    func loadCollections(sortBy: CatalogSortOption?) async throws -> [NftCollection] {
         try await Task.sleep(for: .seconds(1))
-        return collections
+        guard let sortBy else {
+            return collections
+        }
+        return collections.sorted(by: sortBy.comparator)
     }
+
+    func invalidateCache() {}
 }
 
 // MARK: - Mock data

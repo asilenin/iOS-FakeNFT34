@@ -1,19 +1,25 @@
 import Foundation
 
-/// Опция сортировки каталога коллекций.
-///
-/// Значение сохраняется в `UserDefaults` под ключом `"catalogSortOption"` и переживает перезапуск приложения.
+/// Опция сортировки каталога. Хранится в `UserDefaults` под ключом `"catalogSortOption"`.
 enum CatalogSortOption: String, CaseIterable {
-    /// Сортировка по названию коллекции в алфавитном порядке (локализованное сравнение).
     case name
-
-    /// Сортировка по количеству NFT в коллекции в порядке убывания.
-    /// При равном количестве NFT вторичный ключ — имя коллекции.
     case nftCount
 }
 
 extension CatalogSortOption {
 
+    /// Значение query-параметра `sortBy` для mock-сервера.
+    var apiSortKey: String {
+        switch self {
+        case .name:
+            return "name"
+        case .nftCount:
+            return "nfts"
+        }
+    }
+
+    /// Локальный компаратор для `MockCatalogService` и тестов.
+    /// `.nftCount`: по убыванию количества, при равенстве — по имени.
     var comparator: (NftCollection, NftCollection) -> Bool {
         switch self {
         case .name:
@@ -32,9 +38,9 @@ extension CatalogSortOption {
         }
     }
 
-    /// Сравнение коллекций по имени с правилом:
-    /// коллекции с `name == nil` всегда уходят в конец списка.
+    /// Коллекции с `name == nil` уходят в конец.
     private static func compareByName(_ lhs: NftCollection, _ rhs: NftCollection) -> Bool {
+
         switch (lhs.name, rhs.name) {
         case let (lhsName?, rhsName?):
             return lhsName.localizedStandardCompare(rhsName) == .orderedAscending

@@ -24,13 +24,31 @@ final class ServicesAssembly {
     }
 
     // MARK: - Epics services
-    var catalogService: CatalogServiceProtocol {
-        // TODO: swap for CatalogService(networkClient: networkClient).
-        MockCatalogService()
-    }
-    var collectionDetailService: CollectionDetailServiceProtocol {
-        // TODO: swap for CollectionDetailService(networkClient: networkClient) in P3.
-        MockCollectionDetailService()
-    }
 
+    // `lazy var` + `@ObservationIgnored` — чтобы экземпляры сервисов переживали повторные
+    // обращения (иначе in-memory кэши внутри сервисов сбрасывались бы каждый раз).
+    // `@Observable` превращает `var` в computed, поэтому без `@ObservationIgnored` `lazy` не работает.
+
+    @ObservationIgnored
+    private lazy var _catalogNetworkClient: NetworkClient = CatalogNetworkClient(
+        inner: networkClient
+    )
+
+    @ObservationIgnored
+    private lazy var _catalogService: CatalogServiceProtocol = CatalogService(networkClient: networkClient)
+    var catalogService: CatalogServiceProtocol { _catalogService }
+
+    @ObservationIgnored
+    private lazy var _collectionDetailService: CollectionDetailServiceProtocol = CollectionDetailService(networkClient: networkClient)
+    var collectionDetailService: CollectionDetailServiceProtocol { _collectionDetailService }
+
+    @ObservationIgnored
+    private lazy var _catalogFavoritesService: CatalogFavoritesServiceProtocol =
+    CatalogFavoritesService(networkClient: _catalogNetworkClient)
+    var catalogFavoritesService: CatalogFavoritesServiceProtocol { _catalogFavoritesService }
+
+    @ObservationIgnored
+    private lazy var _catalogCartService: CatalogCartServiceProtocol =
+    CatalogCartService(networkClient: _catalogNetworkClient)
+    var catalogCartService: CatalogCartServiceProtocol { _catalogCartService }
 }

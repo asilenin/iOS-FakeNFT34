@@ -4,21 +4,16 @@ import Foundation
 @MainActor
 final class CatalogViewModel {
 
-    /// Текущее состояние загрузки.
     private(set) var state: CatalogState = .loading
-
     private(set) var collections: [NftCollection] = []
-
-    /// Ошибка последней попытки загрузки, если она была.
-    /// Используется для отображения алерта через `ErrorAlert` компонент.
     var error: Error?
 
-    /// Опция сортировки, выбранная пользователем.
-    /// При изменении список коллекций автоматически пересортируется.
+    /// При изменении триггерит повторную загрузку. Кэш `CatalogService` отдаёт мгновенный ответ,
+    /// если такой `sortBy` уже загружался.
     var sortOption: CatalogSortOption {
         didSet {
             guard sortOption != oldValue else { return }
-            applySortToState()
+            Task { await load() }
         }
     }
 
@@ -30,35 +25,36 @@ final class CatalogViewModel {
         self.sortOption = initialSortOption
     }
 
-    /// Загрузить коллекции с сервера и отсортировать по текущей опции.
     /// Отменяет предыдущую загрузку, если она была в процессе.
     func load() async {
         currentTask?.cancel()
 
-        let task = Task { [service] in
-            await performLoad(using: service)
+        let task = Task { [service, sortOption] in
+            await performLoad(using: service, sortOption: sortOption)
         }
         currentTask = task
         await task.value
     }
 
-    private func performLoad(using service: CatalogServiceProtocol) async {
+    /// Минует кэш сервиса. Вызывается из pull-to-refresh.
+    func reload() async {
+        await service.invalidateCache()
+        await load()
+    }
+
+    private func performLoad(using service: CatalogServiceProtocol, sortOption: CatalogSortOption) async {
         state = .loading
         do {
-            let loaded = try await service.loadCollections()
+            let loaded = try await service.loadCollections(sortBy: sortOption)
             try Task.checkCancellation()
-            collections = loaded.sorted(by: sortOption.comparator)
+            collections = loaded
             state = .success
         } catch is CancellationError {
             return
         } catch {
+            print("❌ [\(fileName())]: :\(#line)] \(#function) sortBy=\(sortOption.apiSortKey) error: \(error)")
             state = .error
             self.error = error
         }
-    }
-
-    /// Пересортировать текущий набор коллекций (вызывается при смене `sortOption`).
-    private func applySortToState() {
-        collections = collections.sorted(by: sortOption.comparator)
     }
 }
