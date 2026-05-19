@@ -26,14 +26,7 @@ final class StatisticsUserDetailViewModel {
     private(set) var state: StatisticsUserDetailState = .loading
     var loadError: Error?
 
-    // MARK: - Init
-
-    init(summary: StatisticsUser, statisticsService: StatisticsServiceProtocol) {
-        self.summary = summary
-        self.statisticsService = statisticsService
-    }
-
-    // MARK: - Exposed UI
+    // MARK: - Computed Properties
 
     var userId: String { summary.id }
 
@@ -48,6 +41,13 @@ final class StatisticsUserDetailViewModel {
     var websiteURL: URL? {
         guard let url = detail?.websiteURL else { return nil }
         return url.scheme == "https" || url.scheme == "http" ? url : nil
+    }
+
+    // MARK: - Init
+
+    init(summary: StatisticsUser, statisticsService: StatisticsServiceProtocol) {
+        self.summary = summary
+        self.statisticsService = statisticsService
     }
 
     // MARK: - Public Methods

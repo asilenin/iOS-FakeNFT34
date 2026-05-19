@@ -10,12 +10,16 @@ import Kingfisher
 
 struct StatisticsUserDetailView: View {
 
+    // MARK: - Properties
+
     @Environment(Router.self) private var router
     @State private var viewModel: StatisticsUserDetailViewModel
 
     init(viewModel: StatisticsUserDetailViewModel) {
         _viewModel = State(initialValue: viewModel)
     }
+
+    // MARK: - Body
 
     var body: some View {
         ZStack {

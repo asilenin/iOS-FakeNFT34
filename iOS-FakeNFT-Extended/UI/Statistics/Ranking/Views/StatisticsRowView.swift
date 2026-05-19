@@ -8,18 +8,22 @@
 import SwiftUI
 import Kingfisher
 
+private enum Layout {
+    static let rowHeight: CGFloat = 70
+    static let avatarSide: CGFloat = 35
+    static let rankWidth: CGFloat = 28
+    static let cardCornerRadius: CGFloat = 12
+}
+
 struct StatisticsRowView: View {
+
+    // MARK: - Properties
 
     let rank: Int
     let user: StatisticsUser
     let onSelect: () -> Void
 
-    private enum Layout {
-        static let rowHeight: CGFloat = 70
-        static let avatarSide: CGFloat = 35
-        static let rankWidth: CGFloat = 28
-        static let cardCornerRadius: CGFloat = 12
-    }
+    // MARK: - Body
 
     var body: some View {
         HStack(alignment: .center, spacing: 8) {
@@ -51,6 +55,8 @@ struct StatisticsRowView: View {
         }
     }
 
+    // MARK: - Private Views
+
     @ViewBuilder
     private var avatar: some View {
         if let url = user.avatarURL {
@@ -71,4 +77,19 @@ struct StatisticsRowView: View {
                 }
         }
     }
+}
+
+#Preview {
+    StatisticsRowView(
+        rank: 1,
+        user: StatisticsUser(
+            id: "1",
+            name: "Alice",
+            avatarURL: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/April/1.png"),
+            nftsCount: 42,
+            rating: 98
+        ),
+        onSelect: {}
+    )
+    .padding()
 }

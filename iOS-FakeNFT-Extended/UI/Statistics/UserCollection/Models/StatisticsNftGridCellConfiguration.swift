@@ -12,15 +12,3 @@ struct StatisticsNftGridCellConfiguration: Sendable, Equatable {
     let isFavorite: Bool
     let isInCart: Bool
 }
-
-struct StatisticsNftGridCellActions {
-    let onFavoriteTap: () -> Void
-    let onCartTap: () -> Void
-    let onCellTap: () -> Void
-    
-    static let preview = StatisticsNftGridCellActions(
-        onFavoriteTap: {},
-        onCartTap: {},
-        onCellTap: {}
-    )
-}

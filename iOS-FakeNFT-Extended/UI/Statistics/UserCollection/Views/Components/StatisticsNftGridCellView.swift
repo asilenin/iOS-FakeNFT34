@@ -1,5 +1,5 @@
 //
-//  StatisticsNftGridCell.swift
+//  StatisticsNftGridCellView.swift
 //  iOS-FakeNFT-Extended
 //
 //  Created by МAK on 17.05.2026.
@@ -8,10 +8,14 @@
 import SwiftUI
 import Kingfisher
 
-struct StatisticsNftGridCell: View {
+struct StatisticsNftGridCellView: View {
+
+    // MARK: - Properties
 
     let configuration: StatisticsNftGridCellConfiguration
     let actions: StatisticsNftGridCellActions
+
+    // MARK: - Body
 
     var body: some View {
         VStack(spacing: 8) {
@@ -83,12 +87,6 @@ struct StatisticsNftGridCell: View {
             .lineLimit(1)
     }
 
-    private var priceLabel: some View {
-        Text(priceString)
-            .font(.medium10)
-            .foregroundStyle(Color.ypBlack)
-    }
-    
     private var priceBlock: some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("Statistics.nft.priceLabel")
@@ -109,4 +107,22 @@ struct StatisticsNftGridCell: View {
         let formatted = formatter.string(from: NSNumber(value: configuration.nft.price)) ?? "0"
         return "\(formatted) ETH"
     }
+}
+
+#Preview {
+    StatisticsNftGridCellView(
+        configuration: StatisticsNftGridCellConfiguration(
+            nft: StatisticsNft(
+                id: "preview",
+                name: "Archie #1",
+                imageURL: URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/April/1.png"),
+                rating: 3,
+                price: 1.5
+            ),
+            isFavorite: true,
+            isInCart: false
+        ),
+        actions: .preview
+    )
+    .padding()
 }

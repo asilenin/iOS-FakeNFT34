@@ -9,10 +9,14 @@ import SwiftUI
 
 struct StatisticsViewContentView: View {
 
+    // MARK: - Properties
+
     @Environment(Router.self) private var router
     @Bindable var viewModel: StatisticsViewModel
 
     @State private var isShowingSortDialog = false
+
+    // MARK: - Body
 
     var body: some View {
         ZStack {
@@ -47,6 +51,8 @@ struct StatisticsViewContentView: View {
         }
     }
 
+    // MARK: - Private Views
+
     @ViewBuilder
     private var content: some View {
         switch viewModel.state {
@@ -76,4 +82,19 @@ struct StatisticsViewContentView: View {
         .scrollContentBackground(.hidden)
         .contentMargins(.top, 20, for: .scrollContent)
     }
+}
+
+#Preview {
+    @Previewable @State var router = Router()
+    let services = ServicesAssembly(networkClient: DefaultNetworkClient())
+
+    NavigationStack(path: $router.statisticsPath) {
+        StatisticsViewContentView(
+            viewModel: StatisticsViewModel(
+                statisticsService: services.statisticsService
+            )
+        )
+        .environment(router)
+    }
+    .environment(services)
 }

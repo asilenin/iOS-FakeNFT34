@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Детальная модель пользователя для экрана профиля из статистики.
 struct StatisticsUserDetail: Sendable, Hashable, Identifiable {
     let id: String
     let name: String

@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct RatingStarsView: View {
+private enum Constants {
+    static let maxRating = 5
+    static let starSize = CGSize(width: 12, height: 12)
+    static let spacing: CGFloat = 2
+    static let totalWidth: CGFloat = 68
+}
 
-    private enum Constants {
-        static let maxRating = 5
-        static let starSize = CGSize(width: 12, height: 12)
-        static let spacing: CGFloat = 2
-        static let totalWidth: CGFloat = 68
-    }
+struct RatingStarsView: View {
 
     let rating: Int
 
@@ -36,4 +36,13 @@ struct RatingStarsView: View {
     private var normalizedRating: Int {
         min(max(rating, 0), Constants.maxRating)
     }
+}
+
+#Preview {
+    VStack(spacing: 12) {
+        RatingStarsView(rating: 0)
+        RatingStarsView(rating: 3)
+        RatingStarsView(rating: 5)
+    }
+    .padding()
 }

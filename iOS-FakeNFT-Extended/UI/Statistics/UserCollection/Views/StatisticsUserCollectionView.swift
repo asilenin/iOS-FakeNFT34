@@ -9,12 +9,16 @@ import SwiftUI
 
 struct StatisticsUserCollectionView: View {
 
+    // MARK: - Properties
+
     @Environment(Router.self) private var router
     @State private var viewModel: StatisticsUserCollectionViewModel
 
     init(viewModel: StatisticsUserCollectionViewModel) {
         _viewModel = State(initialValue: viewModel)
     }
+
+    // MARK: - Body
 
     var body: some View {
         ZStack {
@@ -67,7 +71,7 @@ struct StatisticsUserCollectionView: View {
                 spacing: 8
             ) {
                 ForEach(viewModel.nfts) { nft in
-                    StatisticsNftGridCell(
+                    StatisticsNftGridCellView(
                         configuration: StatisticsNftGridCellConfiguration(
                             nft: nft,
                             isFavorite: viewModel.isFavorite(nft.id),
@@ -91,4 +95,21 @@ struct StatisticsUserCollectionView: View {
             await viewModel.load()
         }
     }
+}
+
+#Preview {
+    @Previewable @State var router = Router()
+    let services = ServicesAssembly(networkClient: DefaultNetworkClient())
+
+    NavigationStack(path: $router.statisticsPath) {
+        StatisticsUserCollectionView(
+            viewModel: StatisticsUserCollectionViewModel(
+                userId: "1",
+                userName: "Alice",
+                statisticsService: services.statisticsService
+            )
+        )
+    }
+    .environment(router)
+    .environment(services)
 }
