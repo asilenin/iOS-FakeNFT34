@@ -1,6 +1,5 @@
 import Foundation
 
-
 protocol FavoritesServiceProtocol: Sendable {
 
     /// Fetches the current set of liked NFT ids.

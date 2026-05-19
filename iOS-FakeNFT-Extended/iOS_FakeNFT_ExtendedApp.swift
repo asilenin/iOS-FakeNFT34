@@ -8,7 +8,7 @@ struct iOS_FakeNFT_ExtendedApp: App {
 
     init() {
     }
-    
+
     var body: some Scene {
         WindowGroup {
             TabBarView()
