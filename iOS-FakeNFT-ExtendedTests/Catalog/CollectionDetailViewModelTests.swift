@@ -46,6 +46,24 @@ final class CollectionDetailViewModelTests: XCTestCase {
             cartService: cartService ?? StubCartService()
         )
     }
+    
+    /// Создаёт ViewModel и сразу вызывает `load()`. Использовать в тестах,
+    /// которым нужно загруженное состояние и не важен переход loading → success.
+    private func makeLoadedViewModel(
+        collection: NftCollection? = nil,
+        service: CollectionDetailServiceProtocol? = nil,
+        favoritesService: CatalogFavoritesServiceProtocol? = nil,
+        cartService: CatalogCartServiceProtocol? = nil
+    ) async -> CollectionDetailViewModel {
+        let viewModel = makeViewModel(
+            collection: collection,
+            service: service,
+            favoritesService: favoritesService,
+            cartService: cartService
+        )
+        await viewModel.load()
+        return viewModel
+    }
 
     private func assertState(
         _ state: CollectionDetailState,
@@ -123,8 +141,7 @@ final class CollectionDetailViewModelTests: XCTestCase {
 
     func test_didTapFavorite_addsIdOptimistically_andCallsService() async {
         let favorites = StubFavoritesService()
-        let viewModel = makeViewModel(favoritesService: favorites)
-        await viewModel.load()
+        let viewModel = await makeLoadedViewModel(favoritesService: favorites)
 
         await viewModel.didTapFavorite("nft-1")
 
@@ -135,8 +152,7 @@ final class CollectionDetailViewModelTests: XCTestCase {
 
     func test_didTapFavorite_existingId_removesIt() async {
         let favorites = StubFavoritesService(initial: ["nft-1"])
-        let viewModel = makeViewModel(favoritesService: favorites)
-        await viewModel.load()
+        let viewModel = await makeLoadedViewModel(favoritesService: favorites)
 
         await viewModel.didTapFavorite("nft-1")
 
@@ -145,8 +161,7 @@ final class CollectionDetailViewModelTests: XCTestCase {
 
     func test_didTapFavorite_serviceFails_rollsBackStateAndSetsError() async {
         let favorites = StubFavoritesService(initial: ["nft-1"])
-        let viewModel = makeViewModel(favoritesService: favorites)
-        await viewModel.load()
+        let viewModel = await makeLoadedViewModel(favoritesService: favorites)
         await favorites.setSetError(TestError(message: "PUT failed"))
 
         await viewModel.didTapFavorite("nft-2")
@@ -158,8 +173,7 @@ final class CollectionDetailViewModelTests: XCTestCase {
 
     func test_didTapFavorite_whenDisabled_doesNothing() async {
         let favorites = StubFavoritesService()
-        let viewModel = makeViewModel(favoritesService: favorites)
-        await viewModel.load()
+        let viewModel = await makeLoadedViewModel(favoritesService: favorites)
         viewModel.disableFavorites()
 
         await viewModel.didTapFavorite("nft-1")
@@ -173,8 +187,7 @@ final class CollectionDetailViewModelTests: XCTestCase {
 
     func test_didTapCart_addsIdOptimistically_andCallsService() async {
         let cart = StubCartService()
-        let viewModel = makeViewModel(cartService: cart)
-        await viewModel.load()
+        let viewModel = await makeLoadedViewModel(cartService: cart)
 
         await viewModel.didTapCart("nft-1")
 
@@ -185,8 +198,7 @@ final class CollectionDetailViewModelTests: XCTestCase {
 
     func test_didTapCart_serviceFails_rollsBackStateAndSetsError() async {
         let cart = StubCartService(initial: ["nft-1"])
-        let viewModel = makeViewModel(cartService: cart)
-        await viewModel.load()
+        let viewModel = await makeLoadedViewModel(cartService: cart)
         await cart.setSetError(TestError(message: "PUT failed"))
 
         await viewModel.didTapCart("nft-2")
@@ -198,8 +210,7 @@ final class CollectionDetailViewModelTests: XCTestCase {
 
     func test_didTapCart_whenDisabled_doesNothing() async {
         let cart = StubCartService()
-        let viewModel = makeViewModel(cartService: cart)
-        await viewModel.load()
+        let viewModel = await makeLoadedViewModel(cartService: cart)
         viewModel.disableCart()
 
         await viewModel.didTapCart("nft-1")
