@@ -15,6 +15,8 @@ final class StatisticsUserCollectionViewModel {
     // MARK: - Dependencies
 
     private let statisticsService: StatisticsServiceProtocol
+    private let favoritesService: FavoritesServiceProtocol
+    private let cartService: CartServiceProtocol
 
     // MARK: - Input
 
@@ -37,11 +39,15 @@ final class StatisticsUserCollectionViewModel {
     init(
         userId: String,
         userName: String,
-        statisticsService: StatisticsServiceProtocol
+        statisticsService: StatisticsServiceProtocol,
+        favoritesService: FavoritesServiceProtocol,
+        cartService: CartServiceProtocol
     ) {
         self.userId = userId
         self.userName = userName
         self.statisticsService = statisticsService
+        self.favoritesService = favoritesService
+        self.cartService = cartService
     }
 
     // MARK: - Queries
@@ -59,19 +65,39 @@ final class StatisticsUserCollectionViewModel {
     func load() async {
         currentTask?.cancel()
 
-        let task = Task { [statisticsService, userId] in
-            await performLoad(using: statisticsService, userId: userId)
+        let task = Task {
+            await performLoad()
         }
         currentTask = task
         await task.value
     }
 
     func didTapFavorite(_ nftId: String) {
+        let snapshot = favoriteIds
         toggleFavorite(nftId)
+
+        Task {
+            do {
+                try await favoritesService.setFavorites(favoriteIds)
+            } catch {
+                favoriteIds = snapshot
+                loadError = error
+            }
+        }
     }
 
     func didTapCart(_ nftId: String) {
+        let snapshot = cartIds
         toggleCart(nftId)
+
+        Task {
+            do {
+                try await cartService.setCart(cartIds)
+            } catch {
+                cartIds = snapshot
+                loadError = error
+            }
+        }
     }
 
     // MARK: - Private Methods
@@ -92,23 +118,28 @@ final class StatisticsUserCollectionViewModel {
         }
     }
 
-    private func performLoad(
-        using service: StatisticsServiceProtocol,
-        userId: String
-    ) async {
+    private func performLoad() async {
         state = .loading
         loadError = nil
 
         do {
-            let loaded = try await service.fetchUserNfts(userId: userId)
+            async let nftsTask = statisticsService.fetchUserNfts(userId: userId)
+            async let favoritesTask = favoritesService.loadFavorites()
+            async let cartTask = cartService.loadCart()
+
+            let (loadedNfts, favorites, cart) = try await (nftsTask, favoritesTask, cartTask)
             try Task.checkCancellation()
 
-            nfts = loaded
-            state = loaded.isEmpty ? .empty : .success
+            nfts = loadedNfts
+            favoriteIds = favorites
+            cartIds = cart
+            state = loadedNfts.isEmpty ? .empty : .success
         } catch is CancellationError {
             return
         } catch {
             nfts = []
+            favoriteIds = []
+            cartIds = []
             loadError = error
             state = .error
         }

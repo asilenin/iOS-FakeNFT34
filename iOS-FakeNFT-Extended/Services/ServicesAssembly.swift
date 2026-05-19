@@ -12,19 +12,23 @@ final class ServicesAssembly {
 
     // MARK: - Shared services
 
-    var favoritesService: FavoritesServiceProtocol {
-        // TODO: replace with the real actor implementation
-        fatalError("FavoritesService is not wired yet — see B2.6")
-    }
+    @ObservationIgnored
+    private lazy var _favoritesService: FavoritesServiceProtocol = FavoritesService(
+        networkClient: networkClient
+    )
+    var favoritesService: FavoritesServiceProtocol { _favoritesService }
 
-    var cartService: CartServiceProtocol {
-        // TODO: replace with the real actor implementation
-        fatalError("CartService is not wired yet — see B2.6")
-    }
+    @ObservationIgnored
+    private lazy var _cartService: CartServiceProtocol = CartService(
+        networkClient: networkClient
+    )
+    var cartService: CartServiceProtocol { _cartService }
 
     // MARK: - Epics services
 
-    var statisticsService: StatisticsServiceProtocol {
-        MockStatisticsService()
-    }
+    @ObservationIgnored
+    private lazy var _statisticsService: StatisticsServiceProtocol = StatisticsService(
+        networkClient: networkClient
+    )
+    var statisticsService: StatisticsServiceProtocol { _statisticsService }
 }
