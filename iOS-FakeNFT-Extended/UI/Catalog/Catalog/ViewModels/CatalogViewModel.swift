@@ -4,19 +4,12 @@ import Foundation
 @MainActor
 final class CatalogViewModel {
 
-    /// Текущее состояние загрузки.
     private(set) var state: CatalogState = .loading
-
     private(set) var collections: [NftCollection] = []
-
-    /// Ошибка последней попытки загрузки, если она была.
-    /// Используется для отображения алерта через `ErrorAlert` компонент.
     var error: Error?
 
-    /// Опция сортировки, выбранная пользователем.
-    /// При изменении триггерится повторная загрузка с сервера (с новым `sortBy`).
-    /// Запрос проходит через кэш `CatalogService` — если такой sortBy уже загружался,
-    /// сеть не дёргается, ответ приходит мгновенно.
+    /// При изменении триггерит повторную загрузку. Кэш `CatalogService` отдаёт мгновенный ответ,
+    /// если такой `sortBy` уже загружался.
     var sortOption: CatalogSortOption {
         didSet {
             guard sortOption != oldValue else { return }
@@ -32,7 +25,6 @@ final class CatalogViewModel {
         self.sortOption = initialSortOption
     }
 
-    /// Загрузить коллекции с сервера с текущей `sortOption`.
     /// Отменяет предыдущую загрузку, если она была в процессе.
     func load() async {
         currentTask?.cancel()
@@ -44,8 +36,7 @@ final class CatalogViewModel {
         await task.value
     }
 
-    /// Принудительно перезагружает с сервера, минуя кэш.
-    /// Вызывается из pull-to-refresh.
+    /// Минует кэш сервиса. Вызывается из pull-to-refresh.
     func reload() async {
         await service.invalidateCache()
         await load()

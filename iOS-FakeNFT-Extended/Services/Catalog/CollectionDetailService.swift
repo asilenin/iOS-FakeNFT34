@@ -1,18 +1,11 @@
 import Foundation
 
-/// Реальная реализация `CollectionDetailServiceProtocol`, ходящая в mock-сервер Practicum.
-///
-/// - Загружает NFT параллельно через `withTaskGroup` (best-effort:
-///   индивидуальные ошибки глотаются, метод бросает только если все упали).
-/// - Дедуплицирует id перед загрузкой, поэтому повторяющиеся id в `collection.nfts`
-///   не вызывают повторных сетевых запросов.
-/// - Кэширует загруженные NFT по id в памяти. Кэш сбрасывается через
-///   `invalidateCache()` (вызывается из pull-to-refresh во View).
+/// Параллельная загрузка NFT по id с in-memory кэшем и дедупликацией.
+/// Контракт best-effort — см. `CollectionDetailServiceProtocol`.
 actor CollectionDetailService: CollectionDetailServiceProtocol {
 
     private let networkClient: NetworkClient
 
-    /// Ключ — id NFT, значение — последний загруженный объект.
     private var cache: [String: Nft] = [:]
 
     init(networkClient: NetworkClient) {
@@ -54,8 +47,7 @@ actor CollectionDetailService: CollectionDetailServiceProtocol {
 
     // MARK: - Private
 
-    /// Загружает NFT по списку id параллельно. Ошибки отдельных запросов
-    /// игнорируются — в результат попадают только успешные.
+    /// Параллельная загрузка через `withTaskGroup`. Ошибки отдельных запросов игнорируются.
     private func loadFromNetwork(ids: [String]) async -> [Nft] {
         await withTaskGroup(of: Nft?.self) { group in
             for id in ids {

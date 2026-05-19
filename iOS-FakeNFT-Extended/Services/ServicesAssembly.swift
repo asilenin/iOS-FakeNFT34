@@ -25,17 +25,14 @@ final class ServicesAssembly {
 
     // MARK: - Epics services
 
-    // Real services are stored as `lazy var` so the same actor instance survives across
-    // multiple accesses. Critical for the in-memory caches inside the services —
-    // a fresh computed-property instance per access would reset the cache on every read.
-    // @ObservationIgnored is required because @Observable converts vars to computed,
-    // which conflicts with `lazy`.
+        // `lazy var` + `@ObservationIgnored` — чтобы экземпляры сервисов переживали повторные
+        // обращения (иначе in-memory кэши внутри сервисов сбрасывались бы каждый раз).
+        // `@Observable` превращает `var` в computed, поэтому без `@ObservationIgnored` `lazy` не работает.
 
-    /// Сетевой клиент эпика Каталога. Поддерживает form-urlencoded для PUT-запросов
-    /// (избранное, корзина). JSON-запросы делегирует в общий `DefaultNetworkClient`.
-    @ObservationIgnored
-    private lazy var _catalogNetworkClient: NetworkClient = CatalogNetworkClient(
-        inner: networkClient
+        @ObservationIgnored
+        private lazy var _catalogNetworkClient: NetworkClient = CatalogNetworkClient(
+            inner: networkClient
+        )
     )
 
     @ObservationIgnored

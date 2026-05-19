@@ -1,11 +1,7 @@
 import Foundation
 
-/// Реальная реализация `CatalogFavoritesServiceProtocol`, ходящая в mock-сервер.
-///
-/// In-memory кэш: единый `Set<String>` хранит последний загруженный/сохранённый
-/// набор лайков. Кэш обновляется при `loadFavorites` (из GET-ответа) и при
-/// `setFavorites` (из PUT-ответа). Инвалидируется через `invalidateCache`
-/// (вызывается из pull-to-refresh во ViewModel).
+/// In-memory кэш набора лайков. Обновляется на `loadFavorites`/`setFavorites`,
+/// инвалидируется через `invalidateCache`.
 actor CatalogFavoritesService: CatalogFavoritesServiceProtocol {
 
     // MARK: - Private

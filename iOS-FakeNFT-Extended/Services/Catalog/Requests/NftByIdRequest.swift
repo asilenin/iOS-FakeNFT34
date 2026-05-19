@@ -1,10 +1,6 @@
 import Foundation
 
-/// Запрос на получение одного NFT по идентификатору.
-///
-/// Соответствует GET `/api/v1/nft/{id}` mock-сервера Practicum.
-/// Используется в `CollectionDetailService` для параллельной загрузки NFT,
-/// входящих в коллекцию.
+/// GET одного NFT по id.
 struct NftByIdRequest: NetworkRequest {
     let id: String
 

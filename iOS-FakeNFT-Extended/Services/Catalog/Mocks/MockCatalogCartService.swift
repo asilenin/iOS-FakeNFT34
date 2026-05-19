@@ -1,9 +1,6 @@
 import Foundation
 
-/// Мок-реализация `CatalogCartServiceProtocol` для разработки UI без сети.
-///
-/// Хранит корзину в памяти, имитирует задержку сети. Используется в Preview
-/// `CollectionDetailView` и в качестве fixture-замены сервиса в тестах ViewModel.
+/// Мок `CatalogCartServiceProtocol` для Preview и тестов. Имитирует задержку сети.
 actor MockCatalogCartService: CatalogCartServiceProtocol {
 
     private var cart: Set<String>

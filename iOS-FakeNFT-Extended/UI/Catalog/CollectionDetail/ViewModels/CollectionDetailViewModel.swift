@@ -1,10 +1,6 @@
 import Foundation
 
-/// ViewModel экрана коллекции NFT.
-///
-/// Отвечает за загрузку списка NFT коллекции и за локальное состояние избранного и корзины.
-/// Данные автора (имя, сайт) приходят в составе `NftCollection` — отдельная
-/// сетевая загрузка не нужна, `Author` собирается синхронно в `init`.
+/// ViewModel экрана коллекции: NFT, избранное, корзина.
 @Observable
 @MainActor
 final class CollectionDetailViewModel {
@@ -18,41 +14,24 @@ final class CollectionDetailViewModel {
     private(set) var state: CollectionDetailState = .loading
     private(set) var nfts: [Nft] = []
 
-    /// Автор коллекции. Собирается из полей `NftCollection.author`/`website` в `init`,
-    /// потому что mock-сервер отдаёт эти данные внутри коллекции, а отдельной
-    /// ручки `/users/{id}` для авторов нет.
+    /// Собирается из `NftCollection.author`/`website` синхронно — отдельной ручки `/users/{id}` нет.
     let author: Author
 
-    /// Бинди́тся в `errorAlert` modifier во View.
     var error: Error?
-
-    /// Ошибка загрузки/изменения избранного. Биндится в отдельный `.alert` во View,
-    /// чтобы пользователь мог выбрать между "Повторить" и "Отмена".
     var favoritesError: Error?
-
-    /// Аналогично `favoritesError`, но для корзины.
     var cartError: Error?
 
-    /// Флаг, выставленный пользователем через "Отмена" в favoritesError-алерте.
-    /// Когда `true` — кнопки сердец дизейблятся, чтобы предотвратить отправку
-    /// PUT с неполным состоянием (это могло бы стереть лайки на сервере).
-    /// Сбрасывается при `reload()`.
+    /// Выставляется через "Отмена" в error-алерте. Дизейблит кнопки, чтобы PUT с неполным
+    /// состоянием не стёр данные на сервере. Сбрасывается в `reload()`.
     private(set) var favoritesDisabled: Bool = false
-
-    /// Аналогично `favoritesDisabled`, но для корзины.
     private(set) var cartDisabled: Bool = false
 
-    // Множества state НЕ читаются View напрямую — только через
-    // `isFavorite(_:)` / `isInCart(_:)`. `private(set)` сохранён для того,
-    // чтобы `@Observable` мог отслеживать изменения и триггерить ре-рендер.
+    /// Читаются через `isFavorite(_:)`/`isInCart(_:)`. `private(set)` нужен для `@Observable`.
     private(set) var favoriteIds: Set<String> = []
     private(set) var cartIds: Set<String> = []
 
-    /// id NFT, для которых сейчас идёт PUT-запрос на изменение лайка.
-    /// View использует для дизейбла конкретной кнопки.
+    /// id NFT с активным PUT-запросом — для дизейбла конкретной кнопки.
     private(set) var favoritePendingIds: Set<String> = []
-
-    /// Аналогично, но для корзины.
     private(set) var cartPendingIds: Set<String> = []
 
     // MARK: - Internal
@@ -75,8 +54,7 @@ final class CollectionDetailViewModel {
         self.favoritesService = favoritesService
         self.cartService = cartService
         self.author = Author(
-            // Используем имя автора как идентификатор: серверный id автора недоступен
-            // в ответе `/collections`, а имя по соглашению API уникально в рамках коллекции.
+            // Имя автора как id: серверный id в `/collections` не приходит, имя уникально по соглашению API.
             id: collection.author ?? "",
             name: collection.author ?? "",
             website: collection.website?.absoluteString ?? ""

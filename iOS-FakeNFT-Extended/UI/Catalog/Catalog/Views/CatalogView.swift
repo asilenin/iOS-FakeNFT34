@@ -10,9 +10,7 @@ struct CatalogView: View {
 
     init() {}
 
-    /// Designated initializer for Preview. Provides a pre-built ViewModel so the
-    /// `.task` block reuses it instead of creating one through `ServicesAssembly`.
-    /// Keeps SwiftUI Previews offline.
+    /// Init для Preview: готовый ViewModel, чтобы Preview работал офлайн.
     fileprivate init(previewViewModel: CatalogViewModel) {
         _viewModel = State(wrappedValue: previewViewModel)
     }
@@ -67,7 +65,7 @@ struct CatalogView: View {
             case .loading:
                 LoadingSpinner(size: .medium)
             case .success:
-                list(viewModel.collections)  // ← передаём collections явно
+                list(viewModel.collections)
             case .error:
                 ScrollView {
                     CatalogEmptyStateView(message: "Catalog.loadErrorHint")
@@ -125,8 +123,7 @@ struct CatalogView: View {
             service: MockCatalogService(),
             initialSortOption: .nftCount
         ))
-        // ServicesAssembly is still required by @Environment, but its services
-        // are not accessed because the ViewModel is pre-built above.
+        // ServicesAssembly нужен для @Environment, но не используется (ViewModel уже построен).
         .environment(ServicesAssembly(networkClient: DefaultNetworkClient()))
         .environment(Router())
     }

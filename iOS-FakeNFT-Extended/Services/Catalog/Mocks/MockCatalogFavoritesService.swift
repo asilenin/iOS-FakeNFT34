@@ -1,9 +1,6 @@
 import Foundation
 
-/// Мок-реализация `CatalogFavoritesServiceProtocol` для разработки UI без сети.
-///
-/// Хранит лайки в памяти, имитирует задержку сети. Используется в Preview
-/// `CollectionDetailView` и в качестве fixture-замены сервиса в тестах ViewModel.
+/// Мок `CatalogFavoritesServiceProtocol` для Preview и тестов. Имитирует задержку сети.
 actor MockCatalogFavoritesService: CatalogFavoritesServiceProtocol {
 
     private var favorites: Set<String>

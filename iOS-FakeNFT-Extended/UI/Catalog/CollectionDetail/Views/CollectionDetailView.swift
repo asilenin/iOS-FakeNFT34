@@ -13,9 +13,7 @@ struct CollectionDetailView: View {
         self.collection = collection
     }
 
-    /// Designated initializer for Preview. Provides a pre-built ViewModel so the
-    /// `.task` block reuses it instead of creating one through `ServicesAssembly`.
-    /// Keeps SwiftUI Previews offline.
+    /// Init для Preview: готовый ViewModel, чтобы Preview работал офлайн.
     fileprivate init(collection: NftCollection, previewViewModel: CollectionDetailViewModel) {
         self.collection = collection
         _viewModel = State(wrappedValue: previewViewModel)
@@ -148,12 +146,8 @@ struct CollectionDetailView: View {
 // MARK: - Favorites error alert
 
 private extension View {
-    /// Алерт ошибки лайков. Две кнопки:
-    /// - "Повторить" → `retryLoadFavorites()` (повторно грузит лайки).
-    /// - "Отмена" → `disableFavorites()` (дизейблит кнопки сердец до reload).
-    ///
-    /// Не использует общий `errorAlert`-modifier, потому что у того кнопка
-    /// "Отмена" просто закрывает алерт без дополнительного действия.
+    /// Алерт ошибки лайков: "Повторить" → `retryLoadFavorites`, "Отмена" → `disableFavorites`.
+    /// Не используем общий `errorAlert` — там у "Отмена" нет действия.
     func favoritesErrorAlert(viewModel: CollectionDetailViewModel?) -> some View {
         alert(
             Text("Error.title"),
@@ -179,9 +173,7 @@ private extension View {
             Text(error.localizedDescription)
         }
     }
-    /// Алерт ошибки корзины. Две кнопки:
-    /// - "Повторить" → `retryLoadCart()` (повторно грузит корзину).
-    /// - "Отмена" → `disableCart()` (дизейблит кнопки корзины до reload).
+    /// Алерт ошибки корзины: "Повторить" → `retryLoadCart`, "Отмена" → `disableCart`.
     func cartErrorAlert(viewModel: CollectionDetailViewModel?) -> some View {
         alert(
             Text("Error.title"),
@@ -221,8 +213,7 @@ private extension View {
                 cartService: MockCatalogCartService()
             )
         )
-        // ServicesAssembly is still required by @Environment, but its services
-        // are not accessed because the ViewModel is pre-built above.
+        // ServicesAssembly нужен для @Environment, но не используется (ViewModel уже построен).
         .environment(ServicesAssembly(networkClient: DefaultNetworkClient()))
         .environment(Router())
     }

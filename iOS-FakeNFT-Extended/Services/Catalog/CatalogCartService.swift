@@ -1,11 +1,7 @@
 import Foundation
 
-/// Реальная реализация `CatalogCartServiceProtocol`, ходящая в mock-сервер.
-///
-/// In-memory кэш: единый `Set<String>` хранит последний загруженный/сохранённый
-/// состав корзины. Кэш обновляется при `loadCart` (из GET-ответа) и при
-/// `setCart` (из PUT-ответа). Инвалидируется через `invalidateCache`
-/// (вызывается из pull-to-refresh во ViewModel).
+/// In-memory кэш состава корзины. Обновляется на `loadCart`/`setCart`,
+/// инвалидируется через `invalidateCache`.
 actor CatalogCartService: CatalogCartServiceProtocol {
 
     // MARK: - Private

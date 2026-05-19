@@ -1,12 +1,6 @@
 import Foundation
 
-/// Реальная реализация `CatalogServiceProtocol`, ходящая в mock-сервер Practicum.
-///
-/// Поддерживает in-memory кэш, кэшированный по ключу сортировки `sortBy`:
-/// повторный запрос с тем же `sortBy` отдаёт результат из памяти без сети.
-/// Кэш сбрасывается через `invalidateCache()` (вызывается из pull-to-refresh).
-/// TTL у кэша нет — каталог редко меняется, и явный refresh пользователем
-/// проще и предсказуемее, чем фоновое устаревание.
+/// In-memory кэш коллекций по ключу `sortBy`. Без TTL — инвалидация только через pull-to-refresh.
 actor CatalogService: CatalogServiceProtocol {
 
     // MARK: - Private
@@ -14,8 +8,6 @@ actor CatalogService: CatalogServiceProtocol {
     private static let defaultCacheKey = "_default"
     private let networkClient: NetworkClient
 
-    /// Ключ — `apiSortKey` (или `"_default"` для `nil`).
-    /// Значение — последний загруженный массив коллекций для этого ключа.
     private var cache: [String: [NftCollection]] = [:]
 
     // MARK: - Init
