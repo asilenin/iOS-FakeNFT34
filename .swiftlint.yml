@@ -16,6 +16,7 @@ disabled_rules:
 identifier_name:
   excluded:
     - id
+    - vm
     - _placeholder
 
 type_name:
