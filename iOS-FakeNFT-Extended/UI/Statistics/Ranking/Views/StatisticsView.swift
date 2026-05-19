@@ -40,7 +40,9 @@ struct StatisticsView: View {
                     viewModel: StatisticsUserCollectionViewModel(
                         userId: userId,
                         userName: userName,
-                        statisticsService: services.statisticsService
+                        statisticsService: services.statisticsService,
+                        favoritesService: services.favoritesService,
+                        cartService: services.cartService
                     )
                 )
             case .userWebsite(let url):
