@@ -286,6 +286,7 @@
 		ABC5E1A92C31FABA002B4068 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				ABC5E1B62C31FC70002B4068 /* ServicesAssembly.swift */,
 				9872F4892FB37FD100D8A7A7 /* Statistics */,
 				4747AA162FAF6FD200B07D13 /* Catalog */,
 				4747AA152FAF6FCE00B07D13 /* Cart */,
@@ -293,7 +294,6 @@
 				4747AA132FAF6FBC00B07D13 /* Profile */,
 				4747AA122FAF6FB800B07D13 /* Shared */,
 				ABC5E1AC2C31FB6C002B4068 /* Requests */,
-				ABC5E1B62C31FC70002B4068 /* ServicesAssembly.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";

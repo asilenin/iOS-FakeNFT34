@@ -9,4 +9,6 @@ import Foundation
 
 protocol StatisticsServiceProtocol: Sendable {
     func fetchRankingUsers() async throws -> [StatisticsUser]
+    func fetchUserDetail(userId: String) async throws -> StatisticsUserDetail
+    func fetchUserNfts(userId: String) async throws -> [StatisticsNft]
 }
