@@ -106,7 +106,9 @@ struct StatisticsUserCollectionView: View {
             viewModel: StatisticsUserCollectionViewModel(
                 userId: "1",
                 userName: "Alice",
-                statisticsService: services.statisticsService
+                statisticsService: services.statisticsService,
+                favoritesService: services.favoritesService,
+                cartService: services.cartService
             )
         )
     }
