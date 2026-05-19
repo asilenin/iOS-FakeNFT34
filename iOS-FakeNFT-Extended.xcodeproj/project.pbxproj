@@ -50,6 +50,7 @@
 		47C646F22FBB3863004206CB /* CollectionDetailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C646F12FBB3862004206CB /* CollectionDetailViewModelTests.swift */; };
 		47C646F42FBB51CF004206CB /* CollectionDetailViewModelStubs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C646F32FBB51CC004206CB /* CollectionDetailViewModelStubs.swift */; };
 		47C646F72FBB7B74004206CB /* LogHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C646F62FBB7B74004206CB /* LogHelper.swift */; };
+		47F8548D2FBC6956005C8CBC /* TestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47F8548C2FBC6955005C8CBC /* TestError.swift */; };
 		ABC5E16C2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABC5E16B2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift */; };
 		ABC5E1702C31F5AF002B4068 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABC5E16F2C31F5AF002B4068 /* Assets.xcassets */; };
 		ABC5E1732C31F5AF002B4068 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABC5E1722C31F5AF002B4068 /* Preview Assets.xcassets */; };
@@ -128,6 +129,7 @@
 		47C646F12FBB3862004206CB /* CollectionDetailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDetailViewModelTests.swift; sourceTree = "<group>"; };
 		47C646F32FBB51CC004206CB /* CollectionDetailViewModelStubs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDetailViewModelStubs.swift; sourceTree = "<group>"; };
 		47C646F62FBB7B74004206CB /* LogHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogHelper.swift; sourceTree = "<group>"; };
+		47F8548C2FBC6955005C8CBC /* TestError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestError.swift; sourceTree = "<group>"; };
 		ABC5E1682C31F5AF002B4068 /* iOS-FakeNFT-Extended.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS-FakeNFT-Extended.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABC5E16B2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOS_FakeNFT_ExtendedApp.swift; sourceTree = "<group>"; };
 		ABC5E16F2C31F5AF002B4068 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -184,6 +186,7 @@
 		472DAC612FB9EC68005D4B5B /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				47F8548C2FBC6955005C8CBC /* TestError.swift */,
 				47C646F32FBB51CC004206CB /* CollectionDetailViewModelStubs.swift */,
 				47C646CF2FBB1302004206CB /* URLProtocolMock.swift */,
 				472DAC622FB9EC75005D4B5B /* MockNetworkClient.swift */,
@@ -682,6 +685,7 @@
 				47C646F42FBB51CF004206CB /* CollectionDetailViewModelStubs.swift in Sources */,
 				47C646D02FBB1303004206CB /* URLProtocolMock.swift in Sources */,
 				47C646F02FBB3851004206CB /* CatalogCartServiceTests.swift in Sources */,
+				47F8548D2FBC6956005C8CBC /* TestError.swift in Sources */,
 				47C646D22FBB1309004206CB /* CatalogNetworkClientTests.swift in Sources */,
 				472DAC662FB9EC94005D4B5B /* CollectionDetailServiceTests.swift in Sources */,
 				472DAC632FB9EC76005D4B5B /* MockNetworkClient.swift in Sources */,

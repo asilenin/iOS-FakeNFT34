@@ -33,10 +33,6 @@ final class CollectionDetailViewModelTests: XCTestCase {
         )
     }
 
-    private struct TestError: Error, Equatable {
-        let message: String
-    }
-
     private func makeViewModel(
         collection: NftCollection? = nil,
         service: CollectionDetailServiceProtocol? = nil,
