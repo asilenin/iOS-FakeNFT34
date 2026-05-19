@@ -133,8 +133,9 @@ struct StatisticsUserDetailView: View {
                 .frame(maxWidth: .infinity)
                 .frame(height: 60)
                 .background(Color.ypWhite)
+                .clipShape(Capsule())
                 .overlay {
-                    RoundedRectangle(cornerRadius: 12)
+                    Capsule()
                         .stroke(Color.ypBlack, lineWidth: 1)
                 }
         }

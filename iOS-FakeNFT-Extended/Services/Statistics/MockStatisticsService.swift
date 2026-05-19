@@ -77,45 +77,53 @@ private extension MockStatisticsService {
         "4": "Минималист. Небольшая, но очень ценная подборка NFT.",
         "5": "Иллюстратор. Экспериментирует с цветом и формой в цифровых работах."
     ]
+    
+    static let mockAvatarURLs: [URL] = [
+        URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/April/1.png")!,
+        URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/April/2.png")!,
+        URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/April/3.png")!,
+        URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/April/1.png")!,
+        URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/April/2.png")!
+    ]
 
     static let mockUsers: [StatisticsUser] = [
         StatisticsUser(
             id: "1",
             name: "Alice",
-            avatarURL: URL(string: "https://disk.yandex.ru/i/ZEJiBtCDi3hjYw"),
+            avatarURL: mockAvatarURLs[0],
             nftsCount: 42,
             rating: 98
         ),
         StatisticsUser(
             id: "2",
             name: "Bob",
-            avatarURL: URL(string: "https://disk.yandex.ru/i/QtevnFWydhy77w"),
+            avatarURL: mockAvatarURLs[1],
             nftsCount: 17,
             rating: 72
         ),
         StatisticsUser(
             id: "3",
             name: "Clara",
-            avatarURL: URL(string: "https://disk.yandex.ru/i/5pD61GCWkUWrpQ"),
+            avatarURL: mockAvatarURLs[2],
             nftsCount: 105,
             rating: 100
         ),
         StatisticsUser(
             id: "4",
             name: "Dan",
-            avatarURL: URL(string: "https://disk.yandex.ru/i/Fn9dXaBh3IPoJQ"),
+            avatarURL: mockAvatarURLs[3],
             nftsCount: 3,
             rating: 40
         ),
         StatisticsUser(
             id: "5",
             name: "Eve",
-            avatarURL: URL(string: "https://disk.yandex.ru/i/A2IQmYns3uj9Lw"),
+            avatarURL: mockAvatarURLs[4],
             nftsCount: 64,
             rating: 88
         )
     ]
-
+    
     struct NftTemplate {
         let baseName: String
         let imageURL: URL

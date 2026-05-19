@@ -57,7 +57,7 @@ struct StatisticsNftGridCell: View {
             HStack(alignment: .center, spacing: 0) {
                 VStack(alignment: .leading, spacing: 4) {
                     nameLabel
-                    priceLabel
+                    priceBlock
                 }
                 .frame(width: 68, alignment: .leading)
 
