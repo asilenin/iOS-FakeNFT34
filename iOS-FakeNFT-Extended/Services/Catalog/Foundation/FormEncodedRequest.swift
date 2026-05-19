@@ -1,7 +1,5 @@
 import Foundation
 
-import Foundation
-
 /// Запрос с `application/x-www-form-urlencoded` body.
 protocol FormEncodedRequest: NetworkRequest {
 

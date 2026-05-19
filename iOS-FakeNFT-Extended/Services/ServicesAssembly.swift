@@ -25,14 +25,13 @@ final class ServicesAssembly {
 
     // MARK: - Epics services
 
-        // `lazy var` + `@ObservationIgnored` — чтобы экземпляры сервисов переживали повторные
-        // обращения (иначе in-memory кэши внутри сервисов сбрасывались бы каждый раз).
-        // `@Observable` превращает `var` в computed, поэтому без `@ObservationIgnored` `lazy` не работает.
+    // `lazy var` + `@ObservationIgnored` — чтобы экземпляры сервисов переживали повторные
+    // обращения (иначе in-memory кэши внутри сервисов сбрасывались бы каждый раз).
+    // `@Observable` превращает `var` в computed, поэтому без `@ObservationIgnored` `lazy` не работает.
 
-        @ObservationIgnored
-        private lazy var _catalogNetworkClient: NetworkClient = CatalogNetworkClient(
-            inner: networkClient
-        )
+    @ObservationIgnored
+    private lazy var _catalogNetworkClient: NetworkClient = CatalogNetworkClient(
+        inner: networkClient
     )
 
     @ObservationIgnored

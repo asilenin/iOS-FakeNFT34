@@ -40,3 +40,16 @@ extension CatalogSortOption {
 
     /// Коллекции с `name == nil` уходят в конец.
     private static func compareByName(_ lhs: NftCollection, _ rhs: NftCollection) -> Bool {
+
+        switch (lhs.name, rhs.name) {
+        case let (lhsName?, rhsName?):
+            return lhsName.localizedStandardCompare(rhsName) == .orderedAscending
+        case (_?, nil):
+            return true   // именованная < безымянной
+        case (nil, _?):
+            return false  // безымянная > именованной
+        case (nil, nil):
+            return false  // одинаковы, порядок не важен
+        }
+    }
+}

@@ -46,7 +46,7 @@ final class CollectionDetailViewModelTests: XCTestCase {
             cartService: cartService ?? StubCartService()
         )
     }
-    
+
     /// Создаёт ViewModel и сразу вызывает `load()`. Использовать в тестах,
     /// которым нужно загруженное состояние и не важен переход loading → success.
     private func makeLoadedViewModel(
