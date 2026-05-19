@@ -13,11 +13,10 @@ struct ProfileView: View {
     // MARK: - Environment
 
     @Environment(Router.self) private var router
-    @Environment(ServicesAssembly.self) private var servicesAssembly
 
     // MARK: - State
 
-    @State private var viewModel: ProfileViewModel?
+    @Bindable var viewModel: ProfileViewModel
 
     // MARK: - Body
 
@@ -27,14 +26,15 @@ struct ProfileView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        // TODO(profile epic S3): open edit profile screen.
+                        if let profile = viewModel.loadedProfile {
+                            router.push(ProfileRoute.edit(profile), in: .profile)
+                        }
                     } label: {
                         Image(.edit)
                             .renderingMode(.template)
                             .resizable()
                             .scaledToFit()
                             .foregroundStyle(Color.ypBlack)
-                            .frame(width: 24, height: 24)
                             .frame(width: 42, height: 42)
                     }
                     .buttonStyle(.plain)
@@ -42,11 +42,7 @@ struct ProfileView: View {
                 }
             }
             .task {
-                if viewModel == nil {
-                    viewModel = ProfileViewModel(profileService: servicesAssembly.profileService)
-                }
-
-                await viewModel?.loadProfile()
+                await viewModel.loadProfile()
             }
     }
 
@@ -54,14 +50,14 @@ struct ProfileView: View {
 
     @ViewBuilder
     private var content: some View {
-        switch viewModel?.state {
-        case .none, .some(.idle), .some(.loading):
+        switch viewModel.state {
+        case .idle, .loading:
             LoadingSpinner(size: .medium)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.ypWhite)
-        case .some(.loaded(let profile)):
+        case .loaded(let profile):
             profileContent(profile)
-        case .some(.failed(let message)):
+        case .failed(let message):
             errorContent(message)
         }
     }
@@ -75,7 +71,7 @@ struct ProfileView: View {
                     navigationRow(
                         title: String(localized: "Profile.myNfts"),
                         count: profile.nfts?.count ?? 0,
-                        route: .myNfts
+                        route: .myNfts(profile.nfts ?? [])
                     )
 
                     navigationRow(
@@ -97,7 +93,7 @@ struct ProfileView: View {
     private func header(_ profile: Profile) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .center, spacing: 16) {
-                avatar(sources: avatarSources(from: profile.avatar ?? ""))
+                avatar(sources: profileAvatarSources(from: profile.avatar ?? ""))
 
                 Text(profile.name ?? "")
                     .font(.bold22)
@@ -133,13 +129,11 @@ struct ProfileView: View {
 
     // MARK: - Avatar
 
+    @ViewBuilder
     private func avatar(sources: [Source]) -> some View {
-        ZStack {
-            Image(systemName: "person.crop.circle.fill")
-                .resizable()
-                .scaledToFit()
-                .foregroundStyle(Color.ypGrayLight)
-
+        if sources.isEmpty {
+            avatarPlaceholder
+        } else {
             KFImage(source: sources.first)
                 .placeholder {
                     ZStack {
@@ -156,36 +150,23 @@ struct ProfileView: View {
                 }
                 .resizable()
                 .scaledToFill()
+                .frame(width: 70, height: 70)
+                .clipShape(Circle())
+        }
+    }
+
+    private var avatarPlaceholder: some View {
+        ZStack {
+            Color.ypWhite
+
+            Image(systemName: "person.crop.circle.fill")
+                .resizable()
+                .scaledToFit()
+                .foregroundStyle(.ypGrayLight)
+                .frame(width: 70, height: 70)
         }
         .frame(width: 70, height: 70)
         .clipShape(Circle())
-    }
-
-    private func avatarSources(from avatar: String) -> [Source] {
-        guard let range = avatar.range(of: "/ipfs/") else {
-            guard let url = URL(string: avatar) else {
-                return []
-            }
-
-            return [
-                .network(KF.ImageResource(downloadURL: url))
-            ]
-        }
-
-        let ipfsPath = String(avatar[range.upperBound...])
-
-        let gateways = [
-            "https://ipfs.io/ipfs/",
-            "https://gateway.pinata.cloud/ipfs/",
-            "https://dweb.link/ipfs/"
-        ]
-
-        return gateways.compactMap { gateway in
-            URL(string: "\(gateway)\(ipfsPath)")
-        }
-        .map {
-            .network(KF.ImageResource(downloadURL: $0))
-        }
     }
 
     // MARK: - Navigation
@@ -236,7 +217,7 @@ struct ProfileView: View {
 
             Button(String(localized: "Profile.retry")) {
                 Task {
-                    await viewModel?.loadProfile()
+                    await viewModel.loadProfile()
                 }
             }
             .buttonStyle(.borderedProminent)
@@ -258,15 +239,24 @@ struct ProfilePlaceholderView: View {
             .foregroundStyle(Color.ypBlack)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.ypWhite)
-            .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text(title)
+                        .font(.bold17)
+                        .foregroundStyle(Color.ypBlack)
+                }
+            }
     }
 }
 
 #Preview {
     NavigationStack {
-        ProfileView()
+        ProfileView(
+            viewModel: ProfileViewModel(
+                profileService: ProfileService(networkClient: DefaultNetworkClient())
+            )
+        )
             .environment(Router())
-            .environment(ServicesAssembly(networkClient: DefaultNetworkClient()))
     }
 }

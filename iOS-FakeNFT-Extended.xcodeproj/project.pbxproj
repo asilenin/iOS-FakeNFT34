@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		1D2C564AB74575CCCBF17252 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E534C2E0D0CD0FDFADB8F12 /* Profile.swift */; };
 		3600E00793C57D74E0C398B9 /* ProfileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A057C3C3B7D1AD5797A5CBB /* ProfileRequest.swift */; };
+		40F0A0012FB5000100B07D13 /* ProfileNft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F0A0112FB5000100B07D13 /* ProfileNft.swift */; };
+		40F0A0022FB5000100B07D13 /* NftServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F0A0122FB5000100B07D13 /* NftServiceProtocol.swift */; };
+		40F0A0032FB5000100B07D13 /* NftService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F0A0132FB5000100B07D13 /* NftService.swift */; };
+		40F0A0042FB5000100B07D13 /* UpdateProfileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F0A0142FB5000100B07D13 /* UpdateProfileRequest.swift */; };
+		40F0A0052FB5000100B07D13 /* NftRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F0A0152FB5000100B07D13 /* NftRequest.swift */; };
+		40F0A0062FB5000100B07D13 /* MockProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40F0A0162FB5000100B07D13 /* MockProfileService.swift */; };
 		4747AA052FAF622A00B07D13 /* WebViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA042FAF622900B07D13 /* WebViewRepresentable.swift */; };
 		4747AA072FAF622F00B07D13 /* WebViewScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA062FAF622F00B07D13 /* WebViewScreen.swift */; };
 		4747AA092FAF678300B07D13 /* NetworkClientError+LocalizedError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA082FAF678100B07D13 /* NetworkClientError+LocalizedError.swift */; };
@@ -56,6 +62,12 @@
 /* Begin PBXFileReference section */
 		0590AB39378D38B1E22E7312 /* ProfileServiceProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ProfileServiceProtocol.swift; sourceTree = "<group>"; };
 		0A057C3C3B7D1AD5797A5CBB /* ProfileRequest.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ProfileRequest.swift; sourceTree = "<group>"; };
+		40F0A0112FB5000100B07D13 /* ProfileNft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileNft.swift; sourceTree = "<group>"; };
+		40F0A0122FB5000100B07D13 /* NftServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftServiceProtocol.swift; sourceTree = "<group>"; };
+		40F0A0132FB5000100B07D13 /* NftService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftService.swift; sourceTree = "<group>"; };
+		40F0A0142FB5000100B07D13 /* UpdateProfileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateProfileRequest.swift; sourceTree = "<group>"; };
+		40F0A0152FB5000100B07D13 /* NftRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NftRequest.swift; sourceTree = "<group>"; };
+		40F0A0162FB5000100B07D13 /* MockProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockProfileService.swift; sourceTree = "<group>"; };
 		47470DE62FAF5EF4005D4D4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4747AA042FAF622900B07D13 /* WebViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewRepresentable.swift; sourceTree = "<group>"; };
 		4747AA062FAF622F00B07D13 /* WebViewScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewScreen.swift; sourceTree = "<group>"; };
@@ -87,61 +99,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		479FAEC42FAF4361009D7D33 /* App */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = App;
-			sourceTree = "<group>";
-		};
-		479FAED52FAF4AF8009D7D33 /* Catalog */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = Catalog;
-			sourceTree = "<group>";
-		};
-		479FAED62FAF4B01009D7D33 /* Cart */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = Cart;
-			sourceTree = "<group>";
-		};
-		479FAED72FAF4B08009D7D33 /* Profile */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = Profile;
-			sourceTree = "<group>";
-		};
-		479FAED82FAF4B0F009D7D33 /* Statistics */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
-			explicitFileTypes = {
-			};
-			explicitFolders = (
-			);
-			path = Statistics;
-			sourceTree = "<group>";
-		};
+		479FAEC42FAF4361009D7D33 /* App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = App; sourceTree = "<group>"; };
+		479FAED52FAF4AF8009D7D33 /* Catalog */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Catalog; sourceTree = "<group>"; };
+		479FAED62FAF4B01009D7D33 /* Cart */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Cart; sourceTree = "<group>"; };
+		479FAED72FAF4B08009D7D33 /* Profile */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Profile; sourceTree = "<group>"; };
+		479FAED82FAF4B0F009D7D33 /* Statistics */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Statistics; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,7 +136,6 @@
 			isa = PBXGroup;
 			children = (
 			);
-			name = ViewModels;
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
@@ -183,7 +144,6 @@
 			children = (
 				0FB15A42EEA991ACEA3A505E /* ViewModels */,
 			);
-			name = Profile;
 			path = Profile;
 			sourceTree = "<group>";
 		};
@@ -222,6 +182,9 @@
 			children = (
 				F1B3314F39C40367B42F0098 /* ProfileService.swift */,
 				0590AB39378D38B1E22E7312 /* ProfileServiceProtocol.swift */,
+				40F0A0162FB5000100B07D13 /* MockProfileService.swift */,
+				40F0A0132FB5000100B07D13 /* NftService.swift */,
+				40F0A0122FB5000100B07D13 /* NftServiceProtocol.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -379,6 +342,8 @@
 			children = (
 				ABC5E1AF2C31FB90002B4068 /* RequestConstants.swift */,
 				0A057C3C3B7D1AD5797A5CBB /* ProfileRequest.swift */,
+				40F0A0142FB5000100B07D13 /* UpdateProfileRequest.swift */,
+				40F0A0152FB5000100B07D13 /* NftRequest.swift */,
 			);
 			path = Requests;
 			sourceTree = "<group>";
@@ -401,8 +366,8 @@
 			isa = PBXGroup;
 			children = (
 				7E534C2E0D0CD0FDFADB8F12 /* Profile.swift */,
+				40F0A0112FB5000100B07D13 /* ProfileNft.swift */,
 			);
-			name = Profile;
 			path = Profile;
 			sourceTree = "<group>";
 		};
@@ -413,6 +378,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = ABC5E18C2C31F5B0002B4068 /* Build configuration list for PBXNativeTarget "iOS-FakeNFT-Extended" */;
 			buildPhases = (
+				47B1F98D2FB1FB2400B07D13 /* SwiftLint */,
 				ABC5E1642C31F5AF002B4068 /* Sources */,
 				ABC5E1652C31F5AF002B4068 /* Frameworks */,
 				ABC5E1662C31F5AF002B4068 /* Resources */,
@@ -545,6 +511,29 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		47B1F98D2FB1FB2400B07D13 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [[ -z \"$CI\" ]]; then\n    if [[ \"$(uname -m)\" == arm64 ]]; then\n        export PATH=\"/opt/homebrew/bin:$PATH\"\n    fi\n\n    # Check if running in a SwiftUI preview\n    if [ \"$XCODE_RUNNING_FOR_PREVIEWS\" != \"1\" ]; then\n        if which swiftlint > /dev/null; then\n            swiftlint\n        else\n            echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\n        fi\n    fi\nelse \n    # Running Xcode Cloud\n    echo \"Running in Xcode Cloud. Skipping SwiftLint.\"\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		ABC5E1642C31F5AF002B4068 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -568,9 +557,15 @@
 				4747AA112FAF6E8A00B07D13 /* MenuButton.swift in Sources */,
 				ABC5E1B02C31FB90002B4068 /* RequestConstants.swift in Sources */,
 				1D2C564AB74575CCCBF17252 /* Profile.swift in Sources */,
+				40F0A0012FB5000100B07D13 /* ProfileNft.swift in Sources */,
 				7749F86E6747113552E8F960 /* ProfileService.swift in Sources */,
 				D9EB4FE42B2E09FE33868BC4 /* ProfileServiceProtocol.swift in Sources */,
+				40F0A0062FB5000100B07D13 /* MockProfileService.swift in Sources */,
+				40F0A0032FB5000100B07D13 /* NftService.swift in Sources */,
+				40F0A0022FB5000100B07D13 /* NftServiceProtocol.swift in Sources */,
 				3600E00793C57D74E0C398B9 /* ProfileRequest.swift in Sources */,
+				40F0A0042FB5000100B07D13 /* UpdateProfileRequest.swift in Sources */,
+				40F0A0052FB5000100B07D13 /* NftRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -654,7 +649,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -717,7 +712,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

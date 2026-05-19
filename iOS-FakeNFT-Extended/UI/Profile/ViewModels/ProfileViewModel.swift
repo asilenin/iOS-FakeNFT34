@@ -23,6 +23,13 @@ final class ProfileViewModel {
 
     private(set) var state: State = .idle
 
+    var loadedProfile: Profile? {
+        if case .loaded(let profile) = state {
+            return profile
+        }
+        return nil
+    }
+
     // MARK: - Dependencies
 
     private let profileService: ProfileServiceProtocol
@@ -50,6 +57,10 @@ final class ProfileViewModel {
             )
             state = .failed(message)
         }
+    }
+
+    func updateLoadedProfile(_ profile: Profile) {
+        state = .loaded(profile)
     }
 }
 
