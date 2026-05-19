@@ -78,6 +78,9 @@ struct PaymentView: View {
                 router.popToRoot(in: .cart)
             }
 
+        case .empty:
+            EmptyView()
+
         case .error:
             errorView
         }

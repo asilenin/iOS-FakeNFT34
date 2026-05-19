@@ -19,15 +19,7 @@ enum CartSortOption: String, CaseIterable, Identifiable, Sendable {
 @Observable
 @MainActor
 final class CartViewModel {
-    enum State: Equatable {
-        case idle
-        case loading
-        case loaded
-        case empty
-        case error
-    }
-
-    private(set) var state: State = .idle
+    private(set) var state: CartScreenState = .idle
     private(set) var items: [CartItem] = []
     private(set) var isDeleting = false
     var error: Error?
@@ -120,15 +112,4 @@ final class CartViewModel {
             items.sort { $0.rating > $1.rating }
         }
     }
-}
-
-private extension CartViewModel {
-    static let priceFormatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.locale = Locale.current
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
-        return formatter
-    }()
 }

@@ -11,15 +11,7 @@ import Observation
 @Observable
 @MainActor
 final class PaymentViewModel {
-    enum State: Equatable {
-        case idle
-        case loading
-        case loaded
-        case success
-        case error
-    }
-
-    private(set) var state: State = .idle
+    private(set) var state: CartScreenState = .idle
     private(set) var currencies: [PaymentCurrency] = []
     private(set) var isPaying = false
     var selectedCurrency: PaymentCurrency?
@@ -61,6 +53,7 @@ final class PaymentViewModel {
         cartService: CartServiceProtocol
     ) async {
         guard let selectedCurrency, !isPaying else { return }
+
         await pay(
             currencyID: selectedCurrency.id,
             paymentService: paymentService,

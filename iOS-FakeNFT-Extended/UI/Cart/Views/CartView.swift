@@ -105,6 +105,9 @@ struct CartView: View {
         case .empty:
             emptyView
 
+        case .success:
+            EmptyView()
+
         case .error:
             emptyErrorView
         }
