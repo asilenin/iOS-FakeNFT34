@@ -14,28 +14,12 @@ enum CartSortOption: String, CaseIterable, Identifiable, Sendable {
     case rating
 
     var id: String { rawValue }
-
-    var title: String {
-        switch self {
-        case .name: "По названию"
-        case .price: "По цене"
-        case .rating: "По рейтингу"
-        }
-    }
 }
 
 @Observable
 @MainActor
 final class CartViewModel {
-    enum State: Equatable {
-        case idle
-        case loading
-        case loaded
-        case empty
-        case error
-    }
-
-    private(set) var state: State = .idle
+    private(set) var state: CartScreenState = .idle
     private(set) var items: [CartItem] = []
     private(set) var isDeleting = false
     var error: Error?
@@ -55,7 +39,7 @@ final class CartViewModel {
 
     var totalPriceText: String {
         let total = items.reduce(0) { $0 + $1.price }
-        return "\(Self.priceFormatter.string(from: total as NSNumber) ?? "\(total)") ETH"
+        return CartPriceFormatter.eth(total)
     }
 
     func loadIfNeeded(service: CartServiceProtocol) async {
@@ -128,15 +112,4 @@ final class CartViewModel {
             items.sort { $0.rating > $1.rating }
         }
     }
-}
-
-private extension CartViewModel {
-    static let priceFormatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.locale = Locale.current
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
-        return formatter
-    }()
 }

@@ -4,17 +4,11 @@ struct CartView: View {
     @Environment(Router.self) private var router
     @Environment(ServicesAssembly.self) private var services
 
-    @State private var viewModel: CartViewModel
+    @State private var viewModel = CartViewModel()
     @State private var itemPendingDeletion: CartItem?
     @State private var isSortDialogPresented = false
 
-    @AppStorage("cart.sort.option") private var storedSortOption: CartSortOption = .name
-
-    @MainActor
-    init() {
-        _viewModel = State(initialValue: CartViewModel())
-    }
-
+    @AppStorage(Constants.sortOptionStorageKey) private var storedSortOption: CartSortOption = .name
     var body: some View {
         @Bindable var viewModel = viewModel
 
@@ -67,6 +61,13 @@ struct CartView: View {
             .onChange(of: storedSortOption) { _, newValue in
                 viewModel.sortOption = newValue
             }
+            .onChange(of: router.cartPath.count) { _, newValue in
+                guard newValue == 0 else { return }
+
+                Task {
+                    await viewModel.load(service: services.cartService)
+                }
+            }
             .errorAlert(error: $viewModel.error) {
                 Task {
                     await viewModel.retryLastDelete(service: services.cartService)
@@ -103,6 +104,9 @@ struct CartView: View {
 
         case .empty:
             emptyView
+
+        case .success:
+            EmptyView()
 
         case .error:
             emptyErrorView
@@ -229,6 +233,7 @@ private extension CartView {
     }
 
     enum Constants {
+        static let sortOptionStorageKey = "cart.sort.option"
         static let horizontalPadding: CGFloat = 16
 
         static let errorSpacing: CGFloat = 12

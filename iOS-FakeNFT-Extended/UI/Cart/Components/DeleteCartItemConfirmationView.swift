@@ -26,7 +26,7 @@ struct DeleteCartItemConfirmationView: View {
                     RoundedRectangle(cornerRadius: Constants.imageCornerRadius)
                 )
 
-            Text("Вы уверены, что хотите\nудалить объект из корзины?")
+            Text(Strings.confirmationText)
                 .font(.regular17)
                 .foregroundStyle(.ypBlack)
                 .multilineTextAlignment(.center)
@@ -35,13 +35,13 @@ struct DeleteCartItemConfirmationView: View {
 
             HStack(spacing: Constants.buttonSpacing) {
                 actionButton(
-                    title: "Удалить",
+                    title: Strings.delete,
                     foregroundColor: .ypRedUniversal,
                     action: onDelete
                 )
 
                 actionButton(
-                    title: "Вернуться",
+                    title: Strings.cancel,
                     foregroundColor: .ypWhite,
                     action: onCancel
                 )
@@ -70,6 +70,14 @@ struct DeleteCartItemConfirmationView: View {
                 )
         }
         .buttonStyle(.plain)
+    }
+}
+
+private extension DeleteCartItemConfirmationView {
+    enum Strings {
+        static let confirmationText = "Вы уверены, что хотите\nудалить объект из корзины?"
+        static let delete = "Удалить"
+        static let cancel = "Вернуться"
     }
 }
 

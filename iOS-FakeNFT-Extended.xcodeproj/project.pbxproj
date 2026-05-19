@@ -32,6 +32,8 @@
 		ABC5E1EB2C32084F002B4068 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = ABC5E1E92C32084F002B4068 /* Localizable.strings */; };
 		D01E16CD2FB227210075BF16 /* CartService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01E16CC2FB227210075BF16 /* CartService.swift */; };
 		D0A1C5992FB6413800800521 /* UpdateOrderRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A1C5982FB6413800800521 /* UpdateOrderRequest.swift */; };
+		D0B200172FBA0B29003BD081 /* PaymentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B200162FBA0B29003BD081 /* PaymentService.swift */; };
+		D0B200192FBA11D0003BD081 /* PaymentServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B200182FBA11D0003BD081 /* PaymentServiceProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +82,8 @@
 		ABC5E1EA2C32084F002B4068 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D01E16CC2FB227210075BF16 /* CartService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartService.swift; sourceTree = "<group>"; };
 		D0A1C5982FB6413800800521 /* UpdateOrderRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateOrderRequest.swift; sourceTree = "<group>"; };
+		D0B200162FBA0B29003BD081 /* PaymentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentService.swift; sourceTree = "<group>"; };
+		D0B200182FBA11D0003BD081 /* PaymentServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentServiceProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -145,6 +149,7 @@
 			children = (
 				4747AA192FAF700000B07D13 /* CartServiceProtocol.swift */,
 				4747AA172FAF6FE300B07D13 /* FavoritesServiceProtocol.swift */,
+				D0B200182FBA11D0003BD081 /* PaymentServiceProtocol.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -168,6 +173,7 @@
 			children = (
 				D0B2FFD42FB871D8003BD081 /* Mock */,
 				D01E16CC2FB227210075BF16 /* CartService.swift */,
+				D0B200162FBA0B29003BD081 /* PaymentService.swift */,
 				D0A1C5982FB6413800800521 /* UpdateOrderRequest.swift */,
 			);
 			path = Cart;
@@ -503,6 +509,7 @@
 				4747AA052FAF622A00B07D13 /* WebViewRepresentable.swift in Sources */,
 				4747AA092FAF678300B07D13 /* NetworkClientError+LocalizedError.swift in Sources */,
 				D01E16CD2FB227210075BF16 /* CartService.swift in Sources */,
+				D0B200192FBA11D0003BD081 /* PaymentServiceProtocol.swift in Sources */,
 				ABC5E1992C31F666002B4068 /* Fonts.swift in Sources */,
 				4747AA0F2FAF6AB700B07D13 /* SkeletonView.swift in Sources */,
 				ABC5E1B72C31FC70002B4068 /* ServicesAssembly.swift in Sources */,
@@ -519,6 +526,7 @@
 				ABC5E1A82C31FA90002B4068 /* DateFormatters+Presets.swift in Sources */,
 				4747AA112FAF6E8A00B07D13 /* MenuButton.swift in Sources */,
 				ABC5E1B02C31FB90002B4068 /* RequestConstants.swift in Sources */,
+				D0B200172FBA0B29003BD081 /* PaymentService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
