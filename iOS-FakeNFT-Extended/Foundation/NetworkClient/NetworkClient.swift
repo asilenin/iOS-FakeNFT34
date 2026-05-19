@@ -55,14 +55,33 @@ actor DefaultNetworkClient: NetworkClient {
         var urlRequest = URLRequest(url: endpoint)
         urlRequest.httpMethod = request.httpMethod.rawValue
 
-        if let dto = request.dto,
-           let dtoEncoded = try? encoder.encode(dto) {
-            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            urlRequest.httpBody = dtoEncoded
-        }
+        try configureBody(for: request, urlRequest: &urlRequest)
         urlRequest.addValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
 
         return urlRequest
+    }
+
+    private func configureBody(
+        for request: NetworkRequest,
+        urlRequest: inout URLRequest
+    ) throws {
+        guard let body = request.body else { return }
+
+        switch body {
+        case .json(let dto):
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            urlRequest.httpBody = try encoder.encode(dto)
+
+        case .formURLEncoded(let items):
+            urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            urlRequest.httpBody = Self.formURLEncodedData(from: items)
+        }
+    }
+
+    private static func formURLEncodedData(from items: [URLQueryItem]) -> Data? {
+        var components = URLComponents()
+        components.queryItems = items
+        return components.percentEncodedQuery?.data(using: .utf8)
     }
 
     private func parse<T: Decodable>(data: Data) async throws -> T {
