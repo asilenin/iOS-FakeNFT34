@@ -1,18 +1,7 @@
 import Foundation
 
-/// Сетевой клиент эпика Каталога, поддерживающий form-urlencoded body
-/// дополнительно к стандартным JSON-запросам.
-///
-/// Архитектура — композиция:
-/// - JSON и no-body запросы делегируются во вложенный `inner: NetworkClient`
-///   (обычно `DefaultNetworkClient`), чтобы не дублировать общую логику.
-/// - Form-encoded запросы (`FormEncodedRequest`) обрабатываются здесь
-///   напрямую через `URLSession` — это единственный кусок логики, который
-///   нельзя реализовать через общий `DefaultNetworkClient` без его модификации.
-///
-/// Используется в `CatalogFavoritesService` и `CatalogCartService` для PUT.
-/// `CatalogService` и `CollectionDetailService` могут использовать обычный
-/// `DefaultNetworkClient` — им form-encoded не нужен.
+/// Сетевой клиент Каталога: form-urlencoded запросы шлёт сам,
+/// остальные делегирует во `inner`.
 actor CatalogNetworkClient: NetworkClient {
 
     private let inner: NetworkClient
@@ -57,7 +46,7 @@ actor CatalogNetworkClient: NetworkClient {
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw NetworkClientError.urlSessionError
             }
-            guard 200..<300 ~= httpResponse.statusCode else {
+            guard (200...299).contains(httpResponse.statusCode) else {
                 print("❌ [\(fileName())]: :\(#line)] \(#function) HTTP \(httpResponse.statusCode) for \(urlRequest.url?.absoluteString ?? "nil")")
                 throw NetworkClientError.httpStatusCode(httpResponse.statusCode)
             }
@@ -88,23 +77,8 @@ actor CatalogNetworkClient: NetworkClient {
         return urlRequest
     }
 
-    /// Сериализует словарь полей в form URL-encoded body.
-    ///
-    /// **Пустые массивы пропускаются** — это вынужденное поведение из-за
-    /// специфики mock-сервера FakeNFT: `likes=` (пустая строка) трактуется
-    /// сервером как массив с одним элементом-пустой-строкой, и валится
-    /// с `entity by id is missing`.
-    ///
-    /// Известное ограничение: невозможно «сбросить лайки в пустой массив»
-    /// одним запросом — сервер не принимает такой формат. Если все массивы
-    /// пустые, body будет пустой строкой и запрос будет no-op для сервера.
-    ///
-    /// **Кодирование вручную, не через `URLComponents.queryItems`:**
-    /// `URLComponents` использует `.urlQueryAllowed` character set, который
-    /// валиден для query string в URL, но в form body символы `&`, `=`, `+`
-    /// имеют синтаксическое значение (разделители пар, space-as-plus).
-    /// Без явного экранирования значение `"a&b=c"` отправилось бы как
-    /// `likes=a&b=c`, и сервер распарсил бы его как две пары — `likes=a` и `b=c`.
+    /// Сериализует поля в `application/x-www-form-urlencoded` body.
+    /// Пустые массивы пропускаются — особенность mock-сервера, см. `FormEncodedRequest`.
     private static func encodeFormFields(_ fields: [String: [String]]) -> Data? {
         let allowed = formURLAllowedCharacters
         var pairs: [String] = []
@@ -119,8 +93,7 @@ actor CatalogNetworkClient: NetworkClient {
         return pairs.joined(separator: "&").data(using: .utf8)
     }
 
-    /// Character set для form URL-encoding: `.urlQueryAllowed` минус `&`, `=`, `+`,
-    /// которые в form body имеют синтаксическое значение и должны быть экранированы.
+    /// `.urlQueryAllowed` минус `&=+` — эти символы в form body разделители.
     private static let formURLAllowedCharacters: CharacterSet = {
         var set = CharacterSet.urlQueryAllowed
         set.remove(charactersIn: "&=+")
