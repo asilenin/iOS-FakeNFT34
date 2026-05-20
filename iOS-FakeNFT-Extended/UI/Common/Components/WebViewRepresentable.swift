@@ -5,7 +5,8 @@ struct WebViewRepresentable: UIViewRepresentable {
 
     let url: URL
 
-    /// Optional binding the view writes `true/false` into while a page is loading. Lets the host show a spinner or disable controls.
+    /// Optional binding the view writes `true/false` into while a page is loading. 
+    /// Lets the host show a spinner or disable controls.
     var isLoading: Binding<Bool>?
 
     /// Optional binding the view writes the load progress into, n the range 0.0...1.0.
@@ -14,7 +15,8 @@ struct WebViewRepresentable: UIViewRepresentable {
     func makeUIView(context: Context) -> WKWebView {
         let view = WKWebView()
         view.navigationDelegate = context.coordinator
-        // Observe `estimatedProgress` via KVO. The token lives on the coordinator and is invalidated in dismantleUIView.
+        // Observe `estimatedProgress` via KVO. 
+        // The token lives on the coordinator and is invalidated in dismantleUIView.
         context.coordinator.observation = view.observe(
             \.estimatedProgress,
             options: [.new]
@@ -31,7 +33,10 @@ struct WebViewRepresentable: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: WKWebView, context: Context) {
-        // Reload only when the *requested* URL changed, comparing to what we last asked WKWebView to load — not to `uiView.url`, which can drift after redirects, trailing-slash normalization, anchor changes, etc., and would otherwise cause a reload loop.
+        // Reload only when the *requested* URL changed, comparing to what
+        // we last asked WKWebView to load — not to `uiView.url`,
+        // which can drift after redirects, trailing-slash normalization, anchor changes,
+        // etc., and would otherwise cause a reload loop.
         if context.coordinator.lastLoadedURL != url {
             uiView.load(URLRequest(url: url))
             context.coordinator.lastLoadedURL = url
