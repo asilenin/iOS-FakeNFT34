@@ -1,33 +1,24 @@
 import Foundation
 
 enum CatalogRoute: Hashable {
-    case _placeholder
-    // case collection(NftCollection)
-    // case authorWeb(URL)
+    case collection(NftCollection)
+    case authorWeb(URL)
+    case nftDetail(String)
 }
 
 enum CartRoute: Hashable {
-    case _placeholder
-    // case currencySelection
-    // case userAgreement(URL)
+    case payment
+    case userAgreement(URL)
 }
 
 enum ProfileRoute: Hashable {
     case _placeholder
-    // case myNfts
-    // case favorites
-    // case edit
-    // case userWeb(URL)
 }
 
 enum StatisticsRoute: Hashable {
-    case _placeholder
-    
     case userDetail(StatisticsUser)
-    
     case userCollection(userId: String, userName: String)
-    
     case userWebsite(URL)
-    
     case nftDetail(String)
+    case _placeholder
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - API DTO
+// MARK: - API DTO (Statistics / Users)
 
 struct UserNetworkDTO: Decodable {
     let id: String
@@ -25,14 +25,6 @@ struct NftNetworkDTO: Decodable {
     let images: [String]?
     let rating: Int?
     let price: Float?
-}
-
-struct ProfileNetworkDTO: Decodable {
-    let likes: [String]?
-}
-
-struct OrderNetworkDTO: Decodable {
-    let nfts: [String]?
 }
 
 struct FlexibleInt: Decodable {
@@ -89,6 +81,19 @@ extension NftNetworkDTO {
             imageURL: images?.first.flatMap(URL.init(string:)),
             rating: rating ?? 0,
             price: price ?? 0
+        )
+    }
+}
+
+extension CartNftDTO {
+
+    func toStatisticsNft() -> StatisticsNft {
+        StatisticsNft(
+            id: id,
+            name: name,
+            imageURL: images.first.flatMap(URL.init(string:)),
+            rating: rating,
+            price: Float(price)
         )
     }
 }

@@ -16,11 +16,12 @@ actor FavoritesService: FavoritesServiceProtocol {
     }
 
     func loadFavorites() async throws -> Set<String> {
-        let profile: ProfileNetworkDTO = try await networkClient.send(request: GetProfileRequest())
-        return NetworkIdListParser.parseSet(profile.likes)
+        let profile: CatalogProfileDto = try await networkClient.send(request: ProfileGetRequest())
+        return Set(profile.likes)
     }
 
     func setFavorites(_ ids: Set<String>) async throws {
-        _ = try await networkClient.send(request: UpdateProfileLikesRequest(likes: ids))
+        let request = ProfileSetLikesRequest(likes: Array(ids.sorted()))
+        let profile: CatalogProfileDto = try await networkClient.send(request: request)
+        _ = profile
     }
-}

@@ -14,7 +14,7 @@ actor StatisticsService: StatisticsServiceProtocol {
 
     init(
         networkClient: NetworkClient,
-        pageSize: Int = RequestConstants.defaultPageSize
+        pageSize: Int = RequestConstants.defaultStatisticsPageSize
     ) {
         self.networkClient = networkClient
         self.pageSize = pageSize
@@ -58,8 +58,8 @@ actor StatisticsService: StatisticsServiceProtocol {
         return try await withThrowingTaskGroup(of: StatisticsNft.self) { group in
             for nftId in nftIds {
                 group.addTask {
-                    let dto: NftNetworkDTO = try await client.send(
-                        request: GetNftRequest(nftId: nftId)
+                    let dto: CartNftDTO = try await client.send(
+                        request: LoadNftRequest(nftID: nftId)
                     )
                     return dto.toStatisticsNft()
                 }
