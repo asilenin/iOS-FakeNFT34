@@ -125,8 +125,8 @@ struct MyNFTsView: View {
 #Preview {
     NavigationStack {
         MyNFTsView(
-            nftIds: MockProfileService.nfts.compactMap(\.id),
-            nftService: MockProfileService()
+            nftIds: ProfilePreviewData.nfts.compactMap(\.id),
+            nftService: MockNftService()
         )
     }
 }

@@ -109,8 +109,13 @@ private struct ProfileTabRoot: View {
                             nftIds: nftIds,
                             nftService: nftService
                         )
-                    case .favorites:
-                        ProfilePlaceholderView(title: String(localized: "Profile.favoriteNfts"))
+                    case .favorites(let profile):
+                        FavoriteNFTsView(
+                            profile: profile,
+                            nftService: nftService,
+                            profileService: profileService,
+                            onProfileUpdated: viewModel.updateLoadedProfile
+                        )
                     case .edit(let profile):
                         EditProfileView(
                             profile: profile,

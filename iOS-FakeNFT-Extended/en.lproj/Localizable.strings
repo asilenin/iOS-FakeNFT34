@@ -45,3 +45,7 @@
 "Profile.MyNFTs.unknownAuthor" = "Автор не указан";
 "Profile.MyNFTs.noPrice" = "Цена не указана";
 "Profile.MyNFTs.price" = "Цена";
+"Profile.FavoriteNFTs.title" = "Избранные NFT";
+"Profile.FavoriteNFTs.empty" = "У вас ещё нет избранных NFT";
+"Profile.FavoriteNFTs.error.load" = "Не удалось загрузить избранные NFT: %@";
+"Profile.FavoriteNFTs.error.remove" = "Не удалось удалить NFT из избранного: %@";

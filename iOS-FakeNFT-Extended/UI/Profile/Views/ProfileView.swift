@@ -77,7 +77,7 @@ struct ProfileView: View {
                     navigationRow(
                         title: String(localized: "Profile.favoriteNfts"),
                         count: profile.likes?.count ?? 0,
-                        route: .favorites
+                        route: .favorites(profile)
                     )
                 }
                 .padding(.top, 32)

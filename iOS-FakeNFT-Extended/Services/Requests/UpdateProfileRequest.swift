@@ -37,7 +37,18 @@ struct UpdateProfileRequest: NetworkRequest {
             ("description", profile.description ?? ""),
             ("avatar", profile.avatar ?? ""),
             ("website", profile.website ?? "")
-        ] + (profile.likes ?? []).map { ("likes", $0) }
+        ] + likesFormItems
+    }
+
+    private var likesFormItems: [(String, String)] {
+        guard let likes = profile.likes else { return [] }
+        guard !likes.isEmpty else { return [("likes", Constants.emptyLikesValue)] }
+
+        return likes.map { ("likes", $0) }
+    }
+
+    private enum Constants {
+        static let emptyLikesValue = "null"
     }
 }
 
