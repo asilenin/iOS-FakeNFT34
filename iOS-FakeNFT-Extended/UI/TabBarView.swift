@@ -3,12 +3,13 @@ import SwiftUI
 struct TabBarView: View {
 
     @Environment(Router.self) private var router
+    @Environment(ServicesAssembly.self) private var services
 
     var body: some View {
         @Bindable var router = router
 
         VStack(spacing: 0) {
-            content(router: router)
+            content(router: router, services: services)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
             if !isCurrentTabPushed(router) {
@@ -21,7 +22,7 @@ struct TabBarView: View {
     }
 
     @ViewBuilder
-    private func content(router: Router) -> some View {
+    private func content(router: Router, services: ServicesAssembly) -> some View {
         @Bindable var router = router
 
         switch router.selectedTab {
@@ -29,7 +30,6 @@ struct TabBarView: View {
             NavigationStack(path: $router.profilePath) {
                 ProfileView()
                     .navigationDestination(for: ProfileRoute.self) { _ in
-                        // TODO(profile epic): map ProfileRoute cases to their destination views.
                         EmptyView()
                     }
             }
@@ -61,16 +61,40 @@ struct TabBarView: View {
             }
         case .statistics:
             NavigationStack(path: $router.statisticsPath) {
-                StatisticsView()
-                    .navigationDestination(for: StatisticsRoute.self) { _ in
-                        // TODO(statistics epic): map StatisticsRoute cases to their destination views.
+                StatisticsView(
+                    viewModel: StatisticsViewModel(statisticsService: services.statisticsService)
+                )
+                .navigationDestination(for: StatisticsRoute.self) { route in
+                    switch route {
+                    case .userDetail(let user):
+                        StatisticsUserDetailView(
+                            viewModel: StatisticsUserDetailViewModel(
+                                summary: user,
+                                statisticsService: services.statisticsService
+                            )
+                        )
+                    case .userCollection(let userId, let userName):
+                        StatisticsUserCollectionView(
+                            viewModel: StatisticsUserCollectionViewModel(
+                                userId: userId,
+                                userName: userName,
+                                statisticsService: services.statisticsService,
+                                favoritesService: services.favoritesService,
+                                cartService: services.cartService
+                            )
+                        )
+                    case .userWebsite(let url):
+                        WebViewScreen(url: url)
+                    case .nftDetail(let nftId):
+                        StatisticsNftDetailView(nftId: nftId)
+                    case ._placeholder:
                         EmptyView()
                     }
+                }
             }
         }
     }
 
-    /// True when the currently selected tab has any pushed screens.
     private func isCurrentTabPushed(_ router: Router) -> Bool {
         switch router.selectedTab {
         case .profile:    !router.profilePath.isEmpty

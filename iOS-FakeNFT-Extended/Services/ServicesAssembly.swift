@@ -5,14 +5,16 @@ import Foundation
 final class ServicesAssembly {
 
     private let networkClient: NetworkClient
+    private let catalogNetworkClient: CatalogNetworkClient
     private let cartServiceStorage: CartServiceProtocol
     private let paymentServiceStorage: PaymentServiceProtocol
     private let favoritesServiceStorage: FavoritesServiceProtocol
 
-    private let useMockCart = true
+    private let useMockCart = false
 
     init(networkClient: NetworkClient) {
         self.networkClient = networkClient
+        self.catalogNetworkClient = CatalogNetworkClient(inner: networkClient)
 
         if useMockCart {
             cartServiceStorage = MockCartService()
@@ -21,7 +23,7 @@ final class ServicesAssembly {
         }
 
         paymentServiceStorage = PaymentService(networkClient: networkClient)
-        favoritesServiceStorage = NoOpFavoritesService()
+        favoritesServiceStorage = FavoritesService(networkClient: catalogNetworkClient)
     }
 
     // MARK: - Shared services
@@ -38,16 +40,18 @@ final class ServicesAssembly {
         paymentServiceStorage
     }
 
-    // MARK: - Catalog services
-
-    // `lazy var` + `@ObservationIgnored` — чтобы экземпляры сервисов переживали повторные
-    // обращения (иначе in-memory кэши внутри сервисов сбрасывались бы каждый раз).
-    // `@Observable` превращает `var` в computed, поэтому без `@ObservationIgnored` `lazy` не работает.
+    // MARK: - Statistics
 
     @ObservationIgnored
-    private lazy var _catalogNetworkClient: NetworkClient = CatalogNetworkClient(
-        inner: networkClient
+    private lazy var _statisticsService: StatisticsServiceProtocol = StatisticsService(
+        networkClient: networkClient
     )
+
+    var statisticsService: StatisticsServiceProtocol {
+        _statisticsService
+    }
+
+    // MARK: - Catalog services
 
     @ObservationIgnored
     private lazy var _catalogService: CatalogServiceProtocol = CatalogService(
@@ -68,7 +72,7 @@ final class ServicesAssembly {
 
     @ObservationIgnored
     private lazy var _catalogFavoritesService: CatalogFavoritesServiceProtocol =
-        CatalogFavoritesService(networkClient: _catalogNetworkClient)
+        CatalogFavoritesService(networkClient: catalogNetworkClient)
 
     var catalogFavoritesService: CatalogFavoritesServiceProtocol {
         _catalogFavoritesService
@@ -76,21 +80,9 @@ final class ServicesAssembly {
 
     @ObservationIgnored
     private lazy var _catalogCartService: CatalogCartServiceProtocol =
-        CatalogCartService(networkClient: _catalogNetworkClient)
+        CatalogCartService(networkClient: catalogNetworkClient)
 
     var catalogCartService: CatalogCartServiceProtocol {
         _catalogCartService
-    }
-}
-
-private actor NoOpFavoritesService: FavoritesServiceProtocol {
-    private var ids: Set<String> = []
-
-    func loadFavorites() async throws -> Set<String> {
-        ids
-    }
-
-    func setFavorites(_ ids: Set<String>) async throws {
-        self.ids = ids
     }
 }
