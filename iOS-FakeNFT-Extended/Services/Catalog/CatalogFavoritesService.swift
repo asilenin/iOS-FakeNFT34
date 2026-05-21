@@ -22,7 +22,7 @@ actor CatalogFavoritesService: CatalogFavoritesServiceProtocol {
             print("ℹ️ [\(fileName())]: :\(#line)] \(#function) cache hit, \(cached.count) likes")
             return cached
         }
-        let request = ProfileGetRequest()
+        let request = ProfileRequest()
         print("ℹ️ [\(fileName())]: :\(#line)] \(#function) GET \(request.endpoint?.absoluteString ?? "nil")")
 
         do {

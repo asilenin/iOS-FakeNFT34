@@ -12,6 +12,7 @@ excluded:
 disabled_rules:
   - line_length
   - todo
+  - trailing_whitespace
 
 identifier_name:
   excluded:
@@ -20,5 +21,7 @@ identifier_name:
     - _placeholder
 
 type_name:
+  allowed_symbols:
+    - "_"
   excluded:
     - iOS_FakeNFT_ExtendedApp

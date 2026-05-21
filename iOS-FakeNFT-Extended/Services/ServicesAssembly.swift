@@ -85,4 +85,24 @@ final class ServicesAssembly {
     var catalogCartService: CatalogCartServiceProtocol {
         _catalogCartService
     }
+
+    // MARK: - Profile
+
+    @ObservationIgnored
+    private lazy var _profileService: ProfileServiceProtocol = ProfileService(
+        networkClient: networkClient
+    )
+
+    var profileService: ProfileServiceProtocol {
+        _profileService
+    }
+
+    @ObservationIgnored
+    private lazy var _nftService: NftServiceProtocol = NftService(
+        networkClient: networkClient
+    )
+
+    var nftService: NftServiceProtocol {
+        _nftService
+    }
 }
