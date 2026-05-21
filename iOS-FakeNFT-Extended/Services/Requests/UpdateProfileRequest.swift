@@ -18,17 +18,12 @@ struct UpdateProfileRequest: NetworkRequest {
         .put
     }
 
-    var httpBody: Data? {
-        formItems
-            .map { key, value in
-                "\(key.formEncoded)=\(value.formEncoded)"
+    var body: NetworkRequestBody? {
+        .formURLEncoded(
+            formItems.map { key, value in
+                URLQueryItem(name: key, value: value)
             }
-            .joined(separator: "&")
-            .data(using: .utf8)
-    }
-
-    var contentType: String? {
-        "application/x-www-form-urlencoded"
+        )
     }
 
     private var formItems: [(String, String)] {
@@ -49,14 +44,5 @@ struct UpdateProfileRequest: NetworkRequest {
 
     private enum Constants {
         static let emptyLikesValue = "null"
-    }
-}
-
-private extension String {
-    var formEncoded: String {
-        var allowedCharacters = CharacterSet.urlQueryAllowed
-        allowedCharacters.remove(charactersIn: "&+=")
-
-        return addingPercentEncoding(withAllowedCharacters: allowedCharacters) ?? self
     }
 }

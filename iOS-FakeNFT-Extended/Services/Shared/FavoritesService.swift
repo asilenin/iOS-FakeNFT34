@@ -16,7 +16,7 @@ actor FavoritesService: FavoritesServiceProtocol {
     }
     
     func loadFavorites() async throws -> Set<String> {
-        let profile: CatalogProfileDto = try await networkClient.send(request: ProfileGetRequest())
+        let profile: CatalogProfileDto = try await networkClient.send(request: ProfileRequest())
         return Set(profile.likes)
     }
     

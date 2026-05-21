@@ -54,7 +54,7 @@ struct FavoriteNFTCell: View {
                 .foregroundStyle(Color.ypBlack)
                 .lineLimit(1)
 
-            RatingStarsView(rating: nft.rating ?? 0)
+            RatingStarsView(rating: nft.rating ?? 0, spacing: 0, totalWidth: 60)
                 .padding(.top, 4)
 
             Text(priceText)

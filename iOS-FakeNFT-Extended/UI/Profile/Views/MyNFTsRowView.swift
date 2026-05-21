@@ -75,7 +75,7 @@ struct MyNFTsRowView: View {
                 .foregroundStyle(Color.ypBlack)
                 .lineLimit(1)
 
-            RatingStarsView(rating: nft.rating ?? 0)
+            RatingStarsView(rating: nft.rating ?? 0, spacing: 0, totalWidth: 60)
 
             Text(nft.author ?? String(localized: "Profile.MyNFTs.unknownAuthor"))
                 .font(.regular13)

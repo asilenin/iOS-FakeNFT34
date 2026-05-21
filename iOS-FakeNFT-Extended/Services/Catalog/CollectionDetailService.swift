@@ -52,7 +52,7 @@ actor CollectionDetailService: CollectionDetailServiceProtocol {
         await withTaskGroup(of: Nft?.self) { group in
             for id in ids {
                 group.addTask { [networkClient] in
-                    let request = NftByIdRequest(id: id)
+                    let request = NftRequest(id: id)
                     print("ℹ️ [\(fileName())]: :\(#line)] \(#function) GET \(request.endpoint?.absoluteString ?? "nil")")
                     do {
                         let nft: Nft = try await networkClient.send(request: request)
