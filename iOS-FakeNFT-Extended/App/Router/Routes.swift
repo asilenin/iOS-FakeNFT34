@@ -14,7 +14,7 @@ enum CartRoute: Hashable {
 
 enum ProfileRoute: Hashable {
     case myNfts([String])
-    case favorites(Profile)
+    case favorites([String])
     case edit(Profile)
     case userWeb(URL)
 }

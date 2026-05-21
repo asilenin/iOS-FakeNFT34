@@ -188,42 +188,6 @@ private struct NFTImagePlaceholder: View {
     }
 }
 
-// MARK: - RatingStarsView
-
-private struct RatingStarsView: View {
-
-    // MARK: - Constants
-
-    private enum Constants {
-        static let maxRating = 5
-        static let starSize: CGFloat = 12
-        static let totalWidth: CGFloat = 60
-    }
-
-    // MARK: - Properties
-
-    let rating: Int
-
-    private var normalizedRating: Int {
-        min(max(rating, 0), Constants.maxRating)
-    }
-
-    // MARK: - Body
-
-    var body: some View {
-        HStack(spacing: 0) {
-            ForEach(1...Constants.maxRating, id: \.self) { index in
-                Image(index <= normalizedRating ? .starActive : .starInactive)
-                    .renderingMode(.original)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: Constants.starSize, height: Constants.starSize)
-            }
-        }
-        .frame(width: Constants.totalWidth, height: Constants.starSize, alignment: .leading)
-    }
-}
-
 // MARK: - ProfileNft
 
 extension ProfileNft {

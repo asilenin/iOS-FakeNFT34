@@ -20,16 +20,16 @@ struct FavoriteNFTsView: View {
     // MARK: - Initializers
 
     init(
-        profile: Profile,
+        favoriteIds: [String],
         nftService: NftServiceProtocol,
-        profileService: ProfileServiceProtocol,
+        updateFavoriteIds: @escaping ([String]) async throws -> Profile,
         onProfileUpdated: @escaping (Profile) -> Void
     ) {
         _viewModel = State(
             initialValue: FavoriteNFTsViewModel(
-                profile: profile,
+                favoriteIds: favoriteIds,
                 nftService: nftService,
-                profileService: profileService
+                updateFavoriteIds: updateFavoriteIds
             )
         )
         self.onProfileUpdated = onProfileUpdated
@@ -175,10 +175,26 @@ struct FavoriteNFTsView: View {
 #Preview {
     NavigationStack {
         FavoriteNFTsView(
-            profile: ProfilePreviewData.profile,
+            favoriteIds: ProfilePreviewData.profile.likes ?? [],
             nftService: MockNftService(),
-            profileService: MockProfileService(),
+            updateFavoriteIds: { favoriteIds in
+                ProfilePreviewData.profile.updatingLikes(favoriteIds)
+            },
             onProfileUpdated: { _ in }
+        )
+    }
+}
+
+private extension Profile {
+    func updatingLikes(_ likes: [String]) -> Profile {
+        Profile(
+            id: id,
+            name: name,
+            description: description,
+            website: website,
+            avatar: avatar,
+            nfts: nfts ?? [],
+            likes: likes
         )
     }
 }

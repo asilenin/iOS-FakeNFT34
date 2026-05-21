@@ -109,11 +109,11 @@ private struct ProfileTabRoot: View {
                             nftIds: nftIds,
                             nftService: nftService
                         )
-                    case .favorites(let profile):
+                    case .favorites(let favoriteIds):
                         FavoriteNFTsView(
-                            profile: profile,
+                            favoriteIds: favoriteIds,
                             nftService: nftService,
-                            profileService: profileService,
+                            updateFavoriteIds: viewModel.updateFavoriteIds,
                             onProfileUpdated: viewModel.updateLoadedProfile
                         )
                     case .edit(let profile):

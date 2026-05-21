@@ -23,7 +23,7 @@ final class FavoriteNFTsViewModel {
     }
 
     private(set) var state: State = .idle
-    private(set) var currentProfile: Profile
+    private(set) var favoriteIds: [String]
     private(set) var pendingRemovalIds: Set<String> = []
     private var failedRemovalNFT: ProfileNft?
     var removalErrorMessage: String?
@@ -31,18 +31,18 @@ final class FavoriteNFTsViewModel {
     // MARK: - Dependencies
 
     private let nftService: NftServiceProtocol
-    private let profileService: ProfileServiceProtocol
+    private let updateFavoriteIds: ([String]) async throws -> Profile
 
     // MARK: - Initializers
 
     init(
-        profile: Profile,
+        favoriteIds: [String],
         nftService: NftServiceProtocol,
-        profileService: ProfileServiceProtocol
+        updateFavoriteIds: @escaping ([String]) async throws -> Profile
     ) {
-        currentProfile = profile
+        self.favoriteIds = favoriteIds
         self.nftService = nftService
-        self.profileService = profileService
+        self.updateFavoriteIds = updateFavoriteIds
     }
 
     // MARK: - Public Methods
@@ -50,8 +50,7 @@ final class FavoriteNFTsViewModel {
     func loadNFTs() async {
         guard !state.isLoading else { return }
 
-        let likes = currentProfile.likes ?? []
-        guard !likes.isEmpty else {
+        guard !favoriteIds.isEmpty else {
             state = .empty
             return
         }
@@ -61,7 +60,7 @@ final class FavoriteNFTsViewModel {
 
         do {
             let nfts = try await withThrowingTaskGroup(of: ProfileNft.self) { group in
-                for nftId in likes {
+                for nftId in favoriteIds {
                     group.addTask { [nftService] in
                         try await nftService.loadNft(id: nftId)
                     }
@@ -92,24 +91,23 @@ final class FavoriteNFTsViewModel {
             return nil
         }
 
-        let previousProfile = currentProfile
+        let previousFavoriteIds = favoriteIds
         let previousState = state
-        let updatedLikes = (currentProfile.likes ?? []).filter { $0 != nftId }
-        let updatedProfile = currentProfile.updatingLikes(updatedLikes)
+        let updatedFavoriteIds = favoriteIds.filter { $0 != nftId }
 
         pendingRemovalIds.insert(nftId)
         removalErrorMessage = nil
-        currentProfile = updatedProfile
+        favoriteIds = updatedFavoriteIds
         removeNFTFromState(id: nftId)
 
         do {
-            let savedProfile = try await profileService.updateProfile(updatedProfile)
-            currentProfile = savedProfile.updatingLikes(updatedLikes)
+            let savedProfile = try await updateFavoriteIds(updatedFavoriteIds)
+            favoriteIds = savedProfile.likes ?? updatedFavoriteIds
             pendingRemovalIds.remove(nftId)
             failedRemovalNFT = nil
-            return currentProfile
+            return savedProfile
         } catch {
-            currentProfile = previousProfile
+            favoriteIds = previousFavoriteIds
             state = previousState
             pendingRemovalIds.remove(nftId)
             failedRemovalNFT = nft
@@ -134,7 +132,7 @@ final class FavoriteNFTsViewModel {
 
     private func removeNFTFromState(id: String) {
         guard case .loaded(let nfts) = state else {
-            state = (currentProfile.likes ?? []).isEmpty ? .empty : state
+            state = favoriteIds.isEmpty ? .empty : state
             return
         }
 
@@ -151,21 +149,5 @@ private extension FavoriteNFTsViewModel.State {
             return true
         }
         return false
-    }
-}
-
-// MARK: - Profile
-
-private extension Profile {
-    func updatingLikes(_ likes: [String]) -> Profile {
-        Profile(
-            id: id,
-            name: name,
-            description: description,
-            website: website,
-            avatar: avatar,
-            nfts: nfts ?? [],
-            likes: likes
-        )
     }
 }
