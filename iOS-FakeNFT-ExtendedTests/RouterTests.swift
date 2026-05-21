@@ -4,6 +4,8 @@ import XCTest
 @MainActor
 final class RouterTests: XCTestCase {
 
+    private let mockCollection = MockCatalogService.mockCollections[0]
+
     func test_initialState_defaultsToCatalogTab_withEmptyPaths() {
         let router = Router()
 
@@ -25,7 +27,7 @@ final class RouterTests: XCTestCase {
     func test_push_appendsToTheTargetTabPath_only() {
         let router = Router()
 
-        router.push(CatalogRoute._placeholder, in: .catalog)
+        router.push(CatalogRoute.collection(mockCollection), in: .catalog)
 
         XCTAssertEqual(router.catalogPath.count, 1)
         XCTAssertTrue(router.cartPath.isEmpty)
@@ -35,8 +37,8 @@ final class RouterTests: XCTestCase {
 
     func test_pop_removesLastFromTargetTabPath() {
         let router = Router()
-        router.push(CatalogRoute._placeholder, in: .catalog)
-        router.push(CatalogRoute._placeholder, in: .catalog)
+        router.push(CatalogRoute.collection(mockCollection), in: .catalog)
+        router.push(CatalogRoute.collection(mockCollection), in: .catalog)
         XCTAssertEqual(router.catalogPath.count, 2)
 
         router.pop(in: .catalog)
@@ -54,7 +56,7 @@ final class RouterTests: XCTestCase {
 
     func test_popToRoot_resetsTargetTabPath_only() {
         let router = Router()
-        router.push(CatalogRoute._placeholder, in: .catalog)
+        router.push(CatalogRoute.collection(mockCollection), in: .catalog)
         router.push(CartRoute._placeholder, in: .cart)
 
         router.popToRoot(in: .catalog)

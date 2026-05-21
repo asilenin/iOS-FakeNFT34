@@ -7,4 +7,6 @@ protocol CartServiceProtocol: Sendable {
 
     /// Replaces the cart contents with `ids` on the server. The implementation must send the full set in a single PUT.
     func setCart(_ ids: Set<String>) async throws
+
+    func loadCartItems() async throws -> [CartItem]
 }

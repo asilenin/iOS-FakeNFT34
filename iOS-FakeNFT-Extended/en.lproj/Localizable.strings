@@ -11,6 +11,7 @@
 "Error.retry" = "Повторить";
 
 "Common.sort" = "Сортировка";
+"Common.close" = "Закрыть";
 
 "Profile.error.load" = "Не удалось загрузить профиль: %@";
 "Profile.edit.accessibility" = "Редактировать профиль";
@@ -49,3 +50,25 @@
 "Profile.FavoriteNFTs.empty" = "У вас ещё нет избранных NFT";
 "Profile.FavoriteNFTs.error.load" = "Не удалось загрузить избранные NFT: %@";
 "Profile.FavoriteNFTs.error.remove" = "Не удалось удалить NFT из избранного: %@";
+
+"Statistics.sort.title" = "Сортировка";
+"Statistics.sort.byRating" = "По рейтингу";
+"Statistics.sort.byName" = "По имени";
+"Statistics.sort.byNftsCount" = "По количеству NFT";
+"Statistics.empty" = "Список пользователей пуст";
+"Statistics.loadErrorHint" = "Не удалось загрузить статистику";
+"Statistics.user.openWebsite" = "Перейти на сайт пользователя";
+"Statistics.user.collectionRow" = "Коллекция NFT (%lld)";
+"Statistics.collection.title" = "Коллекция NFT";
+"Statistics.collection.empty" = "У пользователя пока нет NFT";
+"Statistics.collection.loadErrorHint" = "Не удалось загрузить коллекцию";
+"Statistics.nftDetail.title" = "NFT";
+"Statistics.nft.priceLabel" = "Цена";
+"Statistics.nftDetail.placeholder" = "Экран NFT будет в отдельном эпике";
+
+"Catalog.sort.title" = "Сортировка";
+"Catalog.sort.byName" = "По названию";
+"Catalog.sort.byNftCount" = "По количеству NFT";
+"Catalog.loadErrorHint" = "Не удалось загрузить.\nПотяните вниз, чтобы обновить.";
+"CollectionDetail.placeholder" = "Заглушка экрана коллекции";
+"CollectionHeader.author" = "Автор коллекции:";

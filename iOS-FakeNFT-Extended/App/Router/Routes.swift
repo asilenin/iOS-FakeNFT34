@@ -1,15 +1,22 @@
 import Foundation
 
+/// Маршруты навигации в эпике Каталог.
+///
+/// Используется с `NavigationStack` и `navigationDestination(for:)` для типобезопасной навигации.
 enum CatalogRoute: Hashable {
-    case _placeholder
-    // case collection(NftCollection)
-    // case authorWeb(URL)
+    /// Переход на экран деталей конкретной коллекции.
+    case collection(NftCollection)
+
+    /// Переход на экран WebView с сайтом автора коллекции.
+    case authorWeb(URL)
+
+    /// Переход на экран деталей NFT по идентификатору.
+    case nftDetail(String)
 }
 
 enum CartRoute: Hashable {
-    case _placeholder
-    // case currencySelection
-    // case userAgreement(URL)
+    case payment
+    case userAgreement(URL)
 }
 
 enum ProfileRoute: Hashable {
@@ -20,8 +27,9 @@ enum ProfileRoute: Hashable {
 }
 
 enum StatisticsRoute: Hashable {
+    case userDetail(StatisticsUser)
+    case userCollection(userId: String, userName: String)
+    case userWebsite(URL)
+    case nftDetail(String)
     case _placeholder
-    // case user(User)
-    // case userCollection(User)
-    // case userWeb(URL)
 }
