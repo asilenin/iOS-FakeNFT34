@@ -7,7 +7,7 @@
 
 import Foundation
 
-actor MockProfileService: ProfileServiceProtocol, NftServiceProtocol {
+enum ProfilePreviewData {
 
     // MARK: - Test Data
 
@@ -47,6 +47,9 @@ actor MockProfileService: ProfileServiceProtocol, NftServiceProtocol {
         nfts: nfts.compactMap(\.id),
         likes: Array(nfts.compactMap(\.id).suffix(2))
     )
+}
+
+actor MockProfileService: ProfileServiceProtocol {
 
     // MARK: - State
 
@@ -54,7 +57,7 @@ actor MockProfileService: ProfileServiceProtocol, NftServiceProtocol {
 
     // MARK: - Initializers
 
-    init(profile: Profile = MockProfileService.profile) {
+    init(profile: Profile = ProfilePreviewData.profile) {
         currentProfile = profile
     }
 
@@ -68,11 +71,14 @@ actor MockProfileService: ProfileServiceProtocol, NftServiceProtocol {
         currentProfile = profile
         return profile
     }
+}
+
+actor MockNftService: NftServiceProtocol {
 
     // MARK: - NftServiceProtocol
 
     func loadNft(id: String) async throws -> ProfileNft {
-        guard let nft = Self.nfts.first(where: { $0.id == id }) else {
+        guard let nft = ProfilePreviewData.nfts.first(where: { $0.id == id }) else {
             throw URLError(.fileDoesNotExist)
         }
 

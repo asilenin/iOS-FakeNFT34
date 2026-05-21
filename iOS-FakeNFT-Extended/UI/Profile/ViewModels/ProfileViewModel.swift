@@ -62,6 +62,19 @@ final class ProfileViewModel {
     func updateLoadedProfile(_ profile: Profile) {
         state = .loaded(profile)
     }
+
+    func updateFavoriteIds(_ favoriteIds: [String]) async throws -> Profile {
+        guard let profile = loadedProfile else {
+            throw URLError(.badServerResponse)
+        }
+
+        let updatedProfile = profile.updatingLikes(favoriteIds)
+        let savedProfile = try await profileService.updateProfile(updatedProfile)
+        let actualProfile = savedProfile.updatingLikes(favoriteIds)
+        state = .loaded(actualProfile)
+
+        return actualProfile
+    }
 }
 
 // MARK: - ProfileViewModel.State
@@ -72,5 +85,21 @@ private extension ProfileViewModel.State {
             return true
         }
         return false
+    }
+}
+
+// MARK: - Profile
+
+private extension Profile {
+    func updatingLikes(_ likes: [String]) -> Profile {
+        Profile(
+            id: id,
+            name: name,
+            description: description,
+            website: website,
+            avatar: avatar,
+            nfts: nfts ?? [],
+            likes: likes
+        )
     }
 }
