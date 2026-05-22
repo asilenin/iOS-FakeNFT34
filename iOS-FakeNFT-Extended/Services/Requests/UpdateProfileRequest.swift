@@ -32,17 +32,24 @@ struct UpdateProfileRequest: NetworkRequest {
             ("description", profile.description ?? ""),
             ("avatar", profile.avatar ?? ""),
             ("website", profile.website ?? "")
-        ] + likesFormItems
+        ] + nftsFormItems + likesFormItems
+    }
+
+    private var nftsFormItems: [(String, String)] {
+        guard let nfts = profile.nfts else { return [] }
+        guard !nfts.isEmpty else { return [("nfts", Constants.emptyArrayValue)] }
+
+        return nfts.map { ("nfts", $0) }
     }
 
     private var likesFormItems: [(String, String)] {
         guard let likes = profile.likes else { return [] }
-        guard !likes.isEmpty else { return [("likes", Constants.emptyLikesValue)] }
+        guard !likes.isEmpty else { return [("likes", Constants.emptyArrayValue)] }
 
         return likes.map { ("likes", $0) }
     }
 
     private enum Constants {
-        static let emptyLikesValue = "null"
+        static let emptyArrayValue = "null"
     }
 }

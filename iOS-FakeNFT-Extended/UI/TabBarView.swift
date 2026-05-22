@@ -25,8 +25,7 @@ struct TabBarView: View {
         case .profile:
             ProfileTabRoot(
                 profileService: services.profileService,
-                nftService: services.nftService,
-                purchasedNFTsStorage: services.purchasedNFTsStorage
+                nftService: services.nftService
             )
         case .catalog:
             CatalogTabRoot()
@@ -173,23 +172,17 @@ private struct ProfileTabRoot: View {
 
     private let profileService: ProfileServiceProtocol
     private let nftService: NftServiceProtocol
-    private let purchasedNFTsStorage: PurchasedNFTsStorageProtocol
 
     // MARK: - Initializers
 
     init(
         profileService: ProfileServiceProtocol,
-        nftService: NftServiceProtocol,
-        purchasedNFTsStorage: PurchasedNFTsStorageProtocol
+        nftService: NftServiceProtocol
     ) {
         self.profileService = profileService
         self.nftService = nftService
-        self.purchasedNFTsStorage = purchasedNFTsStorage
         _viewModel = State(
-            initialValue: ProfileViewModel(
-                profileService: profileService,
-                purchasedNFTsStorage: purchasedNFTsStorage
-            )
+            initialValue: ProfileViewModel(profileService: profileService)
         )
     }
 

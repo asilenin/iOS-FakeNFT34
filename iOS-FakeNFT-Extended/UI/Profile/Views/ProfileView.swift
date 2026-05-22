@@ -70,7 +70,11 @@ struct ProfileView: View {
                 header(profile)
 
                 VStack(spacing: 0) {
-                    myNFTsRow()
+                    navigationRow(
+                        title: String(localized: "Profile.myNfts"),
+                        count: profile.nfts?.count ?? 0,
+                        route: .myNfts(profile.nfts ?? [])
+                    )
 
                     navigationRow(
                         title: String(localized: "Profile.favoriteNfts"),
@@ -169,31 +173,6 @@ struct ProfileView: View {
 
     // MARK: - Navigation
 
-    private func myNFTsRow() -> some View {
-        Button {
-            Task {
-                let nftIds = await viewModel.myNFTIds()
-                router.push(ProfileRoute.myNfts(nftIds), in: .profile)
-            }
-        } label: {
-            HStack(spacing: 12) {
-                Text("\(String(localized: "Profile.myNfts"))  (\(viewModel.myNFTsCount))")
-                    .font(.bold17)
-                    .foregroundStyle(Color.ypBlack)
-
-                Spacer()
-
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(Color.ypBlack)
-                    .frame(width: 8, height: 14)
-            }
-            .contentShape(Rectangle())
-            .frame(height: 54)
-        }
-        .buttonStyle(.plain)
-    }
-
     private func navigationRow(
         title: String,
         count: Int,
@@ -277,8 +256,7 @@ struct ProfilePlaceholderView: View {
     NavigationStack {
         ProfileView(
             viewModel: ProfileViewModel(
-                profileService: ProfileService(networkClient: DefaultNetworkClient()),
-                purchasedNFTsStorage: PurchasedNFTsStorage()
+                profileService: ProfileService(networkClient: DefaultNetworkClient())
             )
         )
         .environment(Router())
