@@ -56,7 +56,8 @@ struct PaymentView: View {
                     Task {
                         await viewModel.retryPayment(
                             paymentService: services.paymentService,
-                            cartService: services.cartService
+                            cartService: services.cartService,
+                            purchasedNFTsStorage: services.purchasedNFTsStorage
                         )
                     }
                 }
@@ -129,7 +130,8 @@ struct PaymentView: View {
                 Task {
                     await viewModel.pay(
                         paymentService: services.paymentService,
-                        cartService: services.cartService
+                        cartService: services.cartService,
+                        purchasedNFTsStorage: services.purchasedNFTsStorage
                     )
                 }
             } label: {

@@ -22,6 +22,7 @@ final class ProfileViewModel {
     }
 
     private(set) var state: State = .idle
+    private(set) var purchasedNFTIds: Set<String> = []
 
     var loadedProfile: Profile? {
         if case .loaded(let profile) = state {
@@ -30,14 +31,24 @@ final class ProfileViewModel {
         return nil
     }
 
+    var myNFTsCount: Int {
+        let profileIds = Set(loadedProfile?.nfts ?? [])
+        return profileIds.union(purchasedNFTIds).count
+    }
+
     // MARK: - Dependencies
 
     private let profileService: ProfileServiceProtocol
+    private let purchasedNFTsStorage: PurchasedNFTsStorageProtocol
 
     // MARK: - Initializers
 
-    init(profileService: ProfileServiceProtocol) {
+    init(
+        profileService: ProfileServiceProtocol,
+        purchasedNFTsStorage: PurchasedNFTsStorageProtocol
+    ) {
         self.profileService = profileService
+        self.purchasedNFTsStorage = purchasedNFTsStorage
     }
 
     // MARK: - Public Methods
@@ -48,8 +59,13 @@ final class ProfileViewModel {
         state = .loading
 
         do {
-            let profile = try await profileService.loadProfile()
-            state = .loaded(profile)
+            async let profile = profileService.loadProfile()
+            async let purchasedIds = purchasedNFTsStorage.loadPurchasedNFTIds()
+
+            let loadedProfile = try await profile
+            purchasedNFTIds = await purchasedIds
+
+            state = .loaded(loadedProfile)
         } catch {
             let message = String(
                 format: String(localized: "Profile.error.load"),
@@ -57,6 +73,15 @@ final class ProfileViewModel {
             )
             state = .failed(message)
         }
+    }
+
+    func myNFTIds() async -> [String] {
+        let profileIds = Set(loadedProfile?.nfts ?? [])
+        let purchasedIds = await purchasedNFTsStorage.loadPurchasedNFTIds()
+
+        purchasedNFTIds = purchasedIds
+
+        return Array(profileIds.union(purchasedIds))
     }
 
     func updateLoadedProfile(_ profile: Profile) {

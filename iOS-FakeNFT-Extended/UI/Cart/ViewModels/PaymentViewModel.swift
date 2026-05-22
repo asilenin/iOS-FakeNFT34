@@ -50,20 +50,23 @@ final class PaymentViewModel {
 
     func pay(
         paymentService: PaymentServiceProtocol,
-        cartService: CartServiceProtocol
+        cartService: CartServiceProtocol,
+        purchasedNFTsStorage: PurchasedNFTsStorageProtocol
     ) async {
         guard let selectedCurrency, !isPaying else { return }
 
         await pay(
             currencyID: selectedCurrency.id,
             paymentService: paymentService,
-            cartService: cartService
+            cartService: cartService,
+            purchasedNFTsStorage: purchasedNFTsStorage
         )
     }
 
     func retryPayment(
         paymentService: PaymentServiceProtocol,
-        cartService: CartServiceProtocol
+        cartService: CartServiceProtocol,
+        purchasedNFTsStorage: PurchasedNFTsStorageProtocol
     ) async {
         guard let lastPaymentCurrencyID else {
             await load(service: paymentService)
@@ -73,22 +76,30 @@ final class PaymentViewModel {
         await pay(
             currencyID: lastPaymentCurrencyID,
             paymentService: paymentService,
-            cartService: cartService
+            cartService: cartService,
+            purchasedNFTsStorage: purchasedNFTsStorage
         )
     }
 
     private func pay(
         currencyID: String,
         paymentService: PaymentServiceProtocol,
-        cartService: CartServiceProtocol
+        cartService: CartServiceProtocol,
+        purchasedNFTsStorage: PurchasedNFTsStorageProtocol
     ) async {
         isPaying = true
         error = nil
         lastPaymentCurrencyID = currencyID
 
         do {
+            let purchasedNFTIds = try await cartService.loadCart()
+
             try await paymentService.pay(currencyID: currencyID)
+
+            await purchasedNFTsStorage.addPurchasedNFTIds(purchasedNFTIds)
+
             try await cartService.setCart([])
+
             state = .success
             lastPaymentCurrencyID = nil
         } catch {

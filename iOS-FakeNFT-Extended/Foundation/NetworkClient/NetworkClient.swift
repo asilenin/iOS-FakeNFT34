@@ -14,6 +14,7 @@ protocol NetworkClient {
 }
 
 actor DefaultNetworkClient: NetworkClient {
+
     private let session: URLSession
     private let decoder: JSONDecoder
     private let encoder: JSONEncoder
@@ -30,19 +31,40 @@ actor DefaultNetworkClient: NetworkClient {
 
     func send(request: NetworkRequest) async throws -> Data {
         let urlRequest = try create(request: request)
-        let (data, response) = try await session.data(for: urlRequest)
-        guard let response = response as? HTTPURLResponse else {
-            throw NetworkClientError.urlSessionError
+
+        do {
+            let (data, response) = try await session.data(for: urlRequest)
+
+            guard let response = response as? HTTPURLResponse else {
+                throw NetworkClientError.urlSessionError
+            }
+
+            guard 200 ..< 300 ~= response.statusCode else {
+                #if DEBUG
+                let responseBody = String(data: data, encoding: .utf8) ?? ""
+                print("❌ HTTP \(response.statusCode): \(urlRequest.url?.absoluteString ?? "")")
+                print("❌ Response body: \(responseBody)")
+                #endif
+
+                throw NetworkClientError.httpStatusCode(response.statusCode)
+            }
+
+            return data
+        } catch let error as NetworkClientError {
+            throw error
+        } catch {
+            #if DEBUG
+            print("❌ Network error: \(error)")
+            print("❌ URL: \(urlRequest.url?.absoluteString ?? "")")
+            #endif
+
+            throw NetworkClientError.urlRequestError(error)
         }
-        guard 200 ..< 300 ~= response.statusCode else {
-            throw NetworkClientError.httpStatusCode(response.statusCode)
-        }
-        return data
     }
 
     func send<T: Decodable>(request: NetworkRequest) async throws -> T {
         let data = try await send(request: request)
-        return try await parse(data: data)
+        return try parse(data: data)
     }
 
     // MARK: - Private
@@ -55,8 +77,10 @@ actor DefaultNetworkClient: NetworkClient {
         var urlRequest = URLRequest(url: endpoint)
         urlRequest.httpMethod = request.httpMethod.rawValue
 
-        try configureBody(for: request, urlRequest: &urlRequest)
+        urlRequest.addValue("application/json", forHTTPHeaderField: "Accept")
         urlRequest.addValue(RequestConstants.token, forHTTPHeaderField: "X-Practicum-Mobile-Token")
+
+        try configureBody(for: request, urlRequest: &urlRequest)
 
         return urlRequest
     }
@@ -73,7 +97,10 @@ actor DefaultNetworkClient: NetworkClient {
             urlRequest.httpBody = try encoder.encode(dto)
 
         case .formURLEncoded(let items):
-            urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            urlRequest.setValue(
+                "application/x-www-form-urlencoded",
+                forHTTPHeaderField: "Content-Type"
+            )
             urlRequest.httpBody = Self.formURLEncodedData(from: items)
         }
     }
@@ -84,10 +111,16 @@ actor DefaultNetworkClient: NetworkClient {
         return components.percentEncodedQuery?.data(using: .utf8)
     }
 
-    private func parse<T: Decodable>(data: Data) async throws -> T {
+    private func parse<T: Decodable>(data: Data) throws -> T {
         do {
             return try decoder.decode(T.self, from: data)
         } catch {
+            #if DEBUG
+            let responseBody = String(data: data, encoding: .utf8) ?? ""
+            print("❌ Parsing error: \(error)")
+            print("❌ Response body: \(responseBody)")
+            #endif
+
             throw NetworkClientError.parsingError
         }
     }
