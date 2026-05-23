@@ -36,6 +36,9 @@ struct NftGridCell: View {
     private var imageWithFavoriteButton: some View {
         ZStack(alignment: .topTrailing) {
             KFImage(configuration.nft.images?.first)
+                .placeholder {
+                    SkeletonView(cornerRadius: 12)
+                }
                 .resizable()
                 .scaledToFill()
                 .frame(width: 108, height: 108)
@@ -97,13 +100,7 @@ struct NftGridCell: View {
 
     private var priceString: String {
         guard let price = configuration.nft.price else { return "— ETH" }
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = 0
-        formatter.maximumFractionDigits = 2
-        formatter.decimalSeparator = ","
-        let formatted = formatter.string(from: NSNumber(value: price)) ?? "0"
-        return "\(formatted) ETH"
+        return ETHPriceFormatter.eth(price, minimumFractionDigits: 0)
     }
 }
 

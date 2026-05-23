@@ -22,7 +22,7 @@ struct CartItemView: View {
                     .foregroundStyle(.ypBlack)
                     .lineLimit(2)
 
-                ratingView
+                RatingStarsView(rating: item.rating)
 
                 Spacer()
                     .frame(height: Constants.priceTopSpacing)
@@ -72,21 +72,8 @@ struct CartItemView: View {
             )
     }
 
-    private var ratingView: some View {
-        HStack(spacing: Constants.starSpacing) {
-            ForEach(1...Constants.maxRating, id: \.self) { index in
-                Image(index <= item.rating ? "star-active" : "star-inactive")
-                    .resizable()
-                    .frame(
-                        width: Constants.starSize,
-                        height: Constants.starSize
-                    )
-            }
-        }
-    }
-
     private var priceText: String {
-        CartPriceFormatter.eth(item.price)
+        ETHPriceFormatter.eth(item.price)
     }
 }
 
@@ -106,8 +93,5 @@ private extension CartItemView {
         static let imageSize: CGFloat = 108
         static let imageCornerRadius: CGFloat = 12
         static let deleteIconSize: CGFloat = 40
-        static let starSize: CGFloat = 12
-        static let starSpacing: CGFloat = 2
-        static let maxRating = 5
     }
 }

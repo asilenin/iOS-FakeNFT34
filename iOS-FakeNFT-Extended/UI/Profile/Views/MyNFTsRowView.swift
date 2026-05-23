@@ -114,7 +114,7 @@ struct MyNFTsRowView: View {
             return String(localized: "Profile.MyNFTs.noPrice")
         }
 
-        return String(format: "%.2f ETH", locale: Locale(identifier: "ru_RU"), price)
+        return ETHPriceFormatter.eth(price)
     }
 }
 
@@ -137,11 +137,7 @@ private struct NFTImageView: View {
             if let url, !didFail {
                 KFImage(url)
                     .placeholder {
-                        ZStack {
-                            Color.ypBackgroundUniversal
-
-                            LoadingSpinner(size: .medium, tint: .ypWhiteUniversal)
-                        }
+                        SkeletonView(cornerRadius: Constants.cornerRadius)
                     }
                     .retry(maxCount: 2, interval: .seconds(1))
                     .fade(duration: 0.2)
@@ -151,40 +147,18 @@ private struct NFTImageView: View {
                     .resizable()
                     .scaledToFill()
             } else {
-                NFTImagePlaceholder()
+                SkeletonView(cornerRadius: Constants.cornerRadius)
             }
         }
-        .frame(width: 108, height: 108)
+        .frame(width: Constants.imageSize, height: Constants.imageSize)
         .clipped()
     }
-}
-
-// MARK: - NFTImagePlaceholder
-
-private struct NFTImagePlaceholder: View {
 
     // MARK: - Constants
 
     private enum Constants {
-        static let cellSize: CGFloat = 27
-        static let gridSize = 4
-    }
-
-    // MARK: - Body
-
-    var body: some View {
-        VStack(spacing: 0) {
-            ForEach(0..<Constants.gridSize, id: \.self) { row in
-                HStack(spacing: 0) {
-                    ForEach(0..<Constants.gridSize, id: \.self) { column in
-                        Rectangle()
-                            .fill((row + column).isMultiple(of: 2) ? Color.ypWhite : Color.ypBlack)
-                            .frame(width: Constants.cellSize, height: Constants.cellSize)
-                    }
-                }
-            }
-        }
-        .frame(width: 108, height: 108)
+        static let imageSize: CGFloat = 108
+        static let cornerRadius: CGFloat = 8
     }
 }
 

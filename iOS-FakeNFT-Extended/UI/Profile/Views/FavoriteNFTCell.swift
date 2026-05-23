@@ -81,7 +81,7 @@ struct FavoriteNFTCell: View {
             return String(localized: "Profile.MyNFTs.noPrice")
         }
 
-        return String(format: "%.2f ETH", locale: Locale(identifier: "ru_RU"), price)
+        return ETHPriceFormatter.eth(price)
     }
 }
 

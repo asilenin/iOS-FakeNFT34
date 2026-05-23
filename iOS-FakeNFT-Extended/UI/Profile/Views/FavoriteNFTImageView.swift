@@ -25,11 +25,7 @@ struct FavoriteNFTImageView: View {
             if let url, !didFail {
                 KFImage(url)
                     .placeholder {
-                        ZStack {
-                            Color.ypBackgroundUniversal
-
-                            LoadingSpinner(size: .medium, tint: .ypWhiteUniversal)
-                        }
+                        SkeletonView(cornerRadius: Constants.cornerRadius)
                     }
                     .retry(maxCount: 2, interval: .seconds(1))
                     .fade(duration: 0.2)
@@ -39,7 +35,7 @@ struct FavoriteNFTImageView: View {
                     .resizable()
                     .scaledToFill()
             } else {
-                FavoriteNFTImagePlaceholder()
+                SkeletonView(cornerRadius: Constants.cornerRadius)
             }
         }
         .frame(width: Constants.imageSize, height: Constants.imageSize)
@@ -50,36 +46,7 @@ struct FavoriteNFTImageView: View {
 
     private enum Constants {
         static let imageSize: CGFloat = 80
-    }
-}
-
-// MARK: - FavoriteNFTImagePlaceholder
-
-private struct FavoriteNFTImagePlaceholder: View {
-
-    // MARK: - Constants
-
-    private enum Constants {
-        static let cellSize: CGFloat = 20
-        static let gridSize = 4
-        static let imageSize: CGFloat = 80
-    }
-
-    // MARK: - Body
-
-    var body: some View {
-        VStack(spacing: 0) {
-            ForEach(0..<Constants.gridSize, id: \.self) { row in
-                HStack(spacing: 0) {
-                    ForEach(0..<Constants.gridSize, id: \.self) { column in
-                        Rectangle()
-                            .fill((row + column).isMultiple(of: 2) ? Color.ypWhite : Color.ypBlack)
-                            .frame(width: Constants.cellSize, height: Constants.cellSize)
-                    }
-                }
-            }
-        }
-        .frame(width: Constants.imageSize, height: Constants.imageSize)
+        static let cornerRadius: CGFloat = 12
     }
 }
 
