@@ -20,13 +20,8 @@ actor ProfileService: ProfileServiceProtocol {
     }
 
     func updateProfile(_ profile: Profile) async throws -> Profile {
-        let request = UpdateProfileRequest(profile: profile)
-        let data = try await networkClient.send(request: request)
-
-        guard let updatedProfile = try? JSONDecoder().decode(Profile.self, from: data) else {
-            return profile
-        }
-
-        return updatedProfile
+        try await networkClient.send(
+            request: UpdateProfileRequest(profile: profile)
+        )
     }
 }

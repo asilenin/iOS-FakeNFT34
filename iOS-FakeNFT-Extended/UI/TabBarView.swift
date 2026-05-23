@@ -9,7 +9,7 @@ struct TabBarView: View {
         @Bindable var router = router
 
         VStack(spacing: 0) {
-            content(router: router, services: services)
+            selectedTabContent
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 
             if !isCurrentTabPushed(router) {
@@ -20,9 +20,7 @@ struct TabBarView: View {
     }
 
     @ViewBuilder
-    private func content(router: Router, services: ServicesAssembly) -> some View {
-        @Bindable var router = router
-
+    private var selectedTabContent: some View {
         switch router.selectedTab {
         case .profile:
             ProfileTabRoot(
@@ -30,64 +28,15 @@ struct TabBarView: View {
                 nftService: services.nftService
             )
         case .catalog:
-            NavigationStack(path: $router.catalogPath) {
-                CatalogView()
-                    .navigationDestination(for: CatalogRoute.self) { route in
-                        switch route {
-                        case .collection(let collection):
-                            CollectionDetailView(collection: collection)
-                        case .authorWeb(let url):
-                            WebViewScreen(url: url)
-                        case .nftDetail(let id):
-                            NftDetailView(nftId: id)
-                        }
-                    }
-            }
+            CatalogTabRoot()
         case .cart:
-            NavigationStack(path: $router.cartPath) {
-                CartView()
-                    .navigationDestination(for: CartRoute.self) { route in
-                        switch route {
-                        case .payment:
-                            PaymentView()
-                        case .userAgreement(let url):
-                            WebViewScreen(url: url)
-                        }
-                    }
-            }
+            CartTabRoot()
         case .statistics:
-            NavigationStack(path: $router.statisticsPath) {
-                StatisticsView(
-                    viewModel: StatisticsViewModel(statisticsService: services.statisticsService)
-                )
-                .navigationDestination(for: StatisticsRoute.self) { route in
-                    switch route {
-                    case .userDetail(let user):
-                        StatisticsUserDetailView(
-                            viewModel: StatisticsUserDetailViewModel(
-                                summary: user,
-                                statisticsService: services.statisticsService
-                            )
-                        )
-                    case .userCollection(let userId, let userName):
-                        StatisticsUserCollectionView(
-                            viewModel: StatisticsUserCollectionViewModel(
-                                userId: userId,
-                                userName: userName,
-                                statisticsService: services.statisticsService,
-                                favoritesService: services.favoritesService,
-                                cartService: services.cartService
-                            )
-                        )
-                    case .userWebsite(let url):
-                        WebViewScreen(url: url)
-                    case .nftDetail(let nftId):
-                        StatisticsNftDetailView(nftId: nftId)
-                    case ._placeholder:
-                        EmptyView()
-                    }
-                }
-            }
+            StatisticsTabRoot(
+                statisticsService: services.statisticsService,
+                favoritesService: services.favoritesService,
+                cartService: services.cartService
+            )
         }
     }
 
@@ -97,6 +46,112 @@ struct TabBarView: View {
         case .catalog:    !router.catalogPath.isEmpty
         case .cart:       !router.cartPath.isEmpty
         case .statistics: !router.statisticsPath.isEmpty
+        }
+    }
+}
+
+// MARK: - CatalogTabRoot
+
+private struct CatalogTabRoot: View {
+
+    @Environment(Router.self) private var router
+
+    var body: some View {
+        @Bindable var router = router
+
+        NavigationStack(path: $router.catalogPath) {
+            CatalogView()
+                .navigationDestination(for: CatalogRoute.self) { route in
+                    switch route {
+                    case .collection(let collection):
+                        CollectionDetailView(collection: collection)
+                    case .authorWeb(let url):
+                        WebViewScreen(url: url)
+                    case .nftDetail(let id):
+                        NftDetailView(nftId: id)
+                    }
+                }
+        }
+    }
+}
+
+// MARK: - CartTabRoot
+
+private struct CartTabRoot: View {
+
+    @Environment(Router.self) private var router
+
+    var body: some View {
+        @Bindable var router = router
+
+        NavigationStack(path: $router.cartPath) {
+            CartView()
+                .navigationDestination(for: CartRoute.self) { route in
+                    switch route {
+                    case .payment:
+                        PaymentView()
+                    case .userAgreement(let url):
+                        WebViewScreen(url: url)
+                    }
+                }
+        }
+    }
+}
+
+// MARK: - StatisticsTabRoot
+
+private struct StatisticsTabRoot: View {
+
+    @Environment(Router.self) private var router
+
+    private let statisticsService: StatisticsServiceProtocol
+    private let favoritesService: FavoritesServiceProtocol
+    private let cartService: CartServiceProtocol
+
+    init(
+        statisticsService: StatisticsServiceProtocol,
+        favoritesService: FavoritesServiceProtocol,
+        cartService: CartServiceProtocol
+    ) {
+        self.statisticsService = statisticsService
+        self.favoritesService = favoritesService
+        self.cartService = cartService
+    }
+
+    var body: some View {
+        @Bindable var router = router
+
+        NavigationStack(path: $router.statisticsPath) {
+            StatisticsView(
+                viewModel: StatisticsViewModel(statisticsService: statisticsService)
+            )
+            .navigationDestination(for: StatisticsRoute.self) { route in
+                switch route {
+                case .userDetail(let user):
+                    StatisticsUserDetailView(
+                        viewModel: StatisticsUserDetailViewModel(
+                            summary: user,
+                            statisticsService: statisticsService
+                        )
+                    )
+                case .userCollection(let userId, let userName):
+                    StatisticsUserCollectionView(
+                        viewModel: StatisticsUserCollectionViewModel(
+                            userId: userId,
+                            userName: userName,
+                            statisticsService: statisticsService,
+                            favoritesService: favoritesService,
+                            cartService: cartService
+                        )
+                    )
+                case .userWebsite(let url):
+                    WebViewScreen(url: url)
+                case .nftDetail(let nftId):
+                    StatisticsNftDetailView(nftId: nftId)
+                case ._placeholder:
+                    EmptyView()
+                }
+            }
         }
     }
 }
@@ -126,7 +181,9 @@ private struct ProfileTabRoot: View {
     ) {
         self.profileService = profileService
         self.nftService = nftService
-        _viewModel = State(initialValue: ProfileViewModel(profileService: profileService))
+        _viewModel = State(
+            initialValue: ProfileViewModel(profileService: profileService)
+        )
     }
 
     // MARK: - Body
@@ -143,6 +200,7 @@ private struct ProfileTabRoot: View {
                             nftIds: nftIds,
                             nftService: nftService
                         )
+
                     case .favorites(let favoriteIds):
                         FavoriteNFTsView(
                             favoriteIds: favoriteIds,
@@ -150,12 +208,14 @@ private struct ProfileTabRoot: View {
                             updateFavoriteIds: viewModel.updateFavoriteIds,
                             onProfileUpdated: viewModel.updateLoadedProfile
                         )
+
                     case .edit(let profile):
                         EditProfileView(
                             profile: profile,
                             profileService: profileService,
                             onSaved: viewModel.updateLoadedProfile
                         )
+
                     case .userWeb(let url):
                         WebViewScreen(url: url)
                     }

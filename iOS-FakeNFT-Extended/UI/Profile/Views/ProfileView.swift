@@ -55,8 +55,10 @@ struct ProfileView: View {
             LoadingSpinner(size: .medium)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.ypWhite)
+
         case .loaded(let profile):
             profileContent(profile)
+
         case .failed(let message):
             errorContent(message)
         }
@@ -257,6 +259,6 @@ struct ProfilePlaceholderView: View {
                 profileService: ProfileService(networkClient: DefaultNetworkClient())
             )
         )
-            .environment(Router())
+        .environment(Router())
     }
 }
