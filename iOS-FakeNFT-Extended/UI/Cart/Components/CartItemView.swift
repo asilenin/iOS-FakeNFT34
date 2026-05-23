@@ -28,7 +28,7 @@ struct CartItemView: View {
                     .frame(height: Constants.priceTopSpacing)
 
                 VStack(alignment: .leading, spacing: Constants.priceTextSpacing) {
-                    Text(Strings.priceTitle)
+                    Text("Cart.item.price")
                         .font(.regular13)
                         .foregroundStyle(.ypBlack)
 
@@ -74,12 +74,6 @@ struct CartItemView: View {
 
     private var priceText: String {
         ETHPriceFormatter.eth(item.price)
-    }
-}
-
-private extension CartItemView {
-    enum Strings {
-        static let priceTitle = "Цена"
     }
 }
 

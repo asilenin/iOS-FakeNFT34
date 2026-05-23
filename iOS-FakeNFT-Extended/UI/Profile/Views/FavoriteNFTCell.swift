@@ -29,7 +29,11 @@ struct FavoriteNFTCell: View {
 
     private var imageWithRemoveButton: some View {
         ZStack(alignment: .topTrailing) {
-            FavoriteNFTImageView(url: imageURL)
+            ProfileNFTImageView(
+                url: imageURL,
+                size: Constants.imageSize,
+                cornerRadius: Constants.imageCornerRadius
+            )
 
             Button(action: onRemove) {
                 Image(.favouritesActive)
@@ -43,8 +47,8 @@ struct FavoriteNFTCell: View {
             .buttonStyle(.plain)
             .disabled(isRemoving)
         }
-        .frame(width: 80, height: 80)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .frame(width: Constants.imageSize, height: Constants.imageSize)
+        .clipShape(RoundedRectangle(cornerRadius: Constants.imageCornerRadius))
     }
 
     private var infoBlock: some View {
@@ -82,6 +86,13 @@ struct FavoriteNFTCell: View {
         }
 
         return ETHPriceFormatter.eth(price)
+    }
+}
+
+private extension FavoriteNFTCell {
+    enum Constants {
+        static let imageSize: CGFloat = 80
+        static let imageCornerRadius: CGFloat = 12
     }
 }
 

@@ -100,25 +100,13 @@ final class PaymentViewModel {
             let updatedNFTIds = Set(profile.nfts ?? []).union(purchasedNFTIds)
             let updatedProfile = profile.updatingNFTs(Array(updatedNFTIds))
 
-            let savedProfile = try await profileService.updateProfile(updatedProfile)
-            let reloadedProfile = try await profileService.loadProfile()
-
-            #if DEBUG
-            print("✅ Purchased NFT ids:", purchasedNFTIds)
-            print("✅ Sent profile.nfts:", updatedNFTIds)
-            print("✅ Saved profile.nfts:", savedProfile.nfts ?? [])
-            print("✅ Reloaded profile.nfts:", reloadedProfile.nfts ?? [])
-            #endif
+            _ = try await profileService.updateProfile(updatedProfile)
 
             try await cartService.setCart([])
 
             state = .success
             lastPaymentCurrencyID = nil
         } catch {
-            #if DEBUG
-            print("❌ Payment flow error:", error)
-            #endif
-
             self.error = error
         }
 

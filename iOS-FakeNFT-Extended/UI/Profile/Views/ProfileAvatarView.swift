@@ -33,9 +33,6 @@ struct ProfileAvatarView: View {
                 .alternativeSources(Array(sources.dropFirst()))
                 .retry(maxCount: 2, interval: .seconds(1))
                 .fade(duration: 0.2)
-                .onFailure { error in
-                    print("Profile avatar load failed: \(error)")
-                }
                 .resizable()
                 .scaledToFill()
                 .frame(width: Constants.size, height: Constants.size)

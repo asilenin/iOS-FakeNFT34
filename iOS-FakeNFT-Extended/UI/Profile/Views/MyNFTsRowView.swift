@@ -5,7 +5,6 @@
 //  Created by Анастасия Федотова on 18.05.2026.
 //
 
-import Kingfisher
 import SwiftUI
 
 struct MyNFTsRowView: View {
@@ -38,12 +37,16 @@ struct MyNFTsRowView: View {
 
     private var nftImage: some View {
         ZStack {
-            NFTImageView(url: imageURL)
+            ProfileNFTImageView(
+                url: imageURL,
+                size: Constants.imageSize,
+                cornerRadius: Constants.imageCornerRadius
+            )
 
             likeButton
         }
-        .frame(width: 108, height: 108)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .frame(width: Constants.imageSize, height: Constants.imageSize)
+        .clipShape(RoundedRectangle(cornerRadius: Constants.imageCornerRadius))
     }
 
     private var likeButton: some View {
@@ -118,47 +121,10 @@ struct MyNFTsRowView: View {
     }
 }
 
-// MARK: - NFTImageView
-
-private struct NFTImageView: View {
-
-    // MARK: - State
-
-    @State private var didFail = false
-
-    // MARK: - Properties
-
-    let url: URL?
-
-    // MARK: - Body
-
-    var body: some View {
-        ZStack {
-            if let url, !didFail {
-                KFImage(url)
-                    .placeholder {
-                        SkeletonView(cornerRadius: Constants.cornerRadius)
-                    }
-                    .retry(maxCount: 2, interval: .seconds(1))
-                    .fade(duration: 0.2)
-                    .onFailure { _ in
-                        didFail = true
-                    }
-                    .resizable()
-                    .scaledToFill()
-            } else {
-                SkeletonView(cornerRadius: Constants.cornerRadius)
-            }
-        }
-        .frame(width: Constants.imageSize, height: Constants.imageSize)
-        .clipped()
-    }
-
-    // MARK: - Constants
-
-    private enum Constants {
+private extension MyNFTsRowView {
+    enum Constants {
         static let imageSize: CGFloat = 108
-        static let cornerRadius: CGFloat = 8
+        static let imageCornerRadius: CGFloat = 8
     }
 }
 

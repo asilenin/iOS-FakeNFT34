@@ -32,23 +32,23 @@ struct CartView: View {
                 }
             }
             .confirmationDialog(
-                Text(Strings.sortTitle),
+                Text(String(localized: "Cart.sort.title")),
                 isPresented: $isSortDialogPresented,
                 titleVisibility: .visible
             ) {
-                Button(Strings.sortByPrice) {
+                Button(String(localized: "Cart.sort.price")) {
                     storedSortOption = .price
                 }
 
-                Button(Strings.sortByRating) {
+                Button(String(localized: "Cart.sort.rating")) {
                     storedSortOption = .rating
                 }
 
-                Button(Strings.sortByName) {
+                Button(String(localized: "Cart.sort.name")) {
                     storedSortOption = .name
                 }
 
-                Button(Strings.close, role: .cancel) { }
+                Button(String(localized: "Common.close"), role: .cancel) { }
             }
             .fullScreenCover(item: $itemPendingDeletion) { item in
                 deleteConfirmation(for: item)
@@ -125,18 +125,18 @@ struct CartView: View {
     }
 
     private var emptyView: some View {
-        Text(Strings.emptyCart)
+        Text(String(localized: "Cart.empty"))
             .font(.bold17)
             .foregroundStyle(.ypBlack)
     }
 
     private var emptyErrorView: some View {
         VStack(spacing: Constants.errorSpacing) {
-            Text(Strings.loadingError)
+            Text(String(localized: "Cart.error.load"))
                 .font(.bold17)
                 .foregroundStyle(.ypBlack)
 
-            Button(Strings.retry) {
+            Button(String(localized: "Error.retry")) {
                 Task {
                     await viewModel.load(service: services.cartService)
                 }
@@ -163,7 +163,7 @@ struct CartView: View {
             Button {
                 router.push(CartRoute.payment, in: .cart)
             } label: {
-                Text(Strings.pay)
+                Text(String(localized: "Cart.pay"))
                     .font(.bold17)
                     .foregroundStyle(.ypWhite)
                     .frame(
@@ -220,18 +220,6 @@ struct CartView: View {
 }
 
 private extension CartView {
-    enum Strings {
-        static let sortTitle = "Сортировка"
-        static let sortByPrice = "По цене"
-        static let sortByRating = "По рейтингу"
-        static let sortByName = "По названию"
-        static let close = "Закрыть"
-        static let emptyCart = "Корзина пуста"
-        static let loadingError = "Не удалось загрузить корзину"
-        static let retry = "Повторить"
-        static let pay = "К оплате"
-    }
-
     enum Constants {
         static let sortOptionStorageKey = "cart.sort.option"
         static let horizontalPadding: CGFloat = 16
