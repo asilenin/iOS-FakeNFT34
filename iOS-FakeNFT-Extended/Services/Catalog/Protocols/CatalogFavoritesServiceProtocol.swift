@@ -7,7 +7,7 @@ protocol CatalogFavoritesServiceProtocol: Sendable {
     func loadFavorites() async throws -> Set<String>
 
     /// Заменяет лайки на сервере **целиком** и возвращает обновлённое множество.
-    /// Пустой `ids` не очищает лайки (ограничение mock-сервера, см. `ProfileSetLikesRequest`).
+    /// Пустой `ids` очищает последний лайк через `likes=null` (ограничение mock-сервера).
     func setFavorites(_ ids: Set<String>) async throws -> Set<String>
 
     /// Сбрасывает кэш.

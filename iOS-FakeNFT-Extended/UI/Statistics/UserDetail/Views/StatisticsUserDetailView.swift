@@ -50,7 +50,7 @@ struct StatisticsUserDetailView: View {
     private var content: some View {
         switch viewModel.state {
         case .loading:
-            LoadingSpinner(size: .large)
+            LoadingSpinner(size: .medium)
         case .success:
             successContent
         case .error:

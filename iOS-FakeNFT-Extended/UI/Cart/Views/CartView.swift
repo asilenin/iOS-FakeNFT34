@@ -97,7 +97,7 @@ struct CartView: View {
     private var content: some View {
         switch viewModel.state {
         case .idle, .loading:
-            LoadingSpinner(size: .large)
+            LoadingSpinner(size: .medium)
 
         case .loaded:
             cartList

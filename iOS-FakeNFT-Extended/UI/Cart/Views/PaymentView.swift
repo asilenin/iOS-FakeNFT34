@@ -68,7 +68,7 @@ struct PaymentView: View {
     private var content: some View {
         switch viewModel.state {
         case .idle, .loading:
-            LoadingSpinner(size: .large)
+            LoadingSpinner(size: .medium)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             
         case .loaded:
