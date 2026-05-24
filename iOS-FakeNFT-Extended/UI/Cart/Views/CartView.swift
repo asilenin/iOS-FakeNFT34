@@ -98,6 +98,7 @@ struct CartView: View {
         switch viewModel.state {
         case .idle, .loading:
             LoadingSpinner(size: .medium)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
 
         case .loaded:
             cartList
