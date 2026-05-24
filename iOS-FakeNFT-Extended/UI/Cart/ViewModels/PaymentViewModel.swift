@@ -58,13 +58,15 @@ final class PaymentViewModel {
         await pay(
             currencyID: selectedCurrency.id,
             paymentService: paymentService,
-            cartService: cartService
+            cartService: cartService,
+            profileService: profileService
         )
     }
 
     func retryPayment(
         paymentService: PaymentServiceProtocol,
-        cartService: CartServiceProtocol
+        cartService: CartServiceProtocol,
+        profileService: ProfileServiceProtocol
     ) async {
         guard let lastPaymentCurrencyID else {
             await load(service: paymentService)
@@ -74,14 +76,16 @@ final class PaymentViewModel {
         await pay(
             currencyID: lastPaymentCurrencyID,
             paymentService: paymentService,
-            cartService: cartService
+            cartService: cartService,
+            profileService: profileService
         )
     }
 
     private func pay(
         currencyID: String,
         paymentService: PaymentServiceProtocol,
-        cartService: CartServiceProtocol
+        cartService: CartServiceProtocol,
+        profileService: ProfileServiceProtocol
     ) async {
         isPaying = true
         error = nil
@@ -89,21 +93,18 @@ final class PaymentViewModel {
         
         do {
             let purchasedNFTIds = try await cartService.loadCart()
-            
             try await paymentService.pay(currencyID: currencyID)
-            
-            // Оформляем заказ: POST /orders переносит nfts в профиль.
             try await cartService.performOrder(purchasedNFTIds)
-            
-            // Чистим корзину (nfts=null на сервере).
             _ = try await cartService.setCart([])
+            
+            // Профиль изменён сервером (nfts) в обход ProfileService — сбрасываем кэш.
+            await profileService.invalidateCache()
             
             state = .success
             lastPaymentCurrencyID = nil
         } catch {
             self.error = error
         }
-        
         isPaying = false
     }
 }

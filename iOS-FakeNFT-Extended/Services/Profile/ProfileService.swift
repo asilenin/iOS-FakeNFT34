@@ -9,19 +9,30 @@ import Foundation
 
 actor ProfileService: ProfileServiceProtocol {
     private let networkClient: NetworkClient
+    private var cachedProfile: Profile?
 
     init(networkClient: NetworkClient) {
         self.networkClient = networkClient
     }
 
     func loadProfile() async throws -> Profile {
-        let request = ProfileRequest()
-        return try await networkClient.send(request: request)
+        if let cachedProfile {
+            return cachedProfile
+        }
+        let profile: Profile = try await networkClient.send(request: ProfileRequest())
+        cachedProfile = profile
+        return profile
     }
 
     func updateProfile(_ profile: Profile) async throws -> Profile {
-        try await networkClient.send(
+        let updated: Profile = try await networkClient.send(
             request: UpdateProfileRequest(profile: profile)
         )
+        cachedProfile = updated
+        return updated
+    }
+
+    func invalidateCache() async {
+        cachedProfile = nil
     }
 }
