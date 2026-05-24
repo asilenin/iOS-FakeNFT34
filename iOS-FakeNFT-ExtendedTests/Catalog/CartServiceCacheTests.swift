@@ -1,15 +1,15 @@
 import XCTest
 @testable import iOS_FakeNFT_Extended
 
-final class CatalogCartServiceTests: XCTestCase {
+final class CartServiceCacheTests: XCTestCase {
 
     private var network: MockNetworkClient!
-    private var service: CatalogCartService!
+    private var service: CartService!
 
     override func setUp() {
         super.setUp()
         network = MockNetworkClient()
-        service = CatalogCartService(networkClient: network)
+        service = CartService(networkClient: network, catalogNetworkClient: network)
     }
 
     override func tearDown() {
@@ -17,8 +17,6 @@ final class CatalogCartServiceTests: XCTestCase {
         network = nil
         super.tearDown()
     }
-
-    // MARK: - Helpers
 
     private static let orderURL = "\(RequestConstants.baseURL)/api/v1/orders/1"
 
@@ -32,8 +30,6 @@ final class CatalogCartServiceTests: XCTestCase {
         """
         return json.data(using: .utf8)!
     }
-
-    // MARK: - Tests
 
     func test_loadCart_returnsNftIdsFromServer() async throws {
         await network.stub(url: Self.orderURL, data: Self.orderJSON(nfts: ["a", "b", "c"]))
@@ -50,7 +46,7 @@ final class CatalogCartServiceTests: XCTestCase {
         _ = try await service.loadCart()
 
         let totalCalls = await network.totalCalls
-        XCTAssertEqual(totalCalls, 1, "Second loadCart must come from cache")
+        XCTAssertEqual(totalCalls, 1)
     }
 
     func test_setCart_returnsUpdatedSetFromServerResponse() async throws {
@@ -68,7 +64,7 @@ final class CatalogCartServiceTests: XCTestCase {
         _ = try await service.loadCart()
 
         let totalCalls = await network.totalCalls
-        XCTAssertEqual(totalCalls, 1, "loadCart after setCart must use the cache populated by setCart")
+        XCTAssertEqual(totalCalls, 1)
     }
 
     func test_setCart_propagatesNetworkError() async {

@@ -7,31 +7,55 @@
 
 import Foundation
 
+/// Общий сервис корзины: GET/PUT заказа через `CatalogNetworkClient` и загрузка NFT lkz экрана корзины — через `DefaultNetworkClient`.
 actor CartService: CartServiceProtocol {
-    private let networkClient: NetworkClient
 
-    init(networkClient: NetworkClient) {
+    private let networkClient: NetworkClient
+    private let catalogNetworkClient: NetworkClient
+    private var cachedIds: Set<String>?
+
+    init(networkClient: NetworkClient, catalogNetworkClient: NetworkClient) {
         self.networkClient = networkClient
+        self.catalogNetworkClient = catalogNetworkClient
+    }
+
+    func loadCart() async throws -> Set<String> {
+        if let cachedIds {
+            return cachedIds
+        }
+
+        let order: CatalogOrderDto = try await catalogNetworkClient.send(request: OrderGetRequest())
+        let ids = Set(order.nfts)
+        cachedIds = ids
+        return ids
+    }
+
+    func setCart(_ ids: Set<String>) async throws -> Set<String> {
+        let request = OrderSetNftsRequest(nfts: Array(ids))
+        let order: CatalogOrderDto = try await catalogNetworkClient.send(request: request)
+        let updated = Set(order.nfts)
+        cachedIds = updated
+        return updated
+    }
+
+    func invalidateCache() async {
+        cachedIds = nil
     }
 
     func loadCartItems() async throws -> [CartItem] {
         let ids = try await loadCart()
 
-        return try await withThrowingTaskGroup(
-            of: CartItem.self
-        ) { group in
+        return try await withThrowingTaskGroup(of: CartItem.self) { group in
             for id in ids {
                 group.addTask { [networkClient] in
                     let dto: CartNftDTO = try await networkClient.send(
                         request: NftRequest(id: id)
                     )
-
                     return CartItem(dto: dto)
                 }
             }
 
             var items: [CartItem] = []
-
             for try await item in group {
                 items.append(item)
             }
@@ -40,19 +64,5 @@ actor CartService: CartServiceProtocol {
                 $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending
             }
         }
-    }
-
-    func loadCart() async throws -> Set<String> {
-        let order: CartOrderDTO = try await networkClient.send(
-            request: LoadOrderRequest()
-        )
-
-        return Set(order.nfts)
-    }
-
-    func setCart(_ ids: Set<String>) async throws {
-        _ = try await networkClient.send(
-            request: UpdateOrderRequest(ids: ids)
-        )
     }
 }

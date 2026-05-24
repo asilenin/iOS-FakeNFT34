@@ -19,7 +19,10 @@ final class ServicesAssembly {
         if useMockCart {
             cartServiceStorage = MockCartService()
         } else {
-            cartServiceStorage = CartService(networkClient: networkClient)
+            cartServiceStorage = CartService(
+                networkClient: networkClient,
+                catalogNetworkClient: catalogNetworkClient
+            )
         }
 
         paymentServiceStorage = PaymentService(networkClient: networkClient)
@@ -68,22 +71,6 @@ final class ServicesAssembly {
 
     var collectionDetailService: CollectionDetailServiceProtocol {
         _collectionDetailService
-    }
-
-    @ObservationIgnored
-    private lazy var _catalogFavoritesService: CatalogFavoritesServiceProtocol =
-        CatalogFavoritesService(networkClient: catalogNetworkClient)
-
-    var catalogFavoritesService: CatalogFavoritesServiceProtocol {
-        _catalogFavoritesService
-    }
-
-    @ObservationIgnored
-    private lazy var _catalogCartService: CatalogCartServiceProtocol =
-        CatalogCartService(networkClient: catalogNetworkClient)
-
-    var catalogCartService: CatalogCartServiceProtocol {
-        _catalogCartService
     }
 
     // MARK: - Profile

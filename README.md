@@ -6,14 +6,17 @@
 ## Архитектура
 
 - **UI:** SwiftUI, минимальная iOS 17.0.
-- **Архитектурный паттерн:** MVVM. ViewModel'и — `@Observable @MainActor final class`.
-- **Сервисы:** `actor`-ы, `async/await`, входные/выходные модели — `Sendable`.
-- **Сетевой клиент:** `DefaultNetworkClient` (`actor`) с `URLSession` и `JSONDecoder`.
-- **Навигация:** общий `Router` (`@Observable @MainActor`), один `NavigationPath`
-  на каждый таб + типизированные `Route`-enum'ы. См.
-  [`App/Router/RouterUsage.md`](iOS-FakeNFT-Extended/App/Router/RouterUsage.md).
-- **Дизайн-система:** цвета и иконки в `Assets.xcassets` (с поддержкой Dark
-  Appearance), шрифты — `Font`-extensions в `DesignSystem/Fonts.swift`.
+- **Паттерн:** MVVM (`@Observable @MainActor` ViewModel, сервисы — `actor`, `Sendable`).
+- **DI:** `ServicesAssembly` — единая точка создания сервисов.
+- **Навигация:** `Router` + отдельный `NavigationPath` на таб, маршруты — `CatalogRoute`, `CartRoute`, `ProfileRoute`, `StatisticsRoute`.
+- **Сеть:**
+  - `DefaultNetworkClient` — JSON и `NetworkRequestBody`.
+  - `CatalogNetworkClient` — `FormEncodedRequest` (лайки, состав корзины) с учётом ограничений mock API.
+- **Shared-сервисы (единые для табов):**
+  - `FavoritesService` — лайки профиля (каталог, статистика).
+  - `CartService` — состав заказа + загрузка NFT для экрана корзины.
+  - `PaymentService` — оплата.
+- **TabBar:** `TabBarView` + `ProfileTabRoot`, `CatalogTabRoot`, `CartTabRoot`, `StatisticsTabRoot`.
 
 ## Структура папок
 iOS-FakeNFT-Extended/

@@ -45,8 +45,8 @@ struct CollectionDetailView: View {
                 viewModel = CollectionDetailViewModel(
                     collection: collection,
                     service: services.collectionDetailService,
-                    favoritesService: services.catalogFavoritesService,
-                    cartService: services.catalogCartService
+                    favoritesService: services.favoritesService,
+                    cartService: services.cartService
                 )
             }
             await viewModel?.reload()
@@ -209,8 +209,8 @@ private extension View {
             previewViewModel: CollectionDetailViewModel(
                 collection: collection,
                 service: MockCollectionDetailService(),
-                favoritesService: MockCatalogFavoritesService(),
-                cartService: MockCatalogCartService()
+                favoritesService: MockFavoritesService(),
+                cartService: MockCartService(),
             )
         )
         // ServicesAssembly нужен для @Environment, но не используется (ViewModel уже построен).

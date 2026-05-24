@@ -29,12 +29,15 @@ actor MockCartService: CartServiceProtocol {
         return items
     }
 
-    func setCart(_ ids: Set<String>) async throws {
+    func setCart(_ ids: Set<String>) async throws -> Set<String> {
         try await Task.sleep(for: .milliseconds(Constants.delay))
 
         items = Self.mockItems.filter { ids.contains($0.id) }
         Self.saveIDs(ids)
+        return Set(items.map(\.id))
     }
+
+    func invalidateCache() async {}
 }
 
 // MARK: - Storage
