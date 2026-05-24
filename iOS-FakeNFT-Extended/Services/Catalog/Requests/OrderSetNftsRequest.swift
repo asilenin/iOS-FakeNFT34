@@ -2,14 +2,14 @@ import Foundation
 
 /// PUT состава корзины (form-urlencoded). Заменяет всё множество целиком.
 ///
-/// **Ограничение mock-сервера:** пустой массив `nfts` ведёт к ошибке
-/// `entity by id is missing`. `CatalogNetworkClient` пропустит пустой массив,
-/// и запрос станет no-op — удалить последний NFT через PUT нельзя.
-/// После `invalidateCache` + `loadCart` на сервере останется предыдущий состав.
+/// **Ограничение mock-сервера:** для очистки корзины отправляем `nfts=null`,
+/// иначе пустой массив даёт ошибку `entity by id is missing` (аналогично
+/// `ProfileSetLikesRequest` с `likes=null`).
 struct OrderSetNftsRequest: FormEncodedRequest {
 
     private enum Field {
         static let nfts = "nfts"
+        static let emptyArrayValue = "null"
     }
 
     let nfts: [String]
@@ -21,6 +21,6 @@ struct OrderSetNftsRequest: FormEncodedRequest {
     var httpMethod: HttpMethod { .put }
 
     var formFields: [String: [String]] {
-        [Field.nfts: nfts]
+        [Field.nfts: nfts.isEmpty ? [Field.emptyArrayValue] : nfts]
     }
 }

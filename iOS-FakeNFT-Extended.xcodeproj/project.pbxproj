@@ -28,6 +28,7 @@
 		479BD4C92FB1017A009F014D /* CatalogServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479BD4C82FB10179009F014D /* CatalogServiceProtocol.swift */; };
 		479BD4CC2FB10893009F014D /* MockCatalogService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479BD4CB2FB10892009F014D /* MockCatalogService.swift */; };
 		479BD4CE2FB108C3009F014D /* CatalogServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 479BD4CD2FB108C2009F014D /* CatalogServiceTests.swift */; };
+		47C487222FC3B03400480417 /* OrderPaymentRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C487212FC3B03200480417 /* OrderPaymentRequest.swift */; };
 		47C646CC2FBB12EA004206CB /* FormEncodedRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C646CB2FBB12E9004206CB /* FormEncodedRequest.swift */; };
 		47C646CE2FBB12F0004206CB /* CatalogNetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C646CD2FBB12EF004206CB /* CatalogNetworkClient.swift */; };
 		47C646D02FBB1303004206CB /* URLProtocolMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47C646CF2FBB1302004206CB /* URLProtocolMock.swift */; };
@@ -111,6 +112,7 @@
 		479BD4C82FB10179009F014D /* CatalogServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogServiceProtocol.swift; sourceTree = "<group>"; };
 		479BD4CB2FB10892009F014D /* MockCatalogService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCatalogService.swift; sourceTree = "<group>"; };
 		479BD4CD2FB108C2009F014D /* CatalogServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogServiceTests.swift; sourceTree = "<group>"; };
+		47C487212FC3B03200480417 /* OrderPaymentRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderPaymentRequest.swift; sourceTree = "<group>"; };
 		47C646CB2FBB12E9004206CB /* FormEncodedRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormEncodedRequest.swift; sourceTree = "<group>"; };
 		47C646CD2FBB12EF004206CB /* CatalogNetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogNetworkClient.swift; sourceTree = "<group>"; };
 		47C646CF2FBB1302004206CB /* URLProtocolMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLProtocolMock.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 		473238842FB72E5B00AF30A9 /* Requests */ = {
 			isa = PBXGroup;
 			children = (
+				47C487212FC3B03200480417 /* OrderPaymentRequest.swift */,
 				47C646E72FBB37F0004206CB /* OrderSetNftsRequest.swift */,
 				47C646E52FBB37D9004206CB /* OrderGetRequest.swift */,
 				47C646D82FBB16B2004206CB /* ProfileSetLikesRequest.swift */,
@@ -659,6 +662,7 @@
 			files = (
 				4747AA052FAF622A00B07D13 /* WebViewRepresentable.swift in Sources */,
 				4723FFB12FB47E2100CB43CB /* MockCollectionDetailService.swift in Sources */,
+				47C487222FC3B03400480417 /* OrderPaymentRequest.swift in Sources */,
 				479BD4C92FB1017A009F014D /* CatalogServiceProtocol.swift in Sources */,
 				4747AA092FAF678300B07D13 /* NetworkClientError+LocalizedError.swift in Sources */,
 				9812DB1F2FBCABD1004AA0AC /* NetworkIdListParser.swift in Sources */,

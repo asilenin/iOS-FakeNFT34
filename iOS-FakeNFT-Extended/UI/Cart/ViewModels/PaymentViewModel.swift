@@ -58,15 +58,13 @@ final class PaymentViewModel {
         await pay(
             currencyID: selectedCurrency.id,
             paymentService: paymentService,
-            cartService: cartService,
-            profileService: profileService
+            cartService: cartService
         )
     }
 
     func retryPayment(
         paymentService: PaymentServiceProtocol,
-        cartService: CartServiceProtocol,
-        profileService: ProfileServiceProtocol
+        cartService: CartServiceProtocol
     ) async {
         guard let lastPaymentCurrencyID else {
             await load(service: paymentService)
@@ -76,40 +74,36 @@ final class PaymentViewModel {
         await pay(
             currencyID: lastPaymentCurrencyID,
             paymentService: paymentService,
-            cartService: cartService,
-            profileService: profileService
+            cartService: cartService
         )
     }
 
     private func pay(
         currencyID: String,
         paymentService: PaymentServiceProtocol,
-        cartService: CartServiceProtocol,
-        profileService: ProfileServiceProtocol
+        cartService: CartServiceProtocol
     ) async {
         isPaying = true
         error = nil
         lastPaymentCurrencyID = currencyID
-
+        
         do {
             let purchasedNFTIds = try await cartService.loadCart()
-
+            
             try await paymentService.pay(currencyID: currencyID)
-
-            let profile = try await profileService.loadProfile()
-            let updatedNFTIds = Set(profile.nfts ?? []).union(purchasedNFTIds)
-            let updatedProfile = profile.updatingNFTs(Array(updatedNFTIds))
-
-            _ = try await profileService.updateProfile(updatedProfile)
-
-            try await cartService.setCart([])
-
+            
+            // Оформляем заказ: POST /orders переносит nfts в профиль.
+            try await cartService.performOrder(purchasedNFTIds)
+            
+            // Чистим корзину (nfts=null на сервере).
+            _ = try await cartService.setCart([])
+            
             state = .success
             lastPaymentCurrencyID = nil
         } catch {
             self.error = error
         }
-
+        
         isPaying = false
     }
 }

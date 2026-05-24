@@ -56,8 +56,7 @@ struct PaymentView: View {
                     Task {
                         await viewModel.retryPayment(
                             paymentService: services.paymentService,
-                            cartService: services.cartService,
-                            profileService: services.profileService
+                            cartService: services.cartService
                         )
                     }
                 }
