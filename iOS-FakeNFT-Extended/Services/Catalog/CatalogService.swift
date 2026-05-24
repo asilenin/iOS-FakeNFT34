@@ -22,22 +22,13 @@ actor CatalogService: CatalogServiceProtocol {
         let cacheKey = sortBy?.apiSortKey ?? Self.defaultCacheKey
 
         if let cached = cache[cacheKey] {
-            print("ℹ️ [\(fileName())]: :\(#line)] \(#function) cache hit for sortBy=\(cacheKey), \(cached.count) collections")
             return cached
         }
 
         let request = CollectionsRequest(sortBy: sortBy?.apiSortKey)
-        print("ℹ️ [\(fileName())]: :\(#line)] \(#function) GET \(request.endpoint?.absoluteString ?? "nil")")
-
-        do {
-            let collections: [NftCollection] = try await networkClient.send(request: request)
-            cache[cacheKey] = collections
-            print("ℹ️ [\(fileName())]: :\(#line)] \(#function) loaded \(collections.count) collections")
-            return collections
-        } catch {
-            print("❌ [\(fileName())]: :\(#line)] \(#function) failed for sortBy=\(cacheKey): \(error)")
-            throw error
-        }
+        let collections: [NftCollection] = try await networkClient.send(request: request)
+        cache[cacheKey] = collections
+        return collections
     }
 
     func invalidateCache() {
