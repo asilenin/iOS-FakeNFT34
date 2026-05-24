@@ -95,3 +95,23 @@ actor StubCartService: CartServiceProtocol {
 
     func invalidateCache() async {}
 }
+
+actor StubCollectionDetailService: CollectionDetailServiceProtocol {
+
+    private let nfts: [Nft]
+    private let error: Error?
+
+    init(nfts: [Nft] = [], error: Error? = nil) {
+        self.nfts = nfts
+        self.error = error
+    }
+
+    func loadNfts(byIds ids: [String]) async throws -> [Nft] {
+        if let error {
+            throw error
+        }
+        return nfts
+    }
+
+    func invalidateCache() async {}
+}

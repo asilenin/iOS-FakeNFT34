@@ -6,6 +6,7 @@ protocol CartServiceProtocol: Sendable {
     func loadCart() async throws -> Set<String>
 
     /// Заменяет корзину на сервере целиком и возвращает актуальное множество.
+    @discardableResult
     func setCart(_ ids: Set<String>) async throws -> Set<String>
 
     /// Сбрасывает in-memory кэш состава корзины.
