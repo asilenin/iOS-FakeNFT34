@@ -5,7 +5,6 @@
 //  Created by Анастасия Федотова on 18.05.2026.
 //
 
-import Kingfisher
 import SwiftUI
 
 struct MyNFTsRowView: View {
@@ -38,12 +37,16 @@ struct MyNFTsRowView: View {
 
     private var nftImage: some View {
         ZStack {
-            NFTImageView(url: imageURL)
+            ProfileNFTImageView(
+                url: imageURL,
+                size: Constants.imageSize,
+                cornerRadius: Constants.imageCornerRadius
+            )
 
             likeButton
         }
-        .frame(width: 108, height: 108)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .frame(width: Constants.imageSize, height: Constants.imageSize)
+        .clipShape(RoundedRectangle(cornerRadius: Constants.imageCornerRadius))
     }
 
     private var likeButton: some View {
@@ -114,77 +117,14 @@ struct MyNFTsRowView: View {
             return String(localized: "Profile.MyNFTs.noPrice")
         }
 
-        return String(format: "%.2f ETH", locale: Locale(identifier: "ru_RU"), price)
+        return ETHPriceFormatter.eth(price)
     }
 }
 
-// MARK: - NFTImageView
-
-private struct NFTImageView: View {
-
-    // MARK: - State
-
-    @State private var didFail = false
-
-    // MARK: - Properties
-
-    let url: URL?
-
-    // MARK: - Body
-
-    var body: some View {
-        ZStack {
-            if let url, !didFail {
-                KFImage(url)
-                    .placeholder {
-                        ZStack {
-                            Color.ypBackgroundUniversal
-
-                            LoadingSpinner(size: .medium, tint: .ypWhiteUniversal)
-                        }
-                    }
-                    .retry(maxCount: 2, interval: .seconds(1))
-                    .fade(duration: 0.2)
-                    .onFailure { _ in
-                        didFail = true
-                    }
-                    .resizable()
-                    .scaledToFill()
-            } else {
-                NFTImagePlaceholder()
-            }
-        }
-        .frame(width: 108, height: 108)
-        .clipped()
-    }
-}
-
-// MARK: - NFTImagePlaceholder
-
-private struct NFTImagePlaceholder: View {
-
-    // MARK: - Constants
-
-    private enum Constants {
-        static let cellSize: CGFloat = 27
-        static let gridSize = 4
-    }
-
-    // MARK: - Body
-
-    var body: some View {
-        VStack(spacing: 0) {
-            ForEach(0..<Constants.gridSize, id: \.self) { row in
-                HStack(spacing: 0) {
-                    ForEach(0..<Constants.gridSize, id: \.self) { column in
-                        Rectangle()
-                            .fill((row + column).isMultiple(of: 2) ? Color.ypWhite : Color.ypBlack)
-                            .frame(width: Constants.cellSize, height: Constants.cellSize)
-                    }
-                }
-            }
-        }
-        .frame(width: 108, height: 108)
+private extension MyNFTsRowView {
+    enum Constants {
+        static let imageSize: CGFloat = 108
+        static let imageCornerRadius: CGFloat = 8
     }
 }
 

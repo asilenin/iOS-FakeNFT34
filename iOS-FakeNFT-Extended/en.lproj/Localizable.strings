@@ -13,6 +13,26 @@
 "Common.sort" = "Сортировка";
 "Common.close" = "Закрыть";
 
+"Cart.item.price" = "Цена";
+"Cart.sort.title" = "Сортировка";
+"Cart.sort.price" = "По цене";
+"Cart.sort.rating" = "По рейтингу";
+"Cart.sort.name" = "По названию";
+"Cart.empty" = "Корзина пуста";
+"Cart.error.load" = "Не удалось загрузить корзину";
+"Cart.pay" = "К оплате";
+"Cart.Payment.title" = "Выбор способа оплаты";
+"Cart.Payment.error.load" = "Не удалось загрузить валюты";
+"Cart.Payment.error.pay" = "Не удалось произвести оплату";
+"Cart.Payment.pay" = "Оплатить";
+"Cart.Payment.agreement.prefix" = "Совершая покупку, вы соглашаетесь с условиями";
+"Cart.Payment.agreement.link" = "Пользовательского соглашения";
+"Cart.Payment.success.title" = "Успех! Оплата прошла,\nпоздравляем с покупкой!";
+"Cart.Payment.success.return" = "Вернуться в корзину";
+"Cart.Delete.confirmation" = "Вы уверены, что хотите\nудалить объект из корзины?";
+"Cart.Delete.delete" = "Удалить";
+"Cart.Delete.cancel" = "Вернуться";
+
 "Profile.error.load" = "Не удалось загрузить профиль: %@";
 "Profile.edit.accessibility" = "Редактировать профиль";
 "Profile.myNfts" = "Мои NFT";

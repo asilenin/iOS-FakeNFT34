@@ -57,7 +57,7 @@ struct StatisticsViewContentView: View {
     private var content: some View {
         switch viewModel.state {
         case .loading:
-            LoadingSpinner(size: .large)
+            LoadingSpinner(size: .medium)
         case .empty:
             StatisticsEmptyStateView(message: "Statistics.empty")
         case .success:

@@ -39,7 +39,7 @@ final class CartViewModel {
 
     var totalPriceText: String {
         let total = items.reduce(0) { $0 + $1.price }
-        return CartPriceFormatter.eth(total)
+        return ETHPriceFormatter.eth(total)
     }
 
     func loadIfNeeded(service: CartServiceProtocol) async {

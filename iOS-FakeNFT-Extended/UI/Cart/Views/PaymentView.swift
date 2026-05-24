@@ -23,7 +23,7 @@ struct PaymentView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text(Strings.title)
+                    Text(String(localized: "Cart.Payment.title"))
                         .font(.bold17)
                         .foregroundStyle(.ypBlack)
                 }
@@ -45,14 +45,14 @@ struct PaymentView: View {
                 await viewModel.loadIfNeeded(service: services.paymentService)
             }
             .alert(
-                Strings.paymentError,
+                String(localized: "Cart.Payment.error.pay"),
                 isPresented: paymentErrorBinding
             ) {
-                Button(Strings.cancel, role: .cancel) {
+                Button(String(localized: "Error.cancel"), role: .cancel) {
                     viewModel.error = nil
                 }
                 
-                Button(Strings.retry) {
+                Button(String(localized: "Error.retry")) {
                     Task {
                         await viewModel.retryPayment(
                             paymentService: services.paymentService,
@@ -68,7 +68,7 @@ struct PaymentView: View {
     private var content: some View {
         switch viewModel.state {
         case .idle, .loading:
-            LoadingSpinner(size: .large)
+            LoadingSpinner(size: .medium)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             
         case .loaded:
@@ -107,11 +107,11 @@ struct PaymentView: View {
     
     private var errorView: some View {
         VStack(spacing: Constants.errorSpacing) {
-            Text(Strings.loadingError)
+            Text(String(localized: "Cart.Payment.error.load"))
                 .font(.bold17)
                 .foregroundStyle(.ypBlack)
             
-            Button(Strings.retry) {
+            Button(String(localized: "Error.retry")) {
                 Task {
                     await viewModel.load(service: services.paymentService)
                 }
@@ -135,7 +135,7 @@ struct PaymentView: View {
                     )
                 }
             } label: {
-                Text(Strings.pay)
+                Text(String(localized: "Cart.Payment.pay"))
                     .font(.bold17)
                     .foregroundStyle(.ypWhite)
                     .frame(maxWidth: .infinity)
@@ -167,14 +167,14 @@ struct PaymentView: View {
     
     private var agreementText: some View {
         VStack(alignment: .leading, spacing: Constants.agreementSpacing) {
-            Text(Strings.agreementPrefix)
+            Text(String(localized: "Cart.Payment.agreement.prefix"))
                 .font(.regular13)
                 .foregroundStyle(.ypBlack)
             
             Button {
                 openAgreement()
             } label: {
-                Text(Strings.agreementLink)
+                Text(String(localized: "Cart.Payment.agreement.link"))
                     .font(.regular13)
                     .foregroundStyle(.ypBlueUniversal)
             }
@@ -207,17 +207,6 @@ struct PaymentView: View {
 }
 
 private extension PaymentView {
-    enum Strings {
-        static let title = "Выбор способа оплаты"
-        static let loadingError = "Не удалось загрузить валюты"
-        static let paymentError = "Не удалось произвести оплату"
-        static let retry = "Повторить"
-        static let cancel = "Отмена"
-        static let pay = "Оплатить"
-        static let agreementPrefix = "Совершая покупку, вы соглашаетесь с условиями"
-        static let agreementLink = "Пользовательского соглашения"
-    }
-    
     enum Constants {
         static let horizontalPadding: CGFloat = 16
         static let gridSpacing: CGFloat = 7

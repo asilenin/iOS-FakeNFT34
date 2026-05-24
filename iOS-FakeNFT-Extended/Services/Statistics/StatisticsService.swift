@@ -59,7 +59,7 @@ actor StatisticsService: StatisticsServiceProtocol {
             for nftId in nftIds {
                 group.addTask {
                     let dto: CartNftDTO = try await client.send(
-                        request: LoadNftRequest(nftID: nftId)
+                        request: NftRequest(id: nftId)
                     )
                     return dto.toStatisticsNft()
                 }

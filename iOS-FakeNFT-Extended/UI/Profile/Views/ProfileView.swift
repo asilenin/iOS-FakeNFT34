@@ -5,7 +5,6 @@
 //  Created by Анастасия Федотова on 08.05.2026.
 //
 
-import Kingfisher
 import SwiftUI
 
 struct ProfileView: View {
@@ -95,7 +94,7 @@ struct ProfileView: View {
     private func header(_ profile: Profile) -> some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .center, spacing: 16) {
-                avatar(sources: profileAvatarSources(from: profile.avatar ?? ""))
+                ProfileAvatarView(avatar: profile.avatar)
 
                 Text(profile.name ?? "")
                     .font(.bold22)
@@ -127,48 +126,6 @@ struct ProfileView: View {
                 .padding(.top, 8)
             }
         }
-    }
-
-    // MARK: - Avatar
-
-    @ViewBuilder
-    private func avatar(sources: [Source]) -> some View {
-        if sources.isEmpty {
-            avatarPlaceholder
-        } else {
-            KFImage(source: sources.first)
-                .placeholder {
-                    ZStack {
-                        Color.ypBackgroundUniversal
-
-                        LoadingSpinner(size: .medium, tint: .ypWhiteUniversal)
-                    }
-                }
-                .alternativeSources(Array(sources.dropFirst()))
-                .retry(maxCount: 2, interval: .seconds(1))
-                .fade(duration: 0.2)
-                .onFailure { error in
-                    print("Profile avatar load failed: \(error)")
-                }
-                .resizable()
-                .scaledToFill()
-                .frame(width: 70, height: 70)
-                .clipShape(Circle())
-        }
-    }
-
-    private var avatarPlaceholder: some View {
-        ZStack {
-            Color.ypWhite
-
-            Image(systemName: "person.crop.circle.fill")
-                .resizable()
-                .scaledToFit()
-                .foregroundStyle(.ypGrayLight)
-                .frame(width: 70, height: 70)
-        }
-        .frame(width: 70, height: 70)
-        .clipShape(Circle())
     }
 
     // MARK: - Navigation
@@ -227,28 +184,6 @@ struct ProfileView: View {
         .padding(24)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.ypWhite)
-    }
-}
-
-// MARK: - ProfilePlaceholderView
-
-struct ProfilePlaceholderView: View {
-    let title: String
-
-    var body: some View {
-        Text(title)
-            .font(.bold22)
-            .foregroundStyle(Color.ypBlack)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.ypWhite)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .principal) {
-                    Text(title)
-                        .font(.bold17)
-                        .foregroundStyle(Color.ypBlack)
-                }
-            }
     }
 }
 

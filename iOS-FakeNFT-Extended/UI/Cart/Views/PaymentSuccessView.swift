@@ -16,7 +16,7 @@ struct PaymentSuccessView: View {
                         height: Constants.imageSize
                     )
 
-                Text(Constants.title)
+                Text(String(localized: "Cart.Payment.success.title"))
                     .font(.bold22)
                     .foregroundStyle(.ypBlack)
                     .multilineTextAlignment(.center)
@@ -28,7 +28,7 @@ struct PaymentSuccessView: View {
             Spacer()
 
             Button(action: onReturnToCart) {
-                Text(Constants.buttonTitle)
+                Text(String(localized: "Cart.Payment.success.return"))
                     .font(.bold17)
                     .foregroundStyle(.ypWhite)
                     .frame(maxWidth: .infinity)
@@ -48,9 +48,6 @@ struct PaymentSuccessView: View {
 
 private extension PaymentSuccessView {
     enum Constants {
-        static let title = "Успех! Оплата прошла,\nпоздравляем с покупкой!"
-        static let buttonTitle = "Вернуться в корзину"
-
         static let imageSize: CGFloat = 278
         static let contentSpacing: CGFloat = 20
         static let horizontalPadding: CGFloat = 16

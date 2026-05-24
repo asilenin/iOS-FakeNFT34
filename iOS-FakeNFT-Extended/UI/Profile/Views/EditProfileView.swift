@@ -5,7 +5,6 @@
 //  Created by Анастасия Федотова on 14.05.2026.
 //
 
-import Kingfisher
 import SwiftUI
 
 struct EditProfileView: View {
@@ -151,7 +150,7 @@ struct EditProfileView: View {
             isShowingPhotoDialog = true
         } label: {
             ZStack(alignment: .bottomTrailing) {
-                avatarImage
+                ProfileAvatarView(avatar: viewModel.avatar)
 
                 ZStack {
                     Circle()
@@ -167,45 +166,6 @@ struct EditProfileView: View {
             .frame(width: 70, height: 70)
         }
         .buttonStyle(.plain)
-    }
-
-    @ViewBuilder
-    private var avatarImage: some View {
-        let sources = profileAvatarSources(from: viewModel.avatar)
-
-        if sources.isEmpty {
-            avatarPlaceholder
-        } else {
-            KFImage(source: sources.first)
-                .placeholder {
-                    ZStack {
-                        Color.ypBackgroundUniversal
-
-                        LoadingSpinner(size: .medium, tint: .ypWhiteUniversal)
-                    }
-                }
-                .alternativeSources(Array(sources.dropFirst()))
-                .retry(maxCount: 2, interval: .seconds(1))
-                .fade(duration: 0.2)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 70, height: 70)
-                .clipShape(Circle())
-        }
-    }
-
-    private var avatarPlaceholder: some View {
-        ZStack {
-            Color.ypWhite
-
-            Image(systemName: "person.crop.circle.fill")
-                .resizable()
-                .scaledToFit()
-                .foregroundStyle(.ypGrayLight)
-                .frame(width: 70, height: 70)
-        }
-        .frame(width: 70, height: 70)
-        .clipShape(Circle())
     }
 
     private func editField(

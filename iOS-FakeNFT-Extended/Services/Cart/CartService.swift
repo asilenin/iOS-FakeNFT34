@@ -23,7 +23,7 @@ actor CartService: CartServiceProtocol {
             for id in ids {
                 group.addTask { [networkClient] in
                     let dto: CartNftDTO = try await networkClient.send(
-                        request: LoadNftRequest(nftID: id)
+                        request: NftRequest(id: id)
                     )
 
                     return CartItem(dto: dto)
