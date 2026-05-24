@@ -37,8 +37,8 @@ final class CollectionDetailViewModel {
     // MARK: - Internal
 
     private let service: CollectionDetailServiceProtocol
-    private let favoritesService: CatalogFavoritesServiceProtocol
-    private let cartService: CatalogCartServiceProtocol
+    private let favoritesService: FavoritesServiceProtocol
+    private let cartService: CartServiceProtocol
     private var currentTask: Task<Void, Never>?
 
     // MARK: - Init
@@ -46,8 +46,8 @@ final class CollectionDetailViewModel {
     init(
         collection: NftCollection,
         service: CollectionDetailServiceProtocol,
-        favoritesService: CatalogFavoritesServiceProtocol,
-        cartService: CatalogCartServiceProtocol
+        favoritesService: FavoritesServiceProtocol,
+        cartService: CartServiceProtocol
     ) {
         self.collection = collection
         self.service = service
@@ -212,8 +212,8 @@ final class CollectionDetailViewModel {
 
     private func performLoad(
         using service: CollectionDetailServiceProtocol,
-        favoritesService: CatalogFavoritesServiceProtocol,
-        cartService: CatalogCartServiceProtocol,
+        favoritesService: FavoritesServiceProtocol,
+        cartService: CartServiceProtocol,
         for collection: NftCollection
     ) async {
         state = .loading
@@ -260,7 +260,7 @@ final class CollectionDetailViewModel {
     /// чтобы `async let` рядом с throwing NFT-загрузкой не валил всё.
 
     private func loadFavoritesNonThrowing(
-        using favoritesService: CatalogFavoritesServiceProtocol
+        using favoritesService: FavoritesServiceProtocol
     ) async -> Result<Set<String>, Error> {
         do {
             return .success(try await favoritesService.loadFavorites())
@@ -270,7 +270,7 @@ final class CollectionDetailViewModel {
     }
 
     private func loadCartNonThrowing(
-        using cartService: CatalogCartServiceProtocol
+        using cartService: CartServiceProtocol
     ) async -> Result<Set<String>, Error> {
         do {
             return .success(try await cartService.loadCart())

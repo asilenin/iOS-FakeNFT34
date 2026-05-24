@@ -36,8 +36,8 @@ final class CollectionDetailViewModelTests: XCTestCase {
     private func makeViewModel(
         collection: NftCollection? = nil,
         service: CollectionDetailServiceProtocol? = nil,
-        favoritesService: CatalogFavoritesServiceProtocol? = nil,
-        cartService: CatalogCartServiceProtocol? = nil
+        favoritesService: FavoritesServiceProtocol? = nil,
+        cartService: CartServiceProtocol? = nil
     ) -> CollectionDetailViewModel {
         CollectionDetailViewModel(
             collection: collection ?? Self.makeCollection(),
@@ -52,8 +52,8 @@ final class CollectionDetailViewModelTests: XCTestCase {
     private func makeLoadedViewModel(
         collection: NftCollection? = nil,
         service: CollectionDetailServiceProtocol? = nil,
-        favoritesService: CatalogFavoritesServiceProtocol? = nil,
-        cartService: CatalogCartServiceProtocol? = nil
+        favoritesService: FavoritesServiceProtocol? = nil,
+        cartService: CartServiceProtocol? = nil
     ) async -> CollectionDetailViewModel {
         let viewModel = makeViewModel(
             collection: collection,

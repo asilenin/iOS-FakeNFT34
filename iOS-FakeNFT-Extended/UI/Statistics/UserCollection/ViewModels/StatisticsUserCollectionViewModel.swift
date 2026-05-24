@@ -78,7 +78,7 @@ final class StatisticsUserCollectionViewModel {
 
         Task {
             do {
-                try await favoritesService.setFavorites(favoriteIds)
+                favoriteIds = try await favoritesService.setFavorites(favoriteIds)
             } catch {
                 favoriteIds = snapshot
                 loadError = error
@@ -92,7 +92,7 @@ final class StatisticsUserCollectionViewModel {
 
         Task {
             do {
-                try await cartService.setCart(cartIds)
+                cartIds = try await cartService.setCart(cartIds)
             } catch {
                 cartIds = snapshot
                 loadError = error

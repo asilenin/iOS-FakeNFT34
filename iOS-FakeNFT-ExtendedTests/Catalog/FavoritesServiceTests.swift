@@ -1,15 +1,15 @@
 import XCTest
 @testable import iOS_FakeNFT_Extended
 
-final class CatalogFavoritesServiceTests: XCTestCase {
+final class FavoritesServiceTests: XCTestCase {
 
     private var network: MockNetworkClient!
-    private var service: CatalogFavoritesService!
+    private var service: FavoritesService!
 
     override func setUp() {
         super.setUp()
         network = MockNetworkClient()
-        service = CatalogFavoritesService(networkClient: network)
+        service = FavoritesService(networkClient: network)
     }
 
     override func tearDown() {
@@ -17,8 +17,6 @@ final class CatalogFavoritesServiceTests: XCTestCase {
         network = nil
         super.tearDown()
     }
-
-    // MARK: - Helpers
 
     private static let profileURL = "\(RequestConstants.baseURL)/api/v1/profile/1"
 
@@ -32,8 +30,6 @@ final class CatalogFavoritesServiceTests: XCTestCase {
         """
         return json.data(using: .utf8)!
     }
-
-    // MARK: - Tests
 
     func test_loadFavorites_returnsLikesFromServer() async throws {
         await network.stub(url: Self.profileURL, data: Self.profileJSON(likes: ["a", "b", "c"]))
@@ -50,11 +46,10 @@ final class CatalogFavoritesServiceTests: XCTestCase {
         _ = try await service.loadFavorites()
 
         let totalCalls = await network.totalCalls
-        XCTAssertEqual(totalCalls, 1, "Second loadFavorites must come from cache")
+        XCTAssertEqual(totalCalls, 1)
     }
 
     func test_setFavorites_returnsUpdatedSetFromServerResponse() async throws {
-        // Server returns whatever we sent, in arbitrary order — set comparison is order-agnostic.
         await network.stub(url: Self.profileURL, data: Self.profileJSON(likes: ["x", "y"]))
 
         let updated = try await service.setFavorites(["x", "y"])
@@ -66,11 +61,10 @@ final class CatalogFavoritesServiceTests: XCTestCase {
         await network.stub(url: Self.profileURL, data: Self.profileJSON(likes: ["m"]))
 
         _ = try await service.setFavorites(["m"])
-        // Subsequent load must NOT hit the network because cache is fresh.
         _ = try await service.loadFavorites()
 
         let totalCalls = await network.totalCalls
-        XCTAssertEqual(totalCalls, 1, "loadFavorites after setFavorites must use the cache populated by setFavorites")
+        XCTAssertEqual(totalCalls, 1)
     }
 
     func test_setFavorites_propagatesNetworkError() async {
@@ -96,9 +90,6 @@ final class CatalogFavoritesServiceTests: XCTestCase {
     }
 
     func test_setFavorites_withEmptySet_stillCallsNetwork() async throws {
-        // Even though the server will silently ignore empty likes,
-        // the service still attempts the PUT — it doesn't filter empty sets.
-        // The known limitation lives at the network-client layer.
         await network.stub(url: Self.profileURL, data: Self.profileJSON(likes: []))
 
         let updated = try await service.setFavorites([])

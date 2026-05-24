@@ -1,7 +1,14 @@
+//
+//  MockFavoritesService.swift
+//  iOS-FakeNFT-Extended
+//
+//  Created by МAK on 24.05.2026.
+//
+
 import Foundation
 
-/// Мок `CatalogFavoritesServiceProtocol` для Preview и тестов. Имитирует задержку сети.
-actor MockCatalogFavoritesService: CatalogFavoritesServiceProtocol {
+/// Мок для Preview и тестов.
+actor MockFavoritesService: FavoritesServiceProtocol {
 
     private var favorites: Set<String>
 
@@ -20,5 +27,5 @@ actor MockCatalogFavoritesService: CatalogFavoritesServiceProtocol {
         return favorites
     }
 
-    func invalidateCache() {}
+    func invalidateCache() async {}
 }
