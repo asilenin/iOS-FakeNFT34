@@ -35,22 +35,29 @@ final class MyNFTsViewModel {
     }
 
     private(set) var state: State = .idle
+    private(set) var likedIds: Set<String>
+    private(set) var pendingLikeIds: Set<String> = []
 
     // MARK: - Dependencies
 
     private let nftIds: [String]
     private let nftService: NftServiceProtocol
+    private let updateFavoriteIds: ([String]) async throws -> Profile
     private let userDefaults: UserDefaults
 
     // MARK: - Initializers
 
     init(
         nftIds: [String],
+        favoriteIds: [String],
         nftService: NftServiceProtocol,
+        updateFavoriteIds: @escaping ([String]) async throws -> Profile,
         userDefaults: UserDefaults = .standard
     ) {
         self.nftIds = nftIds
+        self.likedIds = Set(favoriteIds)
         self.nftService = nftService
+        self.updateFavoriteIds = updateFavoriteIds
         self.userDefaults = userDefaults
         sortOption = MyNFTsSortOption(
             rawValue: userDefaults.string(forKey: Constants.sortOptionKey) ?? ""
@@ -58,6 +65,35 @@ final class MyNFTsViewModel {
     }
 
     // MARK: - Public Methods
+    
+    func isLiked(_ nft: ProfileNft) -> Bool {
+        guard let id = nft.id else { return false }
+        return likedIds.contains(id)
+    }
+    
+    func toggleLike(_ nft: ProfileNft) async {
+        guard let id = nft.id, !pendingLikeIds.contains(id) else { return }
+
+        let previousLiked = likedIds
+        var newLiked = likedIds
+        if newLiked.contains(id) {
+            newLiked.remove(id)
+        } else {
+            newLiked.insert(id)
+        }
+
+        pendingLikeIds.insert(id)
+        likedIds = newLiked   // оптимистично
+
+        do {
+            let saved = try await updateFavoriteIds(Array(newLiked))
+            likedIds = Set(saved.likes ?? [])
+        } catch {
+            likedIds = previousLiked   // откат
+        }
+
+        pendingLikeIds.remove(id)
+    }
 
     func loadNFTs() async {
         guard !state.isLoading else { return }

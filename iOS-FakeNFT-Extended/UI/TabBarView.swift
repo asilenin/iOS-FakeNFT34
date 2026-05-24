@@ -198,7 +198,9 @@ private struct ProfileTabRoot: View {
                     case .myNfts(let nftIds):
                         MyNFTsView(
                             nftIds: nftIds,
-                            nftService: nftService
+                            favoriteIds: viewModel.loadedProfile?.likes ?? [],
+                            nftService: nftService,
+                            updateFavoriteIds: viewModel.updateFavoriteIds
                         )
 
                     case .favorites(let favoriteIds):
