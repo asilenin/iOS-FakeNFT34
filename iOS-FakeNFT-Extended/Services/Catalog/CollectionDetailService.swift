@@ -19,8 +19,6 @@ actor CollectionDetailService: CollectionDetailServiceProtocol {
         let cached = uniqueIds.compactMap { cache[$0] }
         let missingIds = uniqueIds.filter { cache[$0] == nil }
 
-        print("ℹ️ [\(fileName())]: :\(#line)] \(#function) requested \(uniqueIds.count) unique ids, \(cached.count) from cache, \(missingIds.count) to fetch")
-
         guard !missingIds.isEmpty else { return cached }
 
         let loaded = await loadFromNetwork(ids: missingIds)
@@ -29,13 +27,8 @@ actor CollectionDetailService: CollectionDetailServiceProtocol {
         }
 
         let result = cached + loaded
-        let failedCount = missingIds.count - loaded.count
-        if failedCount > 0 {
-            print("ℹ️ [\(fileName())]: :\(#line)] \(#function) \(loaded.count) loaded, \(failedCount) failed (best-effort, kept successful)")
-        }
 
         if result.isEmpty {
-            print("❌ [\(fileName())]: :\(#line)] \(#function) no NFTs retrieved at all (cache empty + all requests failed)")
             throw NetworkClientError.urlSessionError
         }
         return result
@@ -53,12 +46,10 @@ actor CollectionDetailService: CollectionDetailServiceProtocol {
             for id in ids {
                 group.addTask { [networkClient] in
                     let request = NftRequest(id: id)
-                    print("ℹ️ [\(fileName())]: :\(#line)] \(#function) GET \(request.endpoint?.absoluteString ?? "nil")")
                     do {
                         let nft: Nft = try await networkClient.send(request: request)
                         return nft
                     } catch {
-                        print("❌ [\(fileName())]: :\(#line)] \(#function) failed for id=\(id): \(error)")
                         return nil
                     }
                 }
