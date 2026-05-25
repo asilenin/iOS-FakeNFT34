@@ -23,8 +23,6 @@ struct StatisticsViewContentView: View {
             Color.ypWhite.ignoresSafeArea()
             content
         }
-        .navigationTitle(Text("Tab.statistics"))
-        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 MenuButton { isShowingSortDialog = true }

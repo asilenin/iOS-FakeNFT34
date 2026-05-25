@@ -77,7 +77,7 @@ struct StatisticsRowView: View {
 
     private var avatarPlaceholder: some View {
         Circle()
-            .fill(Color.ypGrayLight)
+            .fill(Color.ypGrayUniversal)
             .frame(width: Layout.avatarSide, height: Layout.avatarSide)
             .overlay {
                 Image(systemName: "person.fill")
