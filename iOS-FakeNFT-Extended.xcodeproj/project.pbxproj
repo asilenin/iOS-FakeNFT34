@@ -19,6 +19,7 @@
 		473E76C02FC47CE8005E9DC8 /* PaymentTrackingStubs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473E76BF2FC47CE0005E9DC8 /* PaymentTrackingStubs.swift */; };
 		473E76C42FC47E5B005E9DC8 /* ProfileServiceCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473E76C32FC47E59005E9DC8 /* ProfileServiceCacheTests.swift */; };
 		473E76C62FC47EF1005E9DC8 /* MyNFTsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473E76C52FC47EF0005E9DC8 /* MyNFTsViewModelTests.swift */; };
+		473E76C92FC47F36005E9DC8 /* StatisticsServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473E76C82FC47F36005E9DC8 /* StatisticsServiceTests.swift */; };
 		4747AA052FAF622A00B07D13 /* WebViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA042FAF622900B07D13 /* WebViewRepresentable.swift */; };
 		4747AA072FAF622F00B07D13 /* WebViewScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA062FAF622F00B07D13 /* WebViewScreen.swift */; };
 		4747AA092FAF678300B07D13 /* NetworkClientError+LocalizedError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA082FAF678100B07D13 /* NetworkClientError+LocalizedError.swift */; };
@@ -186,6 +187,7 @@
 		473E76BF2FC47CE0005E9DC8 /* PaymentTrackingStubs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentTrackingStubs.swift; sourceTree = "<group>"; };
 		473E76C32FC47E59005E9DC8 /* ProfileServiceCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileServiceCacheTests.swift; sourceTree = "<group>"; };
 		473E76C52FC47EF0005E9DC8 /* MyNFTsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNFTsViewModelTests.swift; sourceTree = "<group>"; };
+		473E76C82FC47F36005E9DC8 /* StatisticsServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsServiceTests.swift; sourceTree = "<group>"; };
 		47470DE62FAF5EF4005D4D4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4747AA042FAF622900B07D13 /* WebViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewRepresentable.swift; sourceTree = "<group>"; };
 		4747AA062FAF622F00B07D13 /* WebViewScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewScreen.swift; sourceTree = "<group>"; };
@@ -409,6 +411,14 @@
 				473E76C32FC47E59005E9DC8 /* ProfileServiceCacheTests.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		473E76C72FC47F2C005E9DC8 /* Statistics */ = {
+			isa = PBXGroup;
+			children = (
+				473E76C82FC47F36005E9DC8 /* StatisticsServiceTests.swift */,
+			);
+			path = Statistics;
 			sourceTree = "<group>";
 		};
 		4747AA022FAF621C00B07D13 /* Common */ = {
@@ -1003,6 +1013,7 @@
 		ABC5E17B2C31F5B0002B4068 /* iOS-FakeNFT-ExtendedTests */ = {
 			isa = PBXGroup;
 			children = (
+				473E76C72FC47F2C005E9DC8 /* Statistics */,
 				473E76C22FC47E55005E9DC8 /* Profile */,
 				473E76C12FC47E51005E9DC8 /* Cart */,
 				472DAC642FB9EC85005D4B5B /* Catalog */,
@@ -1404,6 +1415,7 @@
 				47C646F02FBB3851004206CB /* CartServiceCacheTests.swift in Sources */,
 				47F8548D2FBC6956005C8CBC /* TestError.swift in Sources */,
 				47C646D22FBB1309004206CB /* CatalogNetworkClientTests.swift in Sources */,
+				473E76C92FC47F36005E9DC8 /* StatisticsServiceTests.swift in Sources */,
 				473E76C02FC47CE8005E9DC8 /* PaymentTrackingStubs.swift in Sources */,
 				472DAC662FB9EC94005D4B5B /* CollectionDetailServiceTests.swift in Sources */,
 				472DAC632FB9EC76005D4B5B /* MockNetworkClient.swift in Sources */,
