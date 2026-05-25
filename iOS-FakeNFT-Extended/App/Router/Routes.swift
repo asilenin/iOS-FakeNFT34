@@ -9,9 +9,6 @@ enum CatalogRoute: Hashable {
 
     /// Переход на экран WebView с сайтом автора коллекции.
     case authorWeb(URL)
-
-    /// Переход на экран деталей NFT по идентификатору.
-    case nftDetail(String)
 }
 
 enum CartRoute: Hashable {
@@ -30,5 +27,4 @@ enum StatisticsRoute: Hashable {
     case userDetail(StatisticsUser)
     case userCollection(userId: String, userName: String)
     case userWebsite(URL)
-    case nftDetail(String)
 }

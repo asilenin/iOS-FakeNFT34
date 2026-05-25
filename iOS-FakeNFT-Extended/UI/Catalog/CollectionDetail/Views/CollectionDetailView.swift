@@ -119,7 +119,7 @@ struct CollectionDetailView: View {
                     actions: NftGridCellActions(
                         onFavoriteTap: { Task { await viewModel.didTapFavorite(nft.id) } },
                         onCartTap: { Task { await viewModel.didTapCart(nft.id) } },
-                        onCellTap: { router.push(CatalogRoute.nftDetail(nft.id), in: .catalog) }
+                        onCellTap: { }
                     )
                 )
             }

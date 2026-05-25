@@ -80,9 +80,7 @@ struct StatisticsUserCollectionView: View {
                         actions: StatisticsNftGridCellActions(
                             onFavoriteTap: { viewModel.didTapFavorite(nft.id) },
                             onCartTap: { viewModel.didTapCart(nft.id) },
-                            onCellTap: {
-                                router.push(StatisticsRoute.nftDetail(nft.id), in: .statistics)
-                            }
+                            onCellTap: { }
                         )
                     )
                 }

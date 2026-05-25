@@ -67,8 +67,6 @@ private struct CatalogTabRoot: View {
                         CollectionDetailView(collection: collection)
                     case .authorWeb(let url):
                         WebViewScreen(url: url)
-                    case .nftDetail(let id):
-                        NftDetailView(nftId: id)
                     }
                 }
         }
@@ -146,8 +144,6 @@ private struct StatisticsTabRoot: View {
                     )
                 case .userWebsite(let url):
                     WebViewScreen(url: url)
-                case .nftDetail(let nftId):
-                    StatisticsNftDetailView(nftId: nftId)
                 }
             }
         }

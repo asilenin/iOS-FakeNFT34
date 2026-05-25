@@ -24,7 +24,6 @@ struct StatisticsNftGridCellView: View {
         }
         .frame(width: 108, height: 192)
         .contentShape(Rectangle())
-        .onTapGesture(perform: actions.onCellTap)
     }
 
     // MARK: - Subviews

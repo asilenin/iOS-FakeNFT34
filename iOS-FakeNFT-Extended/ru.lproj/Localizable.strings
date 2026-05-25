@@ -83,9 +83,6 @@
 "Statistics.collection.title" = "Коллекция NFT";
 "Statistics.collection.empty" = "У пользователя пока нет NFT";
 "Statistics.collection.loadErrorHint" = "Не удалось загрузить коллекцию";
-"Statistics.nftDetail.title" = "NFT";
-"Statistics.nft.priceLabel" = "Цена";
-"Statistics.nftDetail.placeholder" = "Экран NFT будет в отдельном эпике";
 
 "Catalog.sort.title" = "Сортировка";
 "Catalog.sort.byName" = "По названию";

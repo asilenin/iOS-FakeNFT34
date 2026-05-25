@@ -83,9 +83,6 @@
 "Statistics.collection.title" = "NFT Collection";
 "Statistics.collection.empty" = "This user has no NFTs yet";
 "Statistics.collection.loadErrorHint" = "Failed to load collection";
-"Statistics.nftDetail.title" = "NFT";
-"Statistics.nft.priceLabel" = "Price";
-"Statistics.nftDetail.placeholder" = "The NFT screen will be in a separate epic";
 
 "Catalog.sort.title" = "Sort";
 "Catalog.sort.byName" = "By name";
