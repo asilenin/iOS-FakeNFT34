@@ -15,6 +15,8 @@
 		472DAC632FB9EC76005D4B5B /* MockNetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472DAC622FB9EC75005D4B5B /* MockNetworkClient.swift */; };
 		472DAC662FB9EC94005D4B5B /* CollectionDetailServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472DAC652FB9EC93005D4B5B /* CollectionDetailServiceTests.swift */; };
 		473238832FB72D1D00AF30A9 /* CollectionsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473238822FB72D1C00AF30A9 /* CollectionsRequest.swift */; };
+		473E76BE2FC47C21005E9DC8 /* PaymentViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473E76BD2FC47C20005E9DC8 /* PaymentViewModelTests.swift */; };
+		473E76C02FC47CE8005E9DC8 /* PaymentTrackingStubs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473E76BF2FC47CE0005E9DC8 /* PaymentTrackingStubs.swift */; };
 		4747AA052FAF622A00B07D13 /* WebViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA042FAF622900B07D13 /* WebViewRepresentable.swift */; };
 		4747AA072FAF622F00B07D13 /* WebViewScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA062FAF622F00B07D13 /* WebViewScreen.swift */; };
 		4747AA092FAF678300B07D13 /* NetworkClientError+LocalizedError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4747AA082FAF678100B07D13 /* NetworkClientError+LocalizedError.swift */; };
@@ -178,6 +180,8 @@
 		472DAC652FB9EC93005D4B5B /* CollectionDetailServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionDetailServiceTests.swift; sourceTree = "<group>"; };
 		473238822FB72D1C00AF30A9 /* CollectionsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsRequest.swift; sourceTree = "<group>"; };
 		473E76BC2FC461C2005E9DC8 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		473E76BD2FC47C20005E9DC8 /* PaymentViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewModelTests.swift; sourceTree = "<group>"; };
+		473E76BF2FC47CE0005E9DC8 /* PaymentTrackingStubs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentTrackingStubs.swift; sourceTree = "<group>"; };
 		47470DE62FAF5EF4005D4D4A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4747AA042FAF622900B07D13 /* WebViewRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewRepresentable.swift; sourceTree = "<group>"; };
 		4747AA062FAF622F00B07D13 /* WebViewScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewScreen.swift; sourceTree = "<group>"; };
@@ -352,6 +356,7 @@
 		472DAC612FB9EC68005D4B5B /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				473E76BF2FC47CE0005E9DC8 /* PaymentTrackingStubs.swift */,
 				47F8548C2FBC6955005C8CBC /* TestError.swift */,
 				47C646F32FBB51CC004206CB /* CollectionDetailViewModelStubs.swift */,
 				47C646CF2FBB1302004206CB /* URLProtocolMock.swift */,
@@ -977,6 +982,7 @@
 		ABC5E17B2C31F5B0002B4068 /* iOS-FakeNFT-ExtendedTests */ = {
 			isa = PBXGroup;
 			children = (
+				473E76BD2FC47C20005E9DC8 /* PaymentViewModelTests.swift */,
 				472DAC642FB9EC85005D4B5B /* Catalog */,
 				472DAC612FB9EC68005D4B5B /* Helpers */,
 				ABC5E17C2C31F5B0002B4068 /* RouterTests.swift */,
@@ -1376,11 +1382,13 @@
 				47C646F02FBB3851004206CB /* CartServiceCacheTests.swift in Sources */,
 				47F8548D2FBC6956005C8CBC /* TestError.swift in Sources */,
 				47C646D22FBB1309004206CB /* CatalogNetworkClientTests.swift in Sources */,
+				473E76C02FC47CE8005E9DC8 /* PaymentTrackingStubs.swift in Sources */,
 				472DAC662FB9EC94005D4B5B /* CollectionDetailServiceTests.swift in Sources */,
 				472DAC632FB9EC76005D4B5B /* MockNetworkClient.swift in Sources */,
 				ABC5E17D2C31F5B0002B4068 /* RouterTests.swift in Sources */,
 				47C646E22FBB1738004206CB /* FavoritesServiceTests.swift in Sources */,
 				479BD4CE2FB108C3009F014D /* CatalogServiceTests.swift in Sources */,
+				473E76BE2FC47C21005E9DC8 /* PaymentViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
