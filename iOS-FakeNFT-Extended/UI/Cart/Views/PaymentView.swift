@@ -37,7 +37,6 @@ struct PaymentView: View {
                 if viewModel.isPaying {
                     Color.ypBlack.opacity(Constants.loaderBackgroundOpacity)
                         .ignoresSafeArea()
-                    
                     LoadingSpinner(size: .medium)
                 }
             }

@@ -50,7 +50,7 @@ struct StatisticsUserCollectionView: View {
     private var content: some View {
         switch viewModel.state {
         case .loading:
-            LoadingSpinner(size: .medium)
+            LoadingSpinner(size: .medium, withBackground: true)
         case .empty:
             StatisticsEmptyStateView(message: "Statistics.collection.empty")
         case .success:
