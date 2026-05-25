@@ -23,8 +23,6 @@ struct StatisticsViewContentView: View {
             Color.ypWhite.ignoresSafeArea()
             content
         }
-        .navigationTitle(Text("Tab.statistics"))
-        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 MenuButton { isShowingSortDialog = true }
@@ -58,6 +56,7 @@ struct StatisticsViewContentView: View {
         switch viewModel.state {
         case .loading:
             LoadingSpinner(size: .medium)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         case .empty:
             StatisticsEmptyStateView(message: "Statistics.empty")
         case .success:
@@ -68,19 +67,17 @@ struct StatisticsViewContentView: View {
     }
 
     private var statisticsList: some View {
-        List {
-            ForEach(Array(viewModel.users.enumerated()), id: \.element.id) { index, user in
-                StatisticsRowView(rank: index + 1, user: user) {
-                    router.push(StatisticsRoute.userDetail(user), in: .statistics)
+        ScrollView {
+            LazyVStack(spacing: 8) {
+                ForEach(Array(viewModel.users.enumerated()), id: \.element.id) { index, user in
+                    StatisticsRowView(rank: index + 1, user: user) {
+                        router.push(StatisticsRoute.userDetail(user), in: .statistics)
+                    }
+                    .padding(.horizontal, 16)
                 }
-                .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.ypWhite)
             }
+            .padding(.top, 20)
         }
-        .listStyle(.plain)
-        .scrollContentBackground(.hidden)
-        .contentMargins(.top, 20, for: .scrollContent)
     }
 }
 

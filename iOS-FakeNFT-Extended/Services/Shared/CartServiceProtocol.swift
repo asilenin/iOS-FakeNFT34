@@ -6,6 +6,7 @@ protocol CartServiceProtocol: Sendable {
     func loadCart() async throws -> Set<String>
 
     /// Заменяет корзину на сервере целиком и возвращает актуальное множество.
+    @discardableResult
     func setCart(_ ids: Set<String>) async throws -> Set<String>
 
     /// Сбрасывает in-memory кэш состава корзины.
@@ -13,4 +14,7 @@ protocol CartServiceProtocol: Sendable {
 
     /// Загружает полные модели NFT для экрана корзины.
     func loadCartItems() async throws -> [CartItem]
+
+    /// Оформляет заказ (POST /orders/1): переносит nfts в профиль. Не очищает корзину.
+    func performOrder(_ ids: Set<String>) async throws
 }

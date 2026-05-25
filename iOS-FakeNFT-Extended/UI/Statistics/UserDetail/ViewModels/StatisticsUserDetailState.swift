@@ -11,7 +11,7 @@ enum StatisticsUserDetailState: Equatable {
     case loading
     case success
     case error(message: String)
-    
+
     static func error(_ error: Error) -> StatisticsUserDetailState {
         .error(message: error.localizedDescription)
     }

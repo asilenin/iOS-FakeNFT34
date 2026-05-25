@@ -16,11 +16,18 @@ struct MyNFTsView: View {
 
     // MARK: - Initializers
 
-    init(nftIds: [String], nftService: NftServiceProtocol) {
+    init(
+        nftIds: [String],
+        favoriteIds: [String],
+        nftService: NftServiceProtocol,
+        updateFavoriteIds: @escaping ([String]) async throws -> Profile
+    ) {
         _viewModel = State(
             initialValue: MyNFTsViewModel(
                 nftIds: nftIds,
-                nftService: nftService
+                favoriteIds: favoriteIds,
+                nftService: nftService,
+                updateFavoriteIds: updateFavoriteIds
             )
         )
     }
@@ -51,11 +58,12 @@ struct MyNFTsView: View {
                 Button(String(localized: "Profile.MyNFTs.sort.price")) {
                     viewModel.sortOption = .price
                 }
-
                 Button(String(localized: "Profile.MyNFTs.sort.rating")) {
                     viewModel.sortOption = .rating
                 }
-
+                Button(String(localized: "Profile.MyNFTs.sort.name")) {
+                    viewModel.sortOption = .name
+                }
                 Button(String(localized: "Error.cancel"), role: .cancel) {}
             }
             .task {
@@ -85,7 +93,14 @@ struct MyNFTsView: View {
         ScrollView {
             LazyVStack(spacing: 16) {
                 ForEach(nfts, id: \.profileListID) { nft in
-                    MyNFTsRowView(nft: nft)
+                    MyNFTsRowView(
+                        nft: nft,
+                        isLiked: viewModel.isLiked(nft),
+                        isLikePending: viewModel.pendingLikeIds.contains(nft.id ?? ""),
+                        onLikeToggle: {
+                            Task { await viewModel.toggleLike(nft) }
+                        }
+                    )
                 }
             }
             .padding(.horizontal, 16)
@@ -126,7 +141,9 @@ struct MyNFTsView: View {
     NavigationStack {
         MyNFTsView(
             nftIds: ProfilePreviewData.nfts.compactMap(\.id),
-            nftService: MockNftService()
+            favoriteIds: Array(ProfilePreviewData.nfts.compactMap(\.id).suffix(2)),
+            nftService: MockNftService(),
+            updateFavoriteIds: { _ in ProfilePreviewData.profile }
         )
     }
 }

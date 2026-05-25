@@ -8,35 +8,28 @@
 import Foundation
 
 /// Общий сервис лайков для каталога, статистики и других табов.
+/// Делегирует хранение в `ProfileService` — единый источник правды для likes.
 actor FavoritesService: FavoritesServiceProtocol {
 
-    private let networkClient: NetworkClient
-    private var cached: Set<String>?
+    private let profileService: ProfileServiceProtocol
 
-    init(networkClient: NetworkClient) {
-        self.networkClient = networkClient
+    init(profileService: ProfileServiceProtocol) {
+        self.profileService = profileService
     }
 
     func loadFavorites() async throws -> Set<String> {
-        if let cached {
-            return cached
-        }
-
-        let profile: CatalogProfileDto = try await networkClient.send(request: ProfileRequest())
-        let favorites = Set(profile.likes)
-        cached = favorites
-        return favorites
+        let profile = try await profileService.loadProfile()
+        return Set(profile.likes ?? [])
     }
 
     func setFavorites(_ ids: Set<String>) async throws -> Set<String> {
-        let request = ProfileSetLikesRequest(likes: Array(ids))
-        let profile: CatalogProfileDto = try await networkClient.send(request: request)
-        let updated = Set(profile.likes)
-        cached = updated
-        return updated
+        let current = try await profileService.loadProfile()
+        let updated = current.updatingLikes(Array(ids))
+        let saved = try await profileService.updateProfile(updated)
+        return Set(saved.likes ?? [])
     }
 
     func invalidateCache() async {
-        cached = nil
+        await profileService.invalidateCache()
     }
 }

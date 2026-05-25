@@ -28,7 +28,6 @@ struct NftGridCell: View {
         }
         .frame(width: 108, height: 172)
         .contentShape(Rectangle())
-        .onTapGesture(perform: actions.onCellTap)
     }
 
     // MARK: - Subviews

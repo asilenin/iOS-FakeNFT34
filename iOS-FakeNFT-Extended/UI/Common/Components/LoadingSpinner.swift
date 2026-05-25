@@ -1,24 +1,5 @@
 import SwiftUI
 
-// MARK: - REMOVE Before release
-//  Usage:
-///  Полноэкранный лоадер во время загрузки списка
-///   if vm.isLoading {
-///       LoadingSpinner(size: .large)
-///   }
-///
-///   Внутри ячейки NFT, пока не загрузилась картинка
-///   KFImage(url)
-///       .placeholder {
-///           LoadingSpinner(size: .small)
-///       }
-///
-///   На тёмном фоне (например, оверлей)
-///   ZStack {
-///       Color.black.opacity(0.5)
-///       LoadingSpinner(size: .large, tint: .ypWhiteUniversal)
-///   }
-
 struct LoadingSpinner: View {
 
     enum Size {
@@ -29,8 +10,22 @@ struct LoadingSpinner: View {
 
     var size: Size = .medium
     var tint: Color = .ypBlack
+    var withBackground: Bool = false
 
     var body: some View {
+        if withBackground {
+            spinner
+                .frame(width: Constants.backgroundSide, height: Constants.backgroundSide)
+                .background(
+                    RoundedRectangle(cornerRadius: Constants.backgroundCornerRadius)
+                        .fill(Color.ypGrayLight)
+                )
+        } else {
+            spinner
+        }
+    }
+
+    private var spinner: some View {
         ProgressView()
             .progressViewStyle(.circular)
             .tint(tint)
@@ -50,6 +45,11 @@ struct LoadingSpinner: View {
     /// `medium` and `large` so the rays match the Figma sizes.
     private var scale: CGFloat {
         pointSize / 20
+    }
+
+    private enum Constants {
+        static let backgroundSide: CGFloat = 82
+        static let backgroundCornerRadius: CGFloat = 8
     }
 }
 

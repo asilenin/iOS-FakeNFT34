@@ -9,6 +9,7 @@ final class ServicesAssembly {
     private let cartServiceStorage: CartServiceProtocol
     private let paymentServiceStorage: PaymentServiceProtocol
     private let favoritesServiceStorage: FavoritesServiceProtocol
+    private let profileServiceStorage: ProfileServiceProtocol
 
     private let useMockCart = false
 
@@ -26,7 +27,10 @@ final class ServicesAssembly {
         }
 
         paymentServiceStorage = PaymentService(networkClient: networkClient)
-        favoritesServiceStorage = FavoritesService(networkClient: catalogNetworkClient)
+
+        let profile = ProfileService(networkClient: networkClient)
+        profileServiceStorage = profile
+        favoritesServiceStorage = FavoritesService(profileService: profile)
     }
 
     // MARK: - Shared services
@@ -41,6 +45,10 @@ final class ServicesAssembly {
 
     var paymentService: PaymentServiceProtocol {
         paymentServiceStorage
+    }
+
+    var profileService: ProfileServiceProtocol {
+        profileServiceStorage
     }
 
     // MARK: - Statistics
@@ -74,15 +82,6 @@ final class ServicesAssembly {
     }
 
     // MARK: - Profile
-
-    @ObservationIgnored
-    private lazy var _profileService: ProfileServiceProtocol = ProfileService(
-        networkClient: networkClient
-    )
-
-    var profileService: ProfileServiceProtocol {
-        _profileService
-    }
 
     @ObservationIgnored
     private lazy var _nftService: NftServiceProtocol = NftService(

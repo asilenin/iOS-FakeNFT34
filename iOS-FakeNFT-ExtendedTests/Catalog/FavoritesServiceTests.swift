@@ -3,99 +3,84 @@ import XCTest
 
 final class FavoritesServiceTests: XCTestCase {
 
-    private var network: MockNetworkClient!
+    private var profileService: MockProfileService!
     private var service: FavoritesService!
 
     override func setUp() {
         super.setUp()
-        network = MockNetworkClient()
-        service = FavoritesService(networkClient: network)
+        profileService = MockProfileService()
+        service = FavoritesService(profileService: profileService)
     }
 
     override func tearDown() {
         service = nil
-        network = nil
+        profileService = nil
         super.tearDown()
     }
 
-    private static let profileURL = "\(RequestConstants.baseURL)/api/v1/profile/1"
+    // MARK: - Helpers
 
-    private static func profileJSON(likes: [String], id: String = "user-id") -> Data {
-        let likesArray = likes.map { "\"\($0)\"" }.joined(separator: ",")
-        let json = """
-        {
-            "id": "\(id)",
-            "likes": [\(likesArray)]
-        }
-        """
-        return json.data(using: .utf8)!
+    private func makeProfile(likes: [String], nfts: [String] = []) -> Profile {
+        Profile(
+            id: "test-id",
+            name: "Test",
+            description: nil,
+            website: nil,
+            avatar: nil,
+            nfts: nfts,
+            likes: likes
+        )
     }
 
-    func test_loadFavorites_returnsLikesFromServer() async throws {
-        await network.stub(url: Self.profileURL, data: Self.profileJSON(likes: ["a", "b", "c"]))
+    // MARK: - loadFavorites
+
+    func test_loadFavorites_extractsLikesFromProfile() async throws {
+        profileService = MockProfileService(profile: makeProfile(likes: ["a", "b"]))
+        service = FavoritesService(profileService: profileService)
 
         let favorites = try await service.loadFavorites()
 
-        XCTAssertEqual(favorites, ["a", "b", "c"])
+        XCTAssertEqual(favorites, Set(["a", "b"]))
     }
 
-    func test_loadFavorites_secondCallUsesCache() async throws {
-        await network.stub(url: Self.profileURL, data: Self.profileJSON(likes: ["a"]))
+    func test_loadFavorites_emptyLikes_returnsEmptySet() async throws {
+        profileService = MockProfileService(profile: makeProfile(likes: []))
+        service = FavoritesService(profileService: profileService)
 
-        _ = try await service.loadFavorites()
-        _ = try await service.loadFavorites()
+        let favorites = try await service.loadFavorites()
 
-        let totalCalls = await network.totalCalls
-        XCTAssertEqual(totalCalls, 1)
+        XCTAssertTrue(favorites.isEmpty)
     }
 
-    func test_setFavorites_returnsUpdatedSetFromServerResponse() async throws {
-        await network.stub(url: Self.profileURL, data: Self.profileJSON(likes: ["x", "y"]))
+    // MARK: - setFavorites
 
-        let updated = try await service.setFavorites(["x", "y"])
+    func test_setFavorites_writesLikesThroughProfileService() async throws {
+        profileService = MockProfileService(profile: makeProfile(likes: ["a"], nfts: ["nft-1"]))
+        service = FavoritesService(profileService: profileService)
 
-        XCTAssertEqual(updated, ["x", "y"])
+        let result = try await service.setFavorites(Set(["a", "b", "c"]))
+
+        XCTAssertEqual(result, Set(["a", "b", "c"]))
     }
 
-    func test_setFavorites_updatesCache() async throws {
-        await network.stub(url: Self.profileURL, data: Self.profileJSON(likes: ["m"]))
+    func test_setFavorites_preservesNfts() async throws {
+        // Лайк не должен затирать купленные nfts профиля.
+        profileService = MockProfileService(profile: makeProfile(likes: ["a"], nfts: ["nft-1", "nft-2"]))
+        service = FavoritesService(profileService: profileService)
 
-        _ = try await service.setFavorites(["m"])
-        _ = try await service.loadFavorites()
+        _ = try await service.setFavorites(Set(["a", "b"]))
 
-        let totalCalls = await network.totalCalls
-        XCTAssertEqual(totalCalls, 1)
+        let profile = try await profileService.loadProfile()
+        XCTAssertEqual(Set(profile.nfts ?? []), Set(["nft-1", "nft-2"]),
+                       "Updating likes must not wipe profile nfts")
     }
 
-    func test_setFavorites_propagatesNetworkError() async {
-        await network.stub(url: Self.profileURL, error: NetworkClientError.httpStatusCode(500))
+    func test_setFavorites_clearAll_returnsEmptySet() async throws {
+        profileService = MockProfileService(profile: makeProfile(likes: ["a", "b"]))
+        service = FavoritesService(profileService: profileService)
 
-        do {
-            _ = try await service.setFavorites(["x"])
-            XCTFail("Expected error to propagate")
-        } catch {
-            // expected
-        }
-    }
+        let result = try await service.setFavorites([])
 
-    func test_invalidateCache_forcesNextLoadToHitNetwork() async throws {
-        await network.stub(url: Self.profileURL, data: Self.profileJSON(likes: ["a"]))
-
-        _ = try await service.loadFavorites()
-        await service.invalidateCache()
-        _ = try await service.loadFavorites()
-
-        let totalCalls = await network.totalCalls
-        XCTAssertEqual(totalCalls, 2)
-    }
-
-    func test_setFavorites_withEmptySet_stillCallsNetwork() async throws {
-        await network.stub(url: Self.profileURL, data: Self.profileJSON(likes: []))
-
-        let updated = try await service.setFavorites([])
-
-        XCTAssertEqual(updated, [])
-        let totalCalls = await network.totalCalls
-        XCTAssertEqual(totalCalls, 1)
+        XCTAssertTrue(result.isEmpty)
     }
 }

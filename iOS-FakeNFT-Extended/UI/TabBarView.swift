@@ -67,8 +67,6 @@ private struct CatalogTabRoot: View {
                         CollectionDetailView(collection: collection)
                     case .authorWeb(let url):
                         WebViewScreen(url: url)
-                    case .nftDetail(let id):
-                        NftDetailView(nftId: id)
                     }
                 }
         }
@@ -146,10 +144,6 @@ private struct StatisticsTabRoot: View {
                     )
                 case .userWebsite(let url):
                     WebViewScreen(url: url)
-                case .nftDetail(let nftId):
-                    StatisticsNftDetailView(nftId: nftId)
-                case ._placeholder:
-                    EmptyView()
                 }
             }
         }
@@ -198,7 +192,9 @@ private struct ProfileTabRoot: View {
                     case .myNfts(let nftIds):
                         MyNFTsView(
                             nftIds: nftIds,
-                            nftService: nftService
+                            favoriteIds: viewModel.loadedProfile?.likes ?? [],
+                            nftService: nftService,
+                            updateFavoriteIds: viewModel.updateFavoriteIds
                         )
 
                     case .favorites(let favoriteIds):

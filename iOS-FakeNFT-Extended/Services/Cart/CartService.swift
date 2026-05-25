@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Общий сервис корзины: GET/PUT заказа через `CatalogNetworkClient` и загрузка NFT lkz экрана корзины — через `DefaultNetworkClient`.
+/// Общий сервис корзины: GET/PUT заказа через `CatalogNetworkClient` и загрузка NFT для экрана корзины — через `DefaultNetworkClient`.
 actor CartService: CartServiceProtocol {
 
     private let networkClient: NetworkClient
@@ -30,6 +30,7 @@ actor CartService: CartServiceProtocol {
         return ids
     }
 
+    @discardableResult
     func setCart(_ ids: Set<String>) async throws -> Set<String> {
         let request = OrderSetNftsRequest(nfts: Array(ids))
         let order: CatalogOrderDto = try await catalogNetworkClient.send(request: request)
@@ -64,5 +65,10 @@ actor CartService: CartServiceProtocol {
                 $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending
             }
         }
+    }
+
+    func performOrder(_ ids: Set<String>) async throws {
+        let request = OrderPaymentRequest(nfts: Array(ids))
+        _ = try await catalogNetworkClient.send(request: request) as CatalogOrderDto
     }
 }

@@ -57,7 +57,7 @@ final class RouterTests: XCTestCase {
     func test_popToRoot_resetsTargetTabPath_only() {
         let router = Router()
         router.push(CatalogRoute.collection(mockCollection), in: .catalog)
-        router.push(CartRoute._placeholder, in: .cart)
+        router.push(CartRoute.payment, in: .cart)
 
         router.popToRoot(in: .catalog)
 

@@ -3,21 +3,21 @@ import SwiftUI
 struct PaymentView: View {
     @Environment(Router.self) private var router
     @Environment(ServicesAssembly.self) private var services
-    
+
     @State private var viewModel = PaymentViewModel()
-    
+
     private let columns = [
         GridItem(.flexible(), spacing: 7),
         GridItem(.flexible(), spacing: 7)
     ]
-    
+
     private let agreementURL = URL(
         string: "https://yandex.ru/legal/practicum_termsofuse"
     )
-    
+
     var body: some View {
         @Bindable var viewModel = viewModel
-        
+
         content
             .background(.ypWhite)
             .navigationBarTitleDisplayMode(.inline)
@@ -37,7 +37,6 @@ struct PaymentView: View {
                 if viewModel.isPaying {
                     Color.ypBlack.opacity(Constants.loaderBackgroundOpacity)
                         .ignoresSafeArea()
-                    
                     LoadingSpinner(size: .medium)
                 }
             }
@@ -51,7 +50,7 @@ struct PaymentView: View {
                 Button(String(localized: "Error.cancel"), role: .cancel) {
                     viewModel.error = nil
                 }
-                
+
                 Button(String(localized: "Error.retry")) {
                     Task {
                         await viewModel.retryPayment(
@@ -63,30 +62,30 @@ struct PaymentView: View {
                 }
             }
     }
-    
+
     @ViewBuilder
     private var content: some View {
         switch viewModel.state {
         case .idle, .loading:
             LoadingSpinner(size: .medium)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-            
+
         case .loaded:
             currenciesGrid
-            
+
         case .success:
             PaymentSuccessView {
                 router.popToRoot(in: .cart)
             }
-            
+
         case .empty:
             EmptyView()
-            
+
         case .error:
             errorView
         }
     }
-    
+
     private var currenciesGrid: some View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: Constants.gridSpacing) {
@@ -104,13 +103,13 @@ struct PaymentView: View {
             .padding(.bottom, Constants.gridBottomPadding)
         }
     }
-    
+
     private var errorView: some View {
         VStack(spacing: Constants.errorSpacing) {
             Text(String(localized: "Cart.Payment.error.load"))
                 .font(.bold17)
                 .foregroundStyle(.ypBlack)
-            
+
             Button(String(localized: "Error.retry")) {
                 Task {
                     await viewModel.load(service: services.paymentService)
@@ -121,11 +120,11 @@ struct PaymentView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-    
+
     private var bottomPanel: some View {
         VStack(alignment: .leading, spacing: Constants.bottomPanelSpacing) {
             agreementText
-            
+
             Button {
                 Task {
                     await viewModel.pay(
@@ -164,13 +163,13 @@ struct PaymentView: View {
             .ignoresSafeArea(edges: .bottom)
         }
     }
-    
+
     private var agreementText: some View {
         VStack(alignment: .leading, spacing: Constants.agreementSpacing) {
             Text(String(localized: "Cart.Payment.agreement.prefix"))
                 .font(.regular13)
                 .foregroundStyle(.ypBlack)
-            
+
             Button {
                 openAgreement()
             } label: {
@@ -181,11 +180,11 @@ struct PaymentView: View {
             .buttonStyle(.plain)
         }
     }
-    
+
     private var payButtonBackground: Color {
         viewModel.canPay ? .ypBlack : .ypGrayUniversal
     }
-    
+
     private var paymentErrorBinding: Binding<Bool> {
         Binding {
             viewModel.error != nil
@@ -195,10 +194,10 @@ struct PaymentView: View {
             }
         }
     }
-    
+
     private func openAgreement() {
         guard let agreementURL else { return }
-        
+
         router.push(
             CartRoute.userAgreement(agreementURL),
             in: .cart
@@ -212,18 +211,18 @@ private extension PaymentView {
         static let gridSpacing: CGFloat = 7
         static let gridTopPadding: CGFloat = 20
         static let gridBottomPadding: CGFloat = 176
-        
+
         static let errorSpacing: CGFloat = 12
         static let loaderBackgroundOpacity: CGFloat = 0.12
-        
+
         static let bottomHorizontalPadding: CGFloat = 16
         static let bottomTopPadding: CGFloat = 16
         static let bottomBottomPadding: CGFloat = 34
         static let bottomPanelSpacing: CGFloat = 16
         static let bottomPanelCornerRadius: CGFloat = 12
-        
+
         static let agreementSpacing: CGFloat = 4
-        
+
         static let payButtonHeight: CGFloat = 60
         static let payButtonCornerRadius: CGFloat = 16
     }

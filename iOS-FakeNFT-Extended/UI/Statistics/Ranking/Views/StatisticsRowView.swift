@@ -9,8 +9,8 @@ import SwiftUI
 import Kingfisher
 
 private enum Layout {
-    static let rowHeight: CGFloat = 70
-    static let avatarSide: CGFloat = 35
+    static let rowHeight: CGFloat = 80
+    static let avatarSide: CGFloat = 28
     static let rankWidth: CGFloat = 28
     static let cardCornerRadius: CGFloat = 12
 }
@@ -33,7 +33,7 @@ struct StatisticsRowView: View {
                 .frame(width: Layout.rankWidth, alignment: .trailing)
 
             Button(action: onSelect) {
-                HStack(spacing: 12) {
+                HStack(spacing: 8) {
                     avatar
                     Text(user.name)
                         .font(.bold17)
@@ -41,10 +41,11 @@ struct StatisticsRowView: View {
                         .lineLimit(1)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Text("\(user.nftsCount)")
-                        .font(.regular17)
+                        .font(.bold17)
                         .foregroundStyle(Color.ypBlack)
+                        .padding(.trailing, 4)
                 }
-                .padding(.horizontal, 12)
+                .padding(.horizontal, 16)
                 .frame(height: Layout.rowHeight)
                 .frame(maxWidth: .infinity)
                 .background(Color.ypGrayLight)
@@ -59,23 +60,30 @@ struct StatisticsRowView: View {
 
     @ViewBuilder
     private var avatar: some View {
-        if let url = user.avatarURL {
-            KFImage(url)
-                .placeholder { LoadingSpinner(size: .small) }
-                .resizable()
-                .scaledToFill()
-                .frame(width: Layout.avatarSide, height: Layout.avatarSide)
-                .clipShape(Circle())
-        } else {
-            Circle()
-                .fill(Color.ypWhite)
-                .frame(width: Layout.avatarSide, height: Layout.avatarSide)
-                .overlay {
-                    Image(systemName: "person.fill")
-                        .font(.system(size: 16))
-                        .foregroundStyle(Color.ypGrayUniversal)
-                }
-        }
+        KFImage(user.avatarURL)
+            .placeholder { avatarPlaceholder }
+            .setProcessor(
+                DownsamplingImageProcessor(
+                    size: CGSize(width: Layout.avatarSide * 3, height: Layout.avatarSide * 3)
+                )
+            )
+            .scaleFactor(UIScreen.main.scale)
+            .cacheOriginalImage()
+            .resizable()
+            .scaledToFill()
+            .frame(width: Layout.avatarSide, height: Layout.avatarSide)
+            .clipShape(Circle())
+    }
+
+    private var avatarPlaceholder: some View {
+        Circle()
+            .fill(Color.ypGrayUniversal)
+            .frame(width: Layout.avatarSide, height: Layout.avatarSide)
+            .overlay {
+                Image(systemName: "person.fill")
+                    .font(.system(size: 14))
+                    .foregroundStyle(Color.ypWhite)
+            }
     }
 }
 

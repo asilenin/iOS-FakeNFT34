@@ -9,28 +9,41 @@ import SwiftUI
 
 struct MyNFTsRowView: View {
 
-    // MARK: - State
-
-    // TODO(profile epic S4): connect the like state to profile.likes.
-    @State private var isLiked = true
-
-    // MARK: - Properties
-
     let nft: ProfileNft
-
-    // MARK: - Body
+    let isLiked: Bool
+    let isLikePending: Bool
+    let onLikeToggle: () -> Void
 
     var body: some View {
         HStack(spacing: 20) {
             nftImage
-
             nftInfo
-
             Spacer(minLength: 8)
-
             priceInfo
         }
         .frame(height: 108)
+    }
+
+    private var likeButton: some View {
+        VStack {
+            HStack {
+                Spacer()
+                Button {
+                    onLikeToggle()
+                } label: {
+                    Image(isLiked ? .favouritesActive : .favouritesInactive)
+                        .renderingMode(.original)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 40, height: 40)
+                        .contentShape(Rectangle())
+                        .opacity(isLikePending ? 0.4 : 1.0)
+                }
+                .buttonStyle(.plain)
+                .disabled(isLikePending)
+            }
+            Spacer()
+        }
     }
 
     // MARK: - Content
@@ -47,28 +60,6 @@ struct MyNFTsRowView: View {
         }
         .frame(width: Constants.imageSize, height: Constants.imageSize)
         .clipShape(RoundedRectangle(cornerRadius: Constants.imageCornerRadius))
-    }
-
-    private var likeButton: some View {
-        VStack {
-            HStack {
-                Spacer()
-
-                Button {
-                    isLiked.toggle()
-                } label: {
-                    Image(isLiked ? .favouritesActive : .favouritesInactive)
-                        .renderingMode(.original)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 40, height: 40)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-            }
-
-            Spacer()
-        }
     }
 
     private var nftInfo: some View {

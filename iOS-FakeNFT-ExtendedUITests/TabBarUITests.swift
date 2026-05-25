@@ -4,6 +4,7 @@ final class TabBarUITests: XCTestCase {
 
     func test_appLaunches_andTabsAreTappable() {
         let app = XCUIApplication()
+        app.launchArguments += ["-AppleLanguages", "(ru)", "-AppleLocale", "ru_RU"]
         app.launch()
 
         let tabs = ["Профиль", "Каталог", "Корзина", "Статистика"]

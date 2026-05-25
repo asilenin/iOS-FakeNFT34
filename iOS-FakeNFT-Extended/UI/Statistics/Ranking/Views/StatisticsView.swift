@@ -47,10 +47,6 @@ struct StatisticsView: View {
                 )
             case .userWebsite(let url):
                 WebViewScreen(url: url)
-            case .nftDetail(let nftId):
-                StatisticsNftDetailView(nftId: nftId)
-            case ._placeholder:
-                EmptyView()
             }
         }
     }

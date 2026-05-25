@@ -38,8 +38,7 @@ actor CatalogNetworkClient: NetworkClient {
 
     private func sendFormEncoded(_ request: FormEncodedRequest) async throws -> Data {
         let urlRequest = try buildFormEncodedURLRequest(from: request)
-        let bodyString = urlRequest.httpBody.flatMap { String(data: $0, encoding: .utf8) } ?? ""
-        print("ℹ️ [\(fileName())]: :\(#line)] \(#function) \(request.httpMethod.rawValue) \(urlRequest.url?.absoluteString ?? "nil") body: \(bodyString)")
+        NetworkLogger.start(urlRequest)
 
         do {
             let (data, response) = try await session.data(for: urlRequest)
@@ -47,13 +46,13 @@ actor CatalogNetworkClient: NetworkClient {
                 throw NetworkClientError.urlSessionError
             }
             guard (200...299).contains(httpResponse.statusCode) else {
-                print("❌ [\(fileName())]: :\(#line)] \(#function) HTTP \(httpResponse.statusCode) for \(urlRequest.url?.absoluteString ?? "nil")")
+                NetworkLogger.httpError(urlRequest, status: httpResponse.statusCode, body: data)
                 throw NetworkClientError.httpStatusCode(httpResponse.statusCode)
             }
-            print("ℹ️ [\(fileName())]: :\(#line)] \(#function) HTTP \(httpResponse.statusCode), \(data.count) bytes")
+            NetworkLogger.success(urlRequest, status: httpResponse.statusCode, byteCount: data.count)
             return data
         } catch {
-            print("❌ [\(fileName())]: :\(#line)] \(#function) network error: \(error)")
+            NetworkLogger.failure(urlRequest, error: error)
             throw error
         }
     }

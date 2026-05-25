@@ -30,37 +30,30 @@ actor DefaultNetworkClient: NetworkClient {
     }
 
     func send(request: NetworkRequest) async throws -> Data {
-        let urlRequest = try create(request: request)
+            let urlRequest = try create(request: request)
+            NetworkLogger.start(urlRequest)
 
-        do {
-            let (data, response) = try await session.data(for: urlRequest)
+            do {
+                let (data, response) = try await session.data(for: urlRequest)
 
-            guard let response = response as? HTTPURLResponse else {
-                throw NetworkClientError.urlSessionError
+                guard let response = response as? HTTPURLResponse else {
+                    throw NetworkClientError.urlSessionError
+                }
+
+                guard 200 ..< 300 ~= response.statusCode else {
+                    NetworkLogger.httpError(urlRequest, status: response.statusCode, body: data)
+                    throw NetworkClientError.httpStatusCode(response.statusCode)
+                }
+
+                NetworkLogger.success(urlRequest, status: response.statusCode, byteCount: data.count)
+                return data
+            } catch let error as NetworkClientError {
+                throw error
+            } catch {
+                NetworkLogger.failure(urlRequest, error: error)
+                throw NetworkClientError.urlRequestError(error)
             }
-
-            guard 200 ..< 300 ~= response.statusCode else {
-                #if DEBUG
-                let responseBody = String(data: data, encoding: .utf8) ?? ""
-                print("❌ HTTP \(response.statusCode): \(urlRequest.url?.absoluteString ?? "")")
-                print("❌ Response body: \(responseBody)")
-                #endif
-
-                throw NetworkClientError.httpStatusCode(response.statusCode)
-            }
-
-            return data
-        } catch let error as NetworkClientError {
-            throw error
-        } catch {
-            #if DEBUG
-            print("❌ Network error: \(error)")
-            print("❌ URL: \(urlRequest.url?.absoluteString ?? "")")
-            #endif
-
-            throw NetworkClientError.urlRequestError(error)
         }
-    }
 
     func send<T: Decodable>(request: NetworkRequest) async throws -> T {
         let data = try await send(request: request)

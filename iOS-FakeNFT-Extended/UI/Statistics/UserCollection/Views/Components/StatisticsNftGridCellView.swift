@@ -22,9 +22,8 @@ struct StatisticsNftGridCellView: View {
             imageWithFavoriteButton
             infoBlock
         }
-        .frame(width: 108, height: 172)
+        .frame(width: 108, height: 192)
         .contentShape(Rectangle())
-        .onTapGesture(perform: actions.onCellTap)
     }
 
     // MARK: - Subviews
@@ -90,14 +89,10 @@ struct StatisticsNftGridCellView: View {
     }
 
     private var priceBlock: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text("Statistics.nft.priceLabel")
-                .font(.medium10)
-                .foregroundStyle(Color.ypGrayUniversal)
-            Text(priceString)
-                .font(.medium10)
-                .foregroundStyle(Color.ypBlack)
-        }
+        Text(priceString)
+            .font(.medium10)
+            .foregroundStyle(Color.ypBlack)
+            .lineLimit(1)
     }
 
     private var priceString: String {
