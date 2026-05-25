@@ -11,6 +11,7 @@ import Observation
 enum MyNFTsSortOption: String {
     case price
     case rating
+    case name
 }
 
 @Observable
@@ -61,7 +62,7 @@ final class MyNFTsViewModel {
         self.userDefaults = userDefaults
         sortOption = MyNFTsSortOption(
             rawValue: userDefaults.string(forKey: Constants.sortOptionKey) ?? ""
-        ) ?? .price
+        ) ?? .rating
     }
 
     // MARK: - Public Methods
@@ -143,6 +144,10 @@ final class MyNFTsViewModel {
             nfts.sorted { ($0.price ?? 0) > ($1.price ?? 0) }
         case .rating:
             nfts.sorted { ($0.rating ?? 0) > ($1.rating ?? 0) }
+        case .name:
+            nfts.sorted {
+                ($0.name ?? "").localizedCaseInsensitiveCompare($1.name ?? "") == .orderedAscending
+            }
         }
     }
 }

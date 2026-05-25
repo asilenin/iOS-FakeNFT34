@@ -62,6 +62,7 @@
 "Profile.MyNFTs.error.load" = "Не удалось загрузить NFT: %@";
 "Profile.MyNFTs.sort.price" = "По цене";
 "Profile.MyNFTs.sort.rating" = "По рейтингу";
+"Profile.MyNFTs.sort.name" = "По названию";
 "Profile.MyNFTs.unknownName" = "Без названия";
 "Profile.MyNFTs.unknownAuthor" = "Автор не указан";
 "Profile.MyNFTs.noPrice" = "Цена не указана";

@@ -58,11 +58,12 @@ struct MyNFTsView: View {
                 Button(String(localized: "Profile.MyNFTs.sort.price")) {
                     viewModel.sortOption = .price
                 }
-                
                 Button(String(localized: "Profile.MyNFTs.sort.rating")) {
                     viewModel.sortOption = .rating
                 }
-                
+                Button(String(localized: "Profile.MyNFTs.sort.name")) {
+                    viewModel.sortOption = .name
+                }
                 Button(String(localized: "Error.cancel"), role: .cancel) {}
             }
             .task {
