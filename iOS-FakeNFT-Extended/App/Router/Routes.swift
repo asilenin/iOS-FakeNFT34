@@ -31,5 +31,4 @@ enum StatisticsRoute: Hashable {
     case userCollection(userId: String, userName: String)
     case userWebsite(URL)
     case nftDetail(String)
-    case _placeholder
 }
