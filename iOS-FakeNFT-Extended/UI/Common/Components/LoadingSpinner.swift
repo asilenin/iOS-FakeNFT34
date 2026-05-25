@@ -1,24 +1,5 @@
 import SwiftUI
 
-// MARK: - REMOVE Before release
-//  Usage:
-///  Полноэкранный лоадер во время загрузки списка
-///   if vm.isLoading {
-///       LoadingSpinner(size: .large)
-///   }
-///
-///   Внутри ячейки NFT, пока не загрузилась картинка
-///   KFImage(url)
-///       .placeholder {
-///           LoadingSpinner(size: .small)
-///       }
-///
-///   На тёмном фоне (например, оверлей)
-///   ZStack {
-///       Color.black.opacity(0.5)
-///       LoadingSpinner(size: .large, tint: .ypWhiteUniversal)
-///   }
-
 struct LoadingSpinner: View {
 
     enum Size {

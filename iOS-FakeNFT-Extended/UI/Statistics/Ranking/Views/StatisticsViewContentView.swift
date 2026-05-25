@@ -68,19 +68,17 @@ struct StatisticsViewContentView: View {
     }
 
     private var statisticsList: some View {
-        List {
-            ForEach(Array(viewModel.users.enumerated()), id: \.element.id) { index, user in
-                StatisticsRowView(rank: index + 1, user: user) {
-                    router.push(StatisticsRoute.userDetail(user), in: .statistics)
+        ScrollView {
+            LazyVStack(spacing: 8) {
+                ForEach(Array(viewModel.users.enumerated()), id: \.element.id) { index, user in
+                    StatisticsRowView(rank: index + 1, user: user) {
+                        router.push(StatisticsRoute.userDetail(user), in: .statistics)
+                    }
+                    .padding(.horizontal, 16)
                 }
-                .listRowInsets(EdgeInsets(top: 4, leading: 16, bottom: 4, trailing: 16))
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.ypWhite)
             }
+            .padding(.top, 20)
         }
-        .listStyle(.plain)
-        .scrollContentBackground(.hidden)
-        .contentMargins(.top, 20, for: .scrollContent)
     }
 }
 

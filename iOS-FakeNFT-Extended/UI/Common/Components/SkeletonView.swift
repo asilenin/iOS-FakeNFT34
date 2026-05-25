@@ -1,12 +1,5 @@
 import SwiftUI
 
-// MARK: - REMOVE Before release
-///  Usage:
-///  KFImage(url)
-///    .placeholder { SkeletonView() }  // ← вот он, скелетон
-///    .resizable()
-///    .aspectRatio(contentMode: .fill)
-
 struct SkeletonView: View {
 
     var cornerRadius: CGFloat = 12

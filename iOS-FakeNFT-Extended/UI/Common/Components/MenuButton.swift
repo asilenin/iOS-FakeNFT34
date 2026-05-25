@@ -1,10 +1,5 @@
 import SwiftUI
 
-// MARK: - REMOVE Before release
-///  Usage:
-/// Wrap inside a `.toolbar { ToolbarItem(placement: .topBarTrailing) }`
-/// when used in a navbar.
-
 struct MenuButton: View {
 
     // MARK: - Constants

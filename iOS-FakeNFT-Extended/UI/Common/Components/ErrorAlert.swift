@@ -1,12 +1,5 @@
 import SwiftUI
 
-// MARK: - REMOVE Before release
-//  Usage:
-///   MyView()
-///     .errorAlert(error: $vm.error) {
-///         Task { await vm.load() }
-///     }
-
 extension View {
     func errorAlert(
         error: Binding<Error?>,
