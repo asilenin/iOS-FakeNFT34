@@ -149,7 +149,6 @@
 		AFD0000A2FBE00010000000A /* RatingStarsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD000092FBE000100000009 /* RatingStarsView.swift */; };
 		AFD0000C2FBE00010000000C /* ETHPriceFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD0000B2FBE00010000000B /* ETHPriceFormatter.swift */; };
 		D01E16CD2FB227210075BF16 /* CartService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D01E16CC2FB227210075BF16 /* CartService.swift */; };
-		D0A1C5992FB6413800800521 /* UpdateOrderRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A1C5982FB6413800800521 /* UpdateOrderRequest.swift */; };
 		D0B200172FBA0B29003BD081 /* PaymentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B200162FBA0B29003BD081 /* PaymentService.swift */; };
 		D0B200192FBA11D0003BD081 /* PaymentServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B200182FBA11D0003BD081 /* PaymentServiceProtocol.swift */; };
 /* End PBXBuildFile section */
@@ -317,7 +316,6 @@
 		AFD000092FBE000100000009 /* RatingStarsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingStarsView.swift; sourceTree = "<group>"; };
 		AFD0000B2FBE00010000000B /* ETHPriceFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ETHPriceFormatter.swift; sourceTree = "<group>"; };
 		D01E16CC2FB227210075BF16 /* CartService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartService.swift; sourceTree = "<group>"; };
-		D0A1C5982FB6413800800521 /* UpdateOrderRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateOrderRequest.swift; sourceTree = "<group>"; };
 		D0B200162FBA0B29003BD081 /* PaymentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentService.swift; sourceTree = "<group>"; };
 		D0B200182FBA11D0003BD081 /* PaymentServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentServiceProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -439,7 +437,6 @@
 				D0B2FFD42FB871D8003BD081 /* Mock */,
 				D01E16CC2FB227210075BF16 /* CartService.swift */,
 				D0B200162FBA0B29003BD081 /* PaymentService.swift */,
-				D0A1C5982FB6413800800521 /* UpdateOrderRequest.swift */,
 			);
 			path = Cart;
 			sourceTree = "<group>";
@@ -1324,7 +1321,6 @@
 				AFD000072FBE000100000007 /* ProfileRequest.swift in Sources */,
 				47C646F72FBB7B74004206CB /* LogHelper.swift in Sources */,
 				ABC5E16C2C31F5AF002B4068 /* iOS_FakeNFT_ExtendedApp.swift in Sources */,
-				D0A1C5992FB6413800800521 /* UpdateOrderRequest.swift in Sources */,
 				AFD000082FBE000100000008 /* UpdateProfileRequest.swift in Sources */,
 				AFD0000A2FBE00010000000A /* RatingStarsView.swift in Sources */,
 				AFD0000C2FBE00010000000C /* ETHPriceFormatter.swift in Sources */,
