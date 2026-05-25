@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Общий сервис корзины: GET/PUT заказа через `CatalogNetworkClient` и загрузка NFT lkz экрана корзины — через `DefaultNetworkClient`.
+/// Общий сервис корзины: GET/PUT заказа через `CatalogNetworkClient` и загрузка NFT для экрана корзины — через `DefaultNetworkClient`.
 actor CartService: CartServiceProtocol {
 
     private let networkClient: NetworkClient
