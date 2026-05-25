@@ -46,9 +46,10 @@ struct RatingStarsView: View {
         HStack(spacing: spacing) {
             ForEach(0..<Constants.maxRating, id: \.self) { index in
                 Image(index < normalizedRating ? .starActive : .starInactive)
-                    .renderingMode(.original)
+                    .renderingMode(index < normalizedRating ? .original : .template)
                     .resizable()
                     .scaledToFit()
+                    .foregroundStyle(Color.ypGrayLight)
                     .frame(width: Constants.starSize, height: Constants.starSize)
             }
         }
