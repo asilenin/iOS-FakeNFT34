@@ -14,7 +14,7 @@ protocol CartServiceProtocol: Sendable {
 
     /// Загружает полные модели NFT для экрана корзины.
     func loadCartItems() async throws -> [CartItem]
-    
+
     /// Оформляет заказ (POST /orders/1): переносит nfts в профиль. Не очищает корзину.
     func performOrder(_ ids: Set<String>) async throws
 }

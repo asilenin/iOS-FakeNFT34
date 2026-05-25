@@ -94,7 +94,7 @@ actor StubCartService: CartServiceProtocol {
     }
 
     func invalidateCache() async {}
-    
+
     func performOrder(_ ids: Set<String>) async throws {}
 }
 

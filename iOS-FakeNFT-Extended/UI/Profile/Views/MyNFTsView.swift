@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct MyNFTsView: View {
-    
+
     // MARK: - State
-    
+
     @State private var viewModel: MyNFTsViewModel
     @State private var isShowingSortDialog = false
-    
+
     // MARK: - Initializers
-    
+
     init(
         nftIds: [String],
         favoriteIds: [String],
@@ -31,9 +31,9 @@ struct MyNFTsView: View {
             )
         )
     }
-    
+
     // MARK: - Body
-    
+
     var body: some View {
         content
             .navigationBarTitleDisplayMode(.inline)
@@ -43,7 +43,7 @@ struct MyNFTsView: View {
                         .font(.bold17)
                         .foregroundStyle(Color.ypBlack)
                 }
-                
+
                 ToolbarItem(placement: .topBarTrailing) {
                     MenuButton {
                         isShowingSortDialog = true
@@ -70,9 +70,9 @@ struct MyNFTsView: View {
                 await viewModel.loadNFTs()
             }
     }
-    
+
     // MARK: - Content
-    
+
     @ViewBuilder
     private var content: some View {
         switch viewModel.state {
@@ -88,7 +88,7 @@ struct MyNFTsView: View {
             errorContent(message)
         }
     }
-    
+
     private func nftList(_ nfts: [ProfileNft]) -> some View {
         ScrollView {
             LazyVStack(spacing: 16) {
@@ -108,7 +108,7 @@ struct MyNFTsView: View {
         }
         .background(Color.ypWhite)
     }
-    
+
     private var emptyContent: some View {
         Text(String(localized: "Profile.MyNFTs.empty"))
             .font(.bold17)
@@ -116,14 +116,14 @@ struct MyNFTsView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.ypWhite)
     }
-    
+
     private func errorContent(_ message: String) -> some View {
         VStack(spacing: 16) {
             Text(message)
                 .font(.bold17)
                 .foregroundStyle(Color.ypBlack)
                 .multilineTextAlignment(.center)
-            
+
             Button(String(localized: "Profile.retry")) {
                 Task {
                     await viewModel.loadNFTs()

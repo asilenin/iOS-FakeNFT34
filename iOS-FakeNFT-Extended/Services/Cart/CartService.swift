@@ -29,7 +29,7 @@ actor CartService: CartServiceProtocol {
         cachedIds = ids
         return ids
     }
-    
+
     @discardableResult
     func setCart(_ ids: Set<String>) async throws -> Set<String> {
         let request = OrderSetNftsRequest(nfts: Array(ids))
@@ -66,7 +66,7 @@ actor CartService: CartServiceProtocol {
             }
         }
     }
-    
+
     func performOrder(_ ids: Set<String>) async throws {
         let request = OrderPaymentRequest(nfts: Array(ids))
         _ = try await catalogNetworkClient.send(request: request) as CatalogOrderDto

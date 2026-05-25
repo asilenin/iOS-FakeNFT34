@@ -77,7 +77,7 @@ private extension MockStatisticsService {
         "4": "Минималист. Небольшая, но очень ценная подборка NFT.",
         "5": "Иллюстратор. Экспериментирует с цветом и формой в цифровых работах."
     ]
-    
+
     static let mockAvatarURLs: [URL] = [
         URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/April/1.png")!,
         URL(string: "https://code.s3.yandex.net/Mobile/iOS/NFT/Beige/April/2.png")!,
@@ -123,7 +123,7 @@ private extension MockStatisticsService {
             rating: 88
         )
     ]
-    
+
     struct NftTemplate {
         let baseName: String
         let imageURL: URL

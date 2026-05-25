@@ -66,12 +66,12 @@ final class MyNFTsViewModel {
     }
 
     // MARK: - Public Methods
-    
+
     func isLiked(_ nft: ProfileNft) -> Bool {
         guard let id = nft.id else { return false }
         return likedIds.contains(id)
     }
-    
+
     func toggleLike(_ nft: ProfileNft) async {
         guard let id = nft.id, !pendingLikeIds.contains(id) else { return }
 

@@ -90,16 +90,16 @@ final class PaymentViewModel {
         isPaying = true
         error = nil
         lastPaymentCurrencyID = currencyID
-        
+
         do {
             let purchasedNFTIds = try await cartService.loadCart()
             try await paymentService.pay(currencyID: currencyID)
             try await cartService.performOrder(purchasedNFTIds)
             _ = try await cartService.setCart([])
-            
+
             // Профиль изменён сервером (nfts) в обход ProfileService — сбрасываем кэш.
             await profileService.invalidateCache()
-            
+
             state = .success
             lastPaymentCurrencyID = nil
         } catch {

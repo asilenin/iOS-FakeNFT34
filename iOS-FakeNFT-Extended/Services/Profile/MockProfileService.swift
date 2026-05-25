@@ -71,7 +71,7 @@ actor MockProfileService: ProfileServiceProtocol {
         currentProfile = profile
         return profile
     }
-    
+
     func invalidateCache() async {}
 }
 

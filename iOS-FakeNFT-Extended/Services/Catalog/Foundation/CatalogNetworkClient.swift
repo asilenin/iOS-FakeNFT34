@@ -39,7 +39,7 @@ actor CatalogNetworkClient: NetworkClient {
     private func sendFormEncoded(_ request: FormEncodedRequest) async throws -> Data {
         let urlRequest = try buildFormEncodedURLRequest(from: request)
         NetworkLogger.start(urlRequest)
-        
+
         do {
             let (data, response) = try await session.data(for: urlRequest)
             guard let httpResponse = response as? HTTPURLResponse else {
