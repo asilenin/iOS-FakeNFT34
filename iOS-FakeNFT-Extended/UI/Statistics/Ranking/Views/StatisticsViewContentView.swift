@@ -58,6 +58,7 @@ struct StatisticsViewContentView: View {
         switch viewModel.state {
         case .loading:
             LoadingSpinner(size: .medium)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         case .empty:
             StatisticsEmptyStateView(message: "Statistics.empty")
         case .success:
