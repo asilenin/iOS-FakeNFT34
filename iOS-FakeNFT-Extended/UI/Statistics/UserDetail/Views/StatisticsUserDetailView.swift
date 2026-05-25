@@ -115,7 +115,7 @@ struct StatisticsUserDetailView: View {
         Image(systemName: "person.crop.circle.fill")
             .resizable()
             .scaledToFit()
-            .foregroundStyle(Color.ypGrayLight)
+            .foregroundStyle(Color.ypGrayUniversal)
             .frame(width: side, height: side)
     }
 
@@ -132,9 +132,9 @@ struct StatisticsUserDetailView: View {
                 .frame(maxWidth: .infinity)
                 .frame(height: 40)
                 .background(Color.ypWhite)
-                .clipShape(Capsule())
+                .clipShape(RoundedRectangle(cornerRadius: 16))
                 .overlay {
-                    Capsule()
+                    RoundedRectangle(cornerRadius: 16)
                         .stroke(Color.ypBlack, lineWidth: 1)
                 }
         }
