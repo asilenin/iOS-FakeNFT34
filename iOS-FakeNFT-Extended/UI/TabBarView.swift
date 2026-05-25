@@ -148,6 +148,7 @@ private struct StatisticsTabRoot: View {
                     WebViewScreen(url: url)
                 case .nftDetail(let nftId):
                     StatisticsNftDetailView(nftId: nftId)
+                }
             }
         }
     }

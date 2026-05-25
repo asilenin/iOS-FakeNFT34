@@ -49,6 +49,7 @@ struct StatisticsView: View {
                 WebViewScreen(url: url)
             case .nftDetail(let nftId):
                 StatisticsNftDetailView(nftId: nftId)
+            }
         }
     }
     .environment(router)

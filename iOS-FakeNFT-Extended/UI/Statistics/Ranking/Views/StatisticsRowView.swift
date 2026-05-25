@@ -62,6 +62,13 @@ struct StatisticsRowView: View {
     private var avatar: some View {
         KFImage(user.avatarURL)
             .placeholder { avatarPlaceholder }
+            .setProcessor(
+                DownsamplingImageProcessor(
+                    size: CGSize(width: Layout.avatarSide * 3, height: Layout.avatarSide * 3)
+                )
+            )
+            .scaleFactor(UIScreen.main.scale)
+            .cacheOriginalImage()
             .resizable()
             .scaledToFill()
             .frame(width: Layout.avatarSide, height: Layout.avatarSide)
@@ -70,7 +77,7 @@ struct StatisticsRowView: View {
 
     private var avatarPlaceholder: some View {
         Circle()
-            .fill(Color.ypGrayUniversal)
+            .fill(Color.ypGrayLight)
             .frame(width: Layout.avatarSide, height: Layout.avatarSide)
             .overlay {
                 Image(systemName: "person.fill")

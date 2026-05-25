@@ -65,11 +65,11 @@ struct StatisticsUserDetailView: View {
 
                 if viewModel.websiteURL != nil {
                     websiteButton
-                        .padding(.top, 20)
+                        .padding(.top, 28)
                 }
 
                 collectionRow
-                    .padding(.top, 32)
+                    .padding(.top, 41)
             }
             .padding(.horizontal, 16)
             .padding(.top, 20)
@@ -103,25 +103,20 @@ struct StatisticsUserDetailView: View {
     @ViewBuilder
     private var avatar: some View {
         let side: CGFloat = 70
-        if let url = viewModel.avatarURL {
-            KFImage(url)
-                .placeholder {
-                    ZStack {
-                        Color.ypBackgroundUniversal
-                        LoadingSpinner(size: .medium, tint: .ypWhiteUniversal)
-                    }
-                }
-                .resizable()
-                .scaledToFill()
-                .frame(width: side, height: side)
-                .clipShape(Circle())
-        } else {
-            Image(systemName: "person.crop.circle.fill")
-                .resizable()
-                .scaledToFit()
-                .foregroundStyle(Color.ypGrayLight)
-                .frame(width: side, height: side)
-        }
+        KFImage(viewModel.avatarURL)
+            .placeholder { avatarPlaceholder(side: side) }
+            .resizable()
+            .scaledToFill()
+            .frame(width: side, height: side)
+            .clipShape(Circle())
+    }
+
+    private func avatarPlaceholder(side: CGFloat) -> some View {
+        Image(systemName: "person.crop.circle.fill")
+            .resizable()
+            .scaledToFit()
+            .foregroundStyle(Color.ypGrayLight)
+            .frame(width: side, height: side)
     }
 
     // MARK: - Website
@@ -135,7 +130,7 @@ struct StatisticsUserDetailView: View {
                 .font(.regular17)
                 .foregroundStyle(Color.ypBlack)
                 .frame(maxWidth: .infinity)
-                .frame(height: 60)
+                .frame(height: 40)
                 .background(Color.ypWhite)
                 .clipShape(Capsule())
                 .overlay {
