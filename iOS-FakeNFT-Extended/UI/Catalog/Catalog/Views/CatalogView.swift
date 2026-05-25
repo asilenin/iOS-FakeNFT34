@@ -1,0 +1,130 @@
+import SwiftUI
+
+struct CatalogView: View {
+
+    @Environment(ServicesAssembly.self) private var services
+    @State private var viewModel: CatalogViewModel?
+    @State private var isShowingSortDialog = false
+
+    @AppStorage("catalogSortOption") private var storedSortOption: CatalogSortOption = .nftCount
+
+    init() {}
+
+    /// Init для Preview: готовый ViewModel, чтобы Preview работал офлайн.
+    fileprivate init(previewViewModel: CatalogViewModel) {
+        _viewModel = State(wrappedValue: previewViewModel)
+    }
+
+    var body: some View {
+        ZStack {
+            Color.ypWhite.ignoresSafeArea()
+            content
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                MenuButton {
+                    isShowingSortDialog = true
+                }
+            }
+        }
+        .confirmationDialog(
+            Text("Catalog.sort.title"),
+            isPresented: $isShowingSortDialog,
+            titleVisibility: .visible
+        ) {
+            Button("Catalog.sort.byName") {
+                viewModel?.sortOption = .name
+                storedSortOption = .name
+            }
+            Button("Catalog.sort.byNftCount") {
+                viewModel?.sortOption = .nftCount
+                storedSortOption = .nftCount
+            }
+            Button("Common.close", role: .cancel) {}
+        }
+        .errorAlert(error: errorBinding) {
+            Task { await viewModel?.load() }
+        }
+        .task {
+            if viewModel == nil {
+                viewModel = CatalogViewModel(
+                    service: services.catalogService,
+                    initialSortOption: storedSortOption
+                )
+            }
+            await viewModel?.load()
+        }
+    }
+
+    // MARK: - Content
+
+    @ViewBuilder
+    private var content: some View {
+        if let viewModel {
+            switch viewModel.state {
+            case .loading:
+                LoadingSpinner(size: .medium)
+            case .success:
+                list(viewModel.collections)
+            case .error:
+                ScrollView {
+                    CatalogEmptyStateView(message: "Catalog.loadErrorHint")
+                        .frame(minHeight: 400)
+                }
+                .refreshable {
+                    await viewModel.reload()
+                }
+            }
+        } else {
+            LoadingSpinner(size: .medium)
+        }
+    }
+
+    private func list(_ collections: [NftCollection]) -> some View {
+        List {
+            ForEach(collections) { collection in
+                ZStack {
+                    // Скрытый NavigationLink обновляет NavigationPath
+                    // (Router отслеживает push через path), но не рендерит chevron.
+                    NavigationLink(value: CatalogRoute.collection(collection)) {
+                        EmptyView()
+                    }
+                    .opacity(0)
+
+                    CatalogRow(collection: collection)
+                }
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 8, trailing: 16))
+                .listRowBackground(Color.ypWhite)
+            }
+        }
+        .listStyle(.plain)
+        .scrollContentBackground(.hidden)
+        .background(Color.ypWhite)
+        .contentMargins(.top, 20, for: .scrollContent)
+        .refreshable {
+            await viewModel?.reload()
+        }
+    }
+
+    // MARK: - Bindings
+
+    private var errorBinding: Binding<Error?> {
+        Binding(
+            get: { viewModel?.error },
+            set: { viewModel?.error = $0 }
+        )
+    }
+}
+
+#Preview {
+    NavigationStack {
+        CatalogView(previewViewModel: CatalogViewModel(
+            service: MockCatalogService(),
+            initialSortOption: .nftCount
+        ))
+        // ServicesAssembly нужен для @Environment, но не используется (ViewModel уже построен).
+        .environment(ServicesAssembly(networkClient: DefaultNetworkClient()))
+        .environment(Router())
+    }
+}

@@ -7,14 +7,23 @@ enum HttpMethod: String {
     case delete = "DELETE"
 }
 
+enum NetworkRequestBody {
+    case json(Encodable)
+    case formURLEncoded([URLQueryItem])
+}
+
 protocol NetworkRequest {
     var endpoint: URL? { get }
     var httpMethod: HttpMethod { get }
     var dto: Encodable? { get }
+    var body: NetworkRequestBody? { get }
 }
 
-// default values
 extension NetworkRequest {
     var httpMethod: HttpMethod { .get }
     var dto: Encodable? { nil }
+    var body: NetworkRequestBody? {
+        guard let dto else { return nil }
+        return .json(dto)
+    }
 }

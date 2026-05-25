@@ -1,0 +1,24 @@
+included:
+  - iOS-FakeNFT-Extended
+  - iOS-FakeNFT-ExtendedTests
+  - iOS-FakeNFT-ExtendedUITests
+
+excluded:
+  - iOS-FakeNFT-Extended.xcodeproj
+  - .build
+  - .swiftpm
+  - DerivedData
+
+disabled_rules:
+  - line_length
+  - todo
+
+identifier_name:
+  excluded:
+    - id
+    - vm
+    - _placeholder
+
+type_name:
+  excluded:
+    - iOS_FakeNFT_ExtendedApp
